@@ -1,18 +1,18 @@
 # Fdb version 3
-["bibtex principal"] 1552731116 "principal.aux" "principal.bbl" "principal" 1552731184
+["bibtex principal"] 1552734238 "principal.aux" "principal.bbl" "principal" 1552734271
   "./styles/plain.bst" 1548871134 20350 2333da366b5c8f6cd632b85558783a79 ""
-  "principal.aux" 1552731183 3594 a126a4a114cf7496ce7d74035a74c8df ""
+  "principal.aux" 1552734241 3594 a126a4a114cf7496ce7d74035a74c8df ""
   "references.bib" 1548871134 3319 b9e2d768a30ace694608067e7b16f10b ""
   (generated)
-  "principal.bbl"
   "principal.blg"
-["pdflatex"] 1552731182 "d:/Sergio/Uni FDI/TFG/Memoria-de-Trabajo-de-Fin-de-Grado/principal.tex" "principal.pdf" "principal" 1552731184
+  "principal.bbl"
+["pdflatex"] 1552734239 "d:/Sergio/Uni FDI/TFG/Memoria-de-Trabajo-de-Fin-de-Grado/principal.tex" "principal.pdf" "principal" 1552734271
   "abstract.tex" 1548871134 615 76aec93e42d1c6973b0fd8f14cc4889e ""
-  "agradecimientos.tex" 1548871134 1482 fa9ca0c7c9fd1aa6bbde4724d8be2d62 ""
+  "agradecimientos.tex" 1552734229 1511 debd36f406fd18d033d2a124633bef4c ""
   "appendixA.tex" 1548871134 602 157a065b2409409deb4b0311f782eba4 ""
   "appendixB.tex" 1548871134 600 4a6a643cedad3beb16639ef02d8caa39 ""
   "autorizacion.tex" 1548871134 1645 dd8f99259f9f16302d59408da69bc665 ""
-  "capitulo1.tex" 1552730958 22745 bd2c11005e62f3b6985a1ecc35a8afc4 ""
+  "capitulo1.tex" 1552734127 22839 8c36e9bcf791df229eb4eb2c0e2350e3 ""
   "class_diss.cls" 1548871134 23118 f640e409baf3748bc6abff3ba6f140df ""
   "d:/Sergio/Uni FDI/TFG/Memoria-de-Trabajo-de-Fin-de-Grado/principal.tex" 1548871134 14288 ea7e8031e4399d739e1bfd813158f7fb ""
   "d:/software/texlive/2018/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1548701149 2971 def0b6c1f0b107b3b936def894055589 ""
@@ -124,17 +124,17 @@
   "dedicatoria.tex" 1552731181 564 828601c49cb2155c6baf3af9f22f683d ""
   "figures/escudo.jpg" 1548871134 15635 030e5d48869b9b9e4cb043772e019e9f ""
   "figures/nodo_1.png" 1552725302 238130 db35ee199e11254ace2aa85ca076bed4 ""
-  "principal.aux" 1552731183 3594 a126a4a114cf7496ce7d74035a74c8df ""
-  "principal.bbl" 1552731116 49 0eba253fc001332e731e8aba3f23127b "bibtex principal"
-  "principal.out" 1552731183 1116 9a39ad0c8229e239c3f5bf9599c0310b ""
+  "principal.aux" 1552734241 3594 a126a4a114cf7496ce7d74035a74c8df ""
+  "principal.bbl" 1552734239 49 0eba253fc001332e731e8aba3f23127b "bibtex principal"
+  "principal.out" 1552734241 1116 9a39ad0c8229e239c3f5bf9599c0310b ""
   "principal.tex" 1548871134 14288 ea7e8031e4399d739e1bfd813158f7fb ""
-  "principal.toc" 1552731183 1220 daea336a373aa7918f59b1fefee199c9 ""
+  "principal.toc" 1552734241 1220 daea336a373aa7918f59b1fefee199c9 ""
   "prologue.tex" 1552730958 2728 1f5cace18738881a1fd72c52f40330f5 ""
   "resumen.tex" 1548871134 1029 35577728ef4fe5bd7f75faea02233603 ""
   "title.tex" 1548871134 2389 c48b56653c683d6dcb49df4d52adea7b ""
   (generated)
   "principal.out"
   "principal.pdf"
+  "principal.aux"
   "principal.log"
   "principal.toc"
-  "principal.aux"
