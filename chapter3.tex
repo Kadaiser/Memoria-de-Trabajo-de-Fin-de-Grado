@@ -22,3 +22,211 @@ sections~\ref{makereference2.1} and ~\ref{makereference2.2}.
 
 Sitio de prueba para la documentación del proceso de instalación de Node y demás.
 
+Es necesario que inicialmente se ejecute [JUSTIFICAR]
+\begin{verbatim}
+sudo apt-get update
+sudo apt-get full-upgrade
+\end{verbatim}
+
+[JUSTIFICAR POR QUÉ NODEJS y NPM]
+Instalación de la versión más reciente de node.js y npm
+Descarga:
+\begin{verbatim}
+curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
+\end{verbatim}
+Instalación:
+\begin{verbatim}
+sudo apt-get install -y nodejs
+\end{verbatim}
+Para comprobar que la instalación se ha llevado a cabo correctamente, crearemos un proyecto de ejemplo (que descartaremos de cara a nuestro trabajo).
+Crearemos la carpeta node-app-example mediante el comando mkdir y nos situaremos dentro de dicha carpeta para ejecutar el comando npm init, el cual inicializa la carpeta con la estructura necesaria para un proyecto base. Se solicitará al usuario una serie de parámetros básicos y otros opcionales, sugerimos realizar esta prueba con la siguiente información:
+
+\begin{verbatim}
+package name: (app-example) app-example
+version: (1.0.0)
+description: App example to check node installation was fine.
+entry point: (index.js) app.js
+test command:
+git repository:
+keywords:
+author:
+license: (ISC)
+\end{verbatim}
+
+Se mostrará un resumen de los parámetros elegidos tal que el siguiente y deberemos confirmar con 'yes'.
+
+\begin{verbatim}
+About to write to /home/kadaiser/node-app-example/package.json:
+
+{
+  "name": "app-example",
+  "version": "1.0.0",
+  "description": "App example to check node installation was fine.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+\end{verbatim}
+
+npm install express –-save
+npm install method-override –-save
+npm install body-parser –-save
+npm install python-shell –-save
+npm install mongoose --save
+
+
+[JUSTIFICAR POR QUÉ MONGODB]
+Instalación de la versión más reciente de mongodb:
+https://docs.mongodb.com/manual/tutorial/install-mongodb-on-debian/
+1. Import the public key used by the package management system.
+\begin{verbatim}
+  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+\end{verbatim}
+
+1B. Si esto ha fallado con:
+\begin{verbatim}
+  gpg: failed to start the dirmngr '/usr/bin/dirmngr': No such file or directory
+\end{verbatim}
+Será necesario instalar previamente el gestor dirmngr to perform network operations for managing and downloading certificates.
+\begin{verbatim}
+  sudo apt-get install dirmngr --install-recommends
+\end{verbatim}
+
+2. Create a /etc/apt/sources.list.d/mongodb-org-4.0.list file for MongoDB.
+\begin{verbatim}
+  echo "deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
+\end{verbatim}
+
+3. Reload local package database.
+\begin{verbatim}
+  sudo apt-get update
+\end{verbatim}
+
+4. Install the MongoDB packages.
+\begin{verbatim}
+  sudo apt-get install -y mongodb-org
+\end{verbatim}
+
+4B. This will probably fail and you will need to install the Debian version for mongo with:
+\begin{verbatim}
+sudo apt-get install -y mongodb
+\end{verbatim}
+
+Esto instalará el daemon mongod, el mongos, el script init asociado, y un archivo de configuración.
+También instalará la shell mongo, y una serie de herramientas de MongoDB.
+
+And to start it as a service when the raspberry pi starts just have to enter this command:
+\begin{verbatim}
+sudo service mongod start
+\end{verbatim}
+
+The binaries are stored in the /usr/bin/ folder while the datas are in the /var/lib/mongodb/ folder. You can check everything is ok by using the mongo shell:
+\begin{verbatim}
+mongo
+\end{verbatim}
+
+
+
+
+(COMPROBAR ESTA SECCIÓN QUE VIENE)
+How to make your node project run at start of raspberry as a service:
+
+create node file:
+sudo nano /etc/init.d/customScript
+with this content:
+
+#!/bin/sh
+# /etc/init.d/node
+
+if [ true != "$INIT_D_SCRIPT_SOURCED" ] ; then
+    set "$0" "$@"; INIT_D_SCRIPT_SOURCED=true . /lib/init/init-d-script
+fi
+
+### BEGIN INIT INFO
+# Provides:          customScript
+# Required-Start:    $all
+# Required-Stop:     $all
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Starts the DAEMON_PATH/DAEMONOPTS server
+# Description:       Starts the DAEMON_PATH/DAEMONOPTS server
+### END INIT INFO
+
+export PATH=$PATH:/opt/node/bin
+
+DAEMON_PATH="/home/pi/dev/customScript”
+
+DAEMON=node
+DAEMONOPTS="app.js"
+NAME=customScript
+DESC="my custom script"
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+
+case "$1" in
+start)
+    printf "%-50s" "Starting $NAME..."
+    cd $DAEMON_PATH
+    PID=`$DAEMON $DAEMONOPTS > /dev/null 2>&1 & echo $!`
+    #echo "Saving PID" $PID " to " $PIDFILE
+    if [ -z $PID ]; then
+        printf "%s\n" "Fail"
+    else
+        echo $PID > $PIDFILE
+        printf "%s\n" "Ok"
+    fi
+;;
+status)
+    printf "%-50s" "Checking $NAME..."
+    if [ -f $PIDFILE ]; then
+        PID=`cat $PIDFILE`
+        if [ -z "`ps axf | grep ${PID} | grep -v grep`" ]; then
+            printf "%s\n" "Process dead but pidfile exists"
+        else
+            echo "Running"
+        fi
+    else
+        printf "%s\n" "Service not running"
+    fi
+;;
+stop)
+    printf "%-50s" "Stopping $NAME"
+    PID=`cat $PIDFILE`
+    cd $DAEMON_PATH
+    if [ -f $PIDFILE ]; then
+        kill -HUP $PID
+        printf "%s\n" "Ok"
+        rm -f $PIDFILE
+    else
+        printf "%s\n" "pidfile not found"
+    fi
+;;
+restart)
+    $0 stop
+    $0 start
+;;
+
+*)
+    echo "Usage: $0 {status|start|stop|restart}"
+    exit 1
+esac
+
+exit 0
+
+damos permisos:
+sudo chmod 755 /etc/init.d/
+make it launch at raspberry boot:
+sudo update-rc.d customScript defaults
+check if services are running:
+service SERVICE_NAME status
+
+If we do not want to restart the server manually every time, then we can use node package called nodemon. It resets the server every time we change the file.
+npm install nodemon --save-dev
+Change the package.json file and add the following line in “scripts” object.
+"scripts": {
+    "start": "nodemon server.js"
+},
+
