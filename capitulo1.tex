@@ -2,48 +2,39 @@
 
 \chapter{Introducción}
 
-%\label{ch:chapter1}
-%\section{Introducción}
-\label{makereference}
-El presente documento recoge el proceso de creación de un prototipo como solución integral de domótica programable, gestionada mediante software para plataforma móvil y Web App. Se plantea además cubrir una serie de objetivos adicionales que permitirán a esta solución ahorrar costes económicos y gastos innecesarios de los suministros de luz y agua en el hogar. La naturaleza del proyecto posee una vertiente sostenible, asequible y libre. Para poder cumplir con estos objetivos, será necesario que los materiales y dispositivos utilizados para su implementación sean sencillos de adquirir, fáciles de reemplazar además de tener un bajo coste en precio de adquisición y de tiempo necesario para su instalación, todo ello usando como base software y hardware libre.
+\section{Introducción}
+\label{ch:Capitulo1}
+El presente documento recoge el proceso de creación de un prototipo como solución integral de domótica programable, gestionada mediante software para plataforma móvil y Web App. La naturaleza del proyecto posee una vertiente sostenible, asequible y libre. Para poder cumplir con estos objetivos, será necesario que los materiales y dispositivos utilizados para su implementación sean sencillos de adquirir, fáciles de reemplazar, además de tener un bajo coste en precio de adquisición y de tiempo necesario para su instalación, todo ello usando como base software y hardware libre.
 
 \section{Motivación}
-\label{makereference1.1}
+\label{ch:Capitulo1.1}
 
+El planteamiento de instalar domótica en un edifico, requiere una planificación extensa y considerar múltiples variables que pueden complicar, en algunos casos imposibilitar, el dotar de automatismos un espacio.
+El problema principal, un presupuesto elevado. En un plano secundario, todas las soluciones aportadas por el sector privado que resultan practicas no son planteadas desde una perspectiva de interoperatividad, si no como un ecosistema cerrado pensado para operar dentro de un abanico de dispositivos seleccionados por los fabricantes y software con políticas opacas.
+
+La conectividad de dispositivos en el hogar a pasado de ordenadores/smartphones/tables conectados al router, a disponer de conectividad en electrodomésticos como la nevera, la lavadora, la televisión, o los sistemas de iluminación. Si bien esta conectividad a día de hoy es opcional para los inquilinos, sus cada vez mayores ventajas y confort aportado esta imponiéndose con fuerza en los hogares, pero siempre contratando los servicios de empresas privadas, y dentro de las opciones que quieran ofrecer.
+
+Surge la cuestión de disponer de una solución libre, que sea públicamente accesible e implementable por quien quiera, implementándola en base a sus necesidades, que, sin disponer de un servicio técnico dedicado, sea mantenible y cuyos elementos sean fáciles de reemplazar.
+
+
+----REVISAR ESTE CONTENIDO
 Una vivienda con inquilinos requiere de dos suministros básicos, luz y agua. Generalmente se incluye un tercero, el gas. Para este proyecto consideraremos sólo los dos primeros, ya que resultan más sencillos de manipular y medir. Es más sencillo cerrar una llave de paso de agua o acceder al cableado eléctrico en los cajetines de las paredes que manipular las tuberías de gas, las cuales deben manipularse con extremo cuidado dada su naturaleza volátil. Esto no significa que no haya riesgos en la manipulación de los otros dos suministros, pero es más seguro incluir un dispositivo en la red eléctrica ya sea mediante enchufes o empalmes, o incluir a un grifo una bomba de agua, que manipular una cañería de gas.
+--------
+
+
+\section{Contexto}
+\label{ch:Capitulo1.2}
+
+Las compañías de suministros se aseguran de medir con exactitud el gasto a facturar del consumo, esto no implica que los consumidores sepan cómo y cuánto se están aprovechando dicho consumo. Existen muchos factores por los cuales se derrochan recursos en un hogar, desde malos hábitos, descuidos o una falsa sensación de control. Con un control digitalizado y una programación adecuada, una casa puede ejecutar una serie de acciones que implican un menor consumo de recursos, un mejor aprovechamiento del suministro de agua/luz y por consecuencia, un ahorro en el bolsillo del ciudadano a la par que un modo de vivir más sostenible.
 
 El gasto medio de un hogar en España [según fuentes* INE o bien Instituto para la Diversificación y Ahorro de la Energía (IDAE)]. Existen distintas estrategias para reducir estos costes, algunas impulsadas por iniciativas gubernamentales como la introducida por el Ministerio de Industria, Turismo y Comercio con el bono para canjear de forma gratuita una bombilla convencional por dos de bajo consumo [insertar referencia Ej: \url{http://www.rtve.es/noticias/20090706/industria-comienza-repartir-gratis-20-millones-bombillas-bajo-consumo/283773.shtml}]. Otras mediante subvenciones como las cedidas por el Ministerio de Energía, Turismo y Agenda Digital a través del IDAE[ ref Ej: \url{http://www.idae.es/ayudas-y-financiacion/para-rehabilitacion-de-edificios-programa-pareer/programa-de-ayudas-para-la}].Otras basadas en la adquisición de electrodomésticos con alta eficiencia energética y consejos de `vox populi` que orientan un uso adecuado del agua y la luz. Todas estas estrategias son adecuadas y pueden combinarse entre sí para reducir el consumo y maximizar el ahorro. De hecho, las pautas habitualmente recomendadas a los consumidores desde asociaciones como la OCU [EJ: \url{https://www.ocu.org/vivienda-y-energia/gas-luz/consejos/trucos-ahorrar-energia}] o los de sentido común, son los que pueden repercutir con mayor impacto en la búsqueda de cumplir estos objetivos. (Explicar aquí como los consejos comunes se los salta la gente por el forro, no porque no quieran, sino por la falta de disciplina y como un proceso automático puede ayudar a lograr este ahorro).
 
-Aunque las compañías se aseguran de medir con exactitud el gasto a facturar del suministro consumido, esto no implica que los consumidores sepan cómo y cuánto están aprovechando dicho consumo. Existen muchos factores por los cuales se derrochan recursos en un hogar, desde malos hábitos, descuidos o una falsa sensación de control. Con un control digitalizado y una programación adecuada, una casa puede ejecutar una serie de acciones que implican un menor consumo de recursos, un mejor aprovechamiento del suministro de agua/luz y por consecuencia, un ahorro en el bolsillo del ciudadano a la par que un modo de vivir más sostenible.
+Actualmente existen soluciones ofertadas por empresas privadas cuyos productos tiene por objetivo aportar confort al hogar mediante el control remoto o la programación de los dispositivos electrónicos del hogar; sin embargo, sus productos privativos y prácticas empresariales poco éticas despiertan suspicacias entre los consumidores, los cuales no quieren renunciar a su privacidad a cambio de automatismos.
 
-Actualmente existen soluciones ofertadas por empresas privadas cuyos productos tiene por objetivo aportar confort al hogar mediante el control remoto o la programación de los dispositivos electrónicos del hogar; sin embargo, sus productos privativos y prácticas empresariales poco éticas despiertan suspicacias entre los consumidores, los cuales no quieren renunciar a su privacidad a cambio de automatismos. Otro de los inconvenientes de soluciones privadas se encuentra en el ecosistema de dispositivos y software que cada compañía quiere imponer, no siendo éstos compatibles habitualmente entre distintas compañías.
-
-
-\section{Estado del Arte de la Domótica y la Inmótica}
-\label{makereference1.1.1}
-
-El término 'domótica' proviene de la unión de las palabras $domus$ (que significa 'casa' en latín) y $-tica$ (de 'automática', palabra en griego que significa ‘que funciona por sí sola’). Se entiende por domótica al conjunto de sistemas que hacen de una vivienda un edificio inteligente, aportando servicios de gestión energética, seguridad, bienestar y comunicación, y que pueden estar integrados por medio de redes interiores y exteriores de comunicación, cableadas o inalámbricas, y cuyo control goza de cierta ubicuidad, desde dentro y fuera del hogar.
-Por 'inmótica' entendemos la incorporación al equipamiento de edificios de uso terciario o industrial (oficinas, edificios corporativos, hoteleros, empresariales y similares) de sistemas de gestión técnica automatizada de las instalaciones, con el objetivo de reducir el consumo de energía, aumentar el confort y la seguridad de estos.
-(Extraído de \url{http://www.altener.es/comunicacion/alternativasenergeticas/domotica-e-inmotica-edificios-inteligentes/}).
-
-Considerar también las conclusiones de sistemas Centralizados y Descentralizados de este artículo.(\url{http://gritosdetecnologia.blogspot.com/2013/04/origen-de-la-domotica.html})
-
-La domótica se remonta a los años 70, uno de los primeros hitos fue el \href{https://es.wikipedia.org/wiki/X10}{protocolo de comunicaciones X-10} de automatización de dispositivos en la línea eléctrica de un hogar. Con él, se puede utilizar la propia red como canal de comunicaciones mediante ráfagas de pulsos. El ancho de banda de 256 dispositivos simultáneos es una cantidad más que suficiente para interactuar con los dispositivos de un hogar, si calculamos que cada elemento susceptible de ser automatizado como por ejemplo persianas, estufas, enchufes, e interruptores ocupase un espacio de este ancho de banda, seguirían sobrando espacios en un piso de 150 metros cuadrados.
-
-En pleno 2019 pueden adquirirse los dispositivos necesarios para instalar una red X-10 que incluye interruptores, actuadores, sensores, transmisores, interfaces y unidades de control (todos ellos necesarios para obtener el control completo de la red) por precios con rangos entre 20 a 70 euros por cada elemento. Esto supone inversión elevada si se tiene en cuenta un hogar de varias habitaciones. Hay que considerar además ciertas limitaciones como que cada controlador es capaz de manejar un número limitado de dispositivos.
-
-En cuanto a las aplicaciones necesarias para gestionar el sistema, X-10 posee alternativas de código libre para su desarrollo como \href{http://www.minervahome.net/}{Minerva}. También existen interfaces hardware que traducen el protocolo X-10 a APIs de servicios web como el dispositivo \href{http://www.iobridge.com/}{ioBridge} que supuso una disrupción en el ámbito del IoT y la automatización del hogar.
-
-Una década después surgiría el SCE (Sistema de Cableado Estructurado) que permitía el trasporte de datos y voz, esto supuso la aparición del concepto Edificio Inteligente. Sin embargo, esto requiera de una instalación compleja difícilmente viable en edificios ya existentes, como es el caso que ocupa el alcance de este proyecto.
-
-Con la aparición de las redes inalámbricas, y sus posteriores estándares como el WIFI, se popularizó la aparición de sistemas de domótica aplicada directamente sobre los dispositivos, sin tener en cuenta la red eléctrica que los hace funcionar.
-
-Los autores de este documento coinciden en la necesidad de crear soluciones integrales o parciales para el hogar, que faciliten la tarea de gestión doméstica.
-
-
+Otro de los inconvenientes de soluciones privadas se encuentra en el ecosistema de dispositivos y software que cada compañía quiere imponer, no siendo éstos compatibles habitualmente entre distintas compañías, esto es, su interoperatividad, tendencia que sin embargo, parece estar cambiando.
 
 \section{Objetivos}
-\label{makereference1.2}
+\label{ch:Capitulo1.3}
 
 Diseñar una solución tecnológica modular y personalizable a las necesidades de cada hogar en función del presupuesto y tipo de vivienda.
 
@@ -59,25 +50,8 @@ Look and feel de la APP (Vista principal HOME, vista MORE, vista LOG)
 Infraestructura operativa
 Un caso de uso operativo a nivel de BBDD
 
-
-\section{Equipación}
-\label{makereference1.3}
-
-Existen múltiples niveles de implementación del prototipo planteado en este documento. En función de la cantidad de módulos operativos se requerirá una mayor cantidad de hardware para la sensorización y los actuadores implicados. El nivel más básico e imprescindible implica un ordenador con SO Linux que actuara como controlador de la infraestructura de dispositivos que dan forma al sistema en su conjunto. Esto permite un gran abanico de opciones, de entre las cuales el presente documento explica la implementación mediante un ordenador compacto de la marca Raspberry Pi. La selección particular de este hardware se apoya en dos características esenciales en el desarrollo de este proyecto: es barato y de bajo consumo eléctrico. Además, goza de presencia en el mercado de dispositivos, por lo cual es fácil de adquirir y ha acumulado una extensa comunidad de usuarios que facilitan su uso mediante tutoriales y experimentos. Como motivos adicionales se encuentra su reducido tamaño que permite ubicarlo con facilidad en lugares estrechos o difícilmente accesibles y su imperceptible ruido al operar.
-
-\section{Criterio de selección del equipamiento y Software}
-\label{makereference1.4}
-El modelo concreto para el desarrollo del prototipo es Rapsberry Pi3b+ que dispone de capacidad de procesador y memoria RAM suficiente para operar todo el software necesario. Este modelo no integra un almacenamiento interno para el usuario, pero su interfaz incluye una ranura de tarjetas micro-SD compatible con todas las opciones de tamaño de almacenamiento disponibles en el mercado. Se precisan de al menos 16 GB de espacio disponible en la memoria del sistema, y es recomendable exceder este mínimo siempre que sea posible, ya que la acumulación de datos con el paso del tiempo por parte del dispositivo crecerá indefinidamente.
-
-Los scripts necesarios para interactuar con los sensores y actuadores conectados se programarán en python para este proyecto, ya que es un lenguaje con una acelerada curva de aprendizaje, gran recorrido y una de las selecciones más comunes para la programación de bajo nivel. Además, se dispone de una enorme abanico de librerías ya creadas y revisadas para programar sensores, como Adafruit. Muchos de los sensores utilizados en el desarrollo de este proyecto son de bajo coste, y eso implica métricas menos exactas, pero gracias a las librerías de Adafruit se puede obtener datos con suficiente precisión para cubrir los objetivos planteados.
-
-
-Tambien será necesario incluir qué hardware y software (SO, paquetes, entornos de desarrollo, etc) usaremos y una justificación para cada caso.
-
-
-
-\section{Esquema de trabajo}
-\label{makereference1.5}
+\section{Plan de trabajo}
+\label{ch:Capitulo1.4}
 
 Dado que el servidor se basará en un conjunto de scripts de lenguaje de python que se encargarán de obtener información de los sensores, para mantener un control de versiones básico usaremos Git. El control de repositorio de Git se instala mediante el paquete 'git-core'. Pueden crearse un servidor de Git que almacene el control de versiones dentro de la misma raspberry sin necesidad de depender de servicios a terceros como GitHub o GitLab.
 
@@ -88,30 +62,5 @@ sudo apt-get install build-essential python-dev
 
 Aquí hablaríamos de cómo hemos organizado el proyecto, nuestras fechas, metodología ágil, sistema de repositorios, aplicaciones necesarias para el desarrollo del trabajo, bla bla bla...
 
-
-\section{Instalación y configuración del nodo principal}
-\label{makereference1.6}
- Utilizando los repositorios de distribuciones oficiales de Sistemas operativos de Raspberry Pi, descargamos la versión ``Lite'' de Raspbian. Para establecer una conexión SSH por terminal es necesario crear un fichero con nombre \verb|ssh| en la raiz de la unidad de almacenamiento donde previamente se haya montado la imagen descargada. La distribución de Raspbian originalmente estaba configurada por defecto con la conexión de SSH abierta en el puerto 22, pudiendo accederse con el usuario \verb|pi| y la contraseña \verb|raspberry|. Este dato era ignorado por los usuarios menos experimentados y esto supuso una brecha de seguridad en todos las distribuciones que no fueron configuradas a posteriori por los usuarios según las indicaciones de la propia \href{https://www.raspberrypi.org/documentation/configuration/security.md}{documentación de Raspberry}. En el primer arranque del SO de la Raspberry se establecerán las configuraciones básicas para las sucesivas conexiones SSH basadas en autenticación con claves privadas.
-
- De las estrategias disponibles para esta configuración, se crearán las claves en el equipo remoto que se conectará a la Raspberry, entregando mediante la primera conexión SSH con terminal la clave pública y almacenando la clave privada en el equipo remoto, reduciendo así el riesgo de ser expuesta fuera del dominio local del equipo. Para disponer de flexibilidad de conexión independientemente del SO del equipo remoto, la clave privada tendra un formato OpenSSH, fácil de incluir en SO Windows ya sea mediante conversión de la clave a formato PPK o como fichero accesible para aplicaciones de desarrollo, transferencias de ficheros, y/o control de versiones que integran conexiones SSH configurables (GitHub, Filezilla, Eclipse, etc).
-
-En Windows puede utilizarse aplicaciones de gestión de claves como 'puttygen'. En la sección de parámetros de generación de las claves se define SSH-2 RSA de 2048bits y en la sección de acciones pulsamos en 'genérate'. Tras unos movimientos aleatorios de ratón se generará la clave pública en el área de texto. Se deben guardar ambas claves mediante los botones 'save public key' y 'save private key'. Esta última será guardada con una contraseña definida en los inputs de la aplicación para tal fin. La clave privada será almacenada en formato PPK para ser rápidamente usada por aplicaciones de conexión por terminal remota como 'PUTTY'. Es recomendable exportar dicho fichero a formato OpenSSH mediante la misma aplicación de generación de claves, en la sección 'Conversions' del menú desplegable y seleccionando la opción 'Export OpenSSH key', definimos un nombre para el fichero de salida y pulsamos 'save'. Esta misma operación puede realizarse desde una terminal de un SO Linux mediante el comando \verb|ssh-keygen -t rsa| que generará por defecto la claves en el directorio \path{/home/username/.ssh/} bajo el nombre \verb|id_rsa.pub| e \verb|id_rsa| para las claves pública y privada respectivamente.
-
-Al no disponer de interfaz mediante dispositivos I/O para una acceso local con la Raspberry, es necesario establecer una primera conexión de terminal remoto mediante SSH con usuario y contraseña. Este primer acceso nos permite establecer las reglas de conexión que se usarán en adelante en el fichero de configuración en la ruta \path{/etc/ssh/sshd_config} asi como la configuracion de cuentas de usuarios.
-
-Las distribuciones de Raspbian disponen del usuario por defecto \verb|pi|. Esta cuenta de usuario esta incluido dentro del grupo de usuarios \verb|sudo|. En adelante se operará con una cuenta distinta que ha de generarse manualmente y adicionalmente eliminar la cuenta del usuario \verb|pi| para limitar brechas de seguridad. Como primer paso, crear el usuario \verb|sudo adduser kadaiser| e incluir al usuario en el grupo de usuarios \verb|sudo|. El fichero por defecto creado durante la instalación de la distribución situado en \path{/etc/sudoers} dispone de la directiva \verb|includedir /etc/sudoers.d| que debe ser descomentada en el fichero de configuración de \verb|sudo sudoers|, mediante el comando \verb|visudo|. Es necesario crear un fichero en la ruta \path{/etc/sudoers.d} con el siguiente formato de nombre \verb|010_kadaiser-nopasswd| cuyo contenido incluya la siguiente linea \verb|kadaiser ALL=(ALL) NOPASSWD: ALL| una vez se haya habilitado la directiva. Tras realizar las comprobaciones de que el nuevo usuario puede operar sin problemas con la nueva configuración de permisos, se elimina el fichero de permisos existente en \path{/etc/sudoers} para el usuario \verb|pi|, y su eliminación del sistema con el comando \verb|sudo deluser -remove-home pi|.
-
-Para realizar la comunicación remota por terminal en SSH de manera más segura y cómoda, incluiremos un fichero con el contenido de la clave pública en una ruta manualmente definida dentro del 'home' del usuario kadaiser.
-
-En concreto modificaremos el puerto de entrada para redirigir la conexión del puerto por defecto 22 a un valor más elevado (como por ejemplo el 45021). Esta decisión tiene como objetivo retrasar las técnicas de sondeo de puertos de un atacante hacia un servidor que admite conexiones externas. Un bot programado para encontrar servidores y marcarlos como objetivo de ataques escaneara puertos mediante evaluación de respuestas con paquetería ICMP. Igualmente un atacante puede determinar la naturaleza de los servicios ofrecidos por un servidor mediante herramientas como 'Nmap', al establecer valores elevados en los puertos, un rastreo incremental desde los valores más bajos llevará mas tiempo, permitiendo a las soluciones de seguridad (como un WFS) del servidor detectar el ataque con margen mayor de tiempo.
-
-En este mismo fichero establecemos unos límites concretos en los valores de tiempo de gracia \verb|LoginGraceTime 5| de apenas 5 segundos, impedimos el acceso del usuario root desde una conexión externa \verb|PermitRootLogin no|, limitamos el número de intentos de conexión \verb|MaxAuthTries 3| y el número máximo de sesiones simultáneas \verb|MaxSessions|. Para admitir las conexiones SSH mediante una autentificación con clave es necesario habilitar la autentificación de clave pública \verb|PubkeyAuthentication yes| y definir la ruta del fichero con la clave publica almcenada localmente en el servidor \verb|AuthorizedKeysFile| \path{.net/.aut} (véase que en este caso hemos definido una ruta manualmente indicando que la clave pública se encuentra en un fichero oculto nombrado \verb|aut| en la ruta \path{/home/pi/.net}). Como refuerzo adicional configuramos el servidor para denegar todo intento de conexión mediante contraseña plana \verb|PasswordAuthentication no|, y adicionalmente limitar el acceso sólo a las cuentas de usuarios designadas \verb|AllowUsers kadaiser|. Definidos los nuevos cambios de configuración, es necesario reiniciar el servicio.
-
-Descargamos la paquetería de Adafruit para el primer sensor de pruebas, el sensor DTH11 de temperatura y humedad.
-Se requiere un montaje sencillo.
-\begin{figure}[hbt!]
-\centering
-\includegraphics[height=2.5in]{figures/nodo_1.png}
-\end{figure}
-
-Clonamos la librería del sensor, nos ubicamos en la ruta descargada \verb|cd Adafruit_Python_DHT| e instalamos la librería \verb|sudo python setup.py install|, previamente instalamos las dependencias de la librería para su instalación \verb|sudo apt-get install python-setuptools| considerando que tenemos la versión de python 2.7.3, esto permitirá instalar la librería de python para el sensor DHT version 1.4. Se debe realizar una prueba de contacto con un script que nos muestre la información por pantalla para verificar que las conexiones del sensor a la rapsberry son correctos. Este primer script es un bucle infinito de mediciones de temperatura y humedad cada poco segundos. Hay una justificación para elegir un bucle sobre una única medida del sensor y está fundamentada en el margen de error inicial de las medidas. Si bien el sensor DTH11 es una opción muy común por su bajo coste y facilidad de implementación (este sensor se caracteriza por tener la señal digital calibrada por lo que asegura una alta calidad y una fiabilidad a lo largo del tiempo, ya que contiene un microcontrolador de 8 bits integrado. Está constituido por dos sensores resistivos (NTC y humedad) - revisar esta info y contrastarla contra ésta: \url{ https://programarfacil.com/blog/arduino-blog/sensor-dht11-temperatura-humedad-arduino/}), ademas de manejar señales digitales que no se ven afectadas por las fluctuaciones de voltaje, tiene algunas contrapartidas que deben tenerse en cuenta. Se necesita un tiempo mínimo de espera entre medidas (de al menos 1 segundo), hecho que no agrava particularmente su desempeño en entornos cerrados como una casa, ya que las variaciones de temperatura y humedad no son bruscas, aun así existen estrategias para reducir estos tiempos, por ejemplo, usar la función millis() de Arduino, el cual nos da el tiempo en milisegundos desde que empieza a ejecutarse el código, De esta forma evitamos la pausa de los 2 segundos, pero no el tiempo que demora en hacer la lectura, que es de aproximadamente  250 milisegundos, el cual lo pueden notar si realizan el ejemplo anterior, en donde se hace parpadear el led interno de la placa (Pin 13) con pausas de 100ms (tomado de \url{https://naylampmechatronics.com/blog/40_Tutorial-sensor-de-temperatura-y-humedad-DHT1.html}). Otro problema que abordar es que las primeras lecturas tienen un margen de error de unos +-2 grados Celsius y +-5\% de humedad relativa en las primeras 4 lecturas. Esto generará un problema a la hora de tomar lecturas instantáneas si el sensor no se encuentra ya operando cuando se solicita el dato. Como estrategia, haremos que el sensor tome medidas indefinidamente y los vuelque en un fichero/BBDD para recortar los tiempo de respuesta, evitando así esperar a que el sensor haga la toma de medidas en el momento de solicitud y sacándolas en su lugar del último registro que tengamos. Un último problema con el que hay que lidiar es su baja precisión limitada a enteros, por lo que no podemos esperar obtener un dato preciso a la décima de la temperatura y humedad. Esto sin embargo no es un problema real dada la naturaleza del proyecto, ya que no necesitamos un grado de precisión menor a la unidad para tomar acciones o informar al usuario.
+\section{Estructura del documento}
+\label{ch:Capitulo1.5}
