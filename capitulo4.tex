@@ -17,3 +17,10 @@ Los scripts necesarios para interactuar con los sensores y actuadores conectados
 
 
 Tambien será necesario incluir qué hardware y software (SO, paquetes, entornos de desarrollo, etc) usaremos y una justificación para cada caso.
+
+Dado que el servidor se basará en un conjunto de scripts de lenguaje de python que se encargarán de obtener información de los sensores, para mantener un control de versiones básico usaremos Git. El control de repositorio de Git se instala mediante el paquete 'git-core'. Pueden crearse un servidor de Git que almacene el control de versiones dentro de la misma raspberry sin necesidad de depender de servicios a terceros como GitHub o GitLab.
+
+Instalamos en el nodo principal los paquetes de pyton:
+\begin{verbatim}
+sudo apt-get install build-essential python-dev
+\end{verbatim}

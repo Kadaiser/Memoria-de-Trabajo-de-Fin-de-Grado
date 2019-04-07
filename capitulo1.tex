@@ -4,63 +4,72 @@
 
 \section{Introducción}
 \label{ch:Capitulo1}
-El presente documento recoge el proceso de creación de un prototipo como solución integral de domótica programable, gestionada mediante software para plataforma móvil y Web App. La naturaleza del proyecto posee una vertiente sostenible, asequible y libre. Para poder cumplir con estos objetivos, será necesario que los materiales y dispositivos utilizados para su implementación sean sencillos de adquirir, fáciles de reemplazar, además de tener un bajo coste en precio de adquisición y de tiempo necesario para su instalación, todo ello usando como base software y hardware libre.
+El presente documento recoge el proceso de creación de un prototipo como solución integral de domótica programable, gestionada mediante software para plataforma móvil y Web App. La naturaleza del proyecto posee una vertiente asequible y libre. Para poder cumplir con estos objetivos, será necesario que los materiales y dispositivos utilizados para su implementación sean sencillos de adquirir, fáciles de reemplazar, además de tener un bajo coste en precio de adquisición y de tiempo necesario para su instalación, todo ello usando como base software y hardware libre.
 
 \section{Motivación}
 \label{ch:Capitulo1.1}
 
-El planteamiento de instalar domótica en un edifico, requiere una planificación extensa y considerar múltiples variables que pueden complicar, en algunos casos imposibilitar, el dotar de automatismos un espacio.
-El problema principal, un presupuesto elevado. En un plano secundario, todas las soluciones aportadas por el sector privado que resultan practicas no son planteadas desde una perspectiva de interoperatividad, si no como un ecosistema cerrado pensado para operar dentro de un abanico de dispositivos seleccionados por los fabricantes y software con políticas opacas.
 
-La conectividad de dispositivos en el hogar a pasado de ordenadores/smartphones/tables conectados al router, a disponer de conectividad en electrodomésticos como la nevera, la lavadora, la televisión, o los sistemas de iluminación. Si bien esta conectividad a día de hoy es opcional para los inquilinos, sus cada vez mayores ventajas y confort aportado esta imponiéndose con fuerza en los hogares, pero siempre contratando los servicios de empresas privadas, y dentro de las opciones que quieran ofrecer.
+En los ultimos años, la domotica ha sufrido un crecimiento acelerado gracias a la interconexión de dispositivos con aplicaciones moviles. So ofrecen kits de domotica Plug and Play, que requieren solamente la intalación de una aplicación de movil gratuita y la adquisición de los dispositivos que consideres necesarios para tus necesidades. Una gran competencia entre empresas a surgido a raiz de este plateamiento, ofreciendo una gama casi ilimitada de dipositivos y electrodomesticos que pueden combinarse, en algunos casos incluso, interoperar entre distintas plataformas. Esta disputa se esta desarrollando en una etapa de mercado aun inestable, y sin embargo ya estan estableciendo unas pautas comunes en todos los actores del sector de la domotica.
 
-Surge la cuestión de disponer de una solución libre, que sea públicamente accesible e implementable por quien quiera, implementándola en base a sus necesidades, que, sin disponer de un servicio técnico dedicado, sea mantenible y cuyos elementos sean fáciles de reemplazar.
+En primer lugar la tendencia es ofrecer dispositivos de distintas rangos de precio, que estan diseñados para utilizarse cada uno en sus propios ecosistemas. Esto implica supeditarse a las inposiciones técnicas que cada fabricante decida vender, incluyendo la forma en la que funcionan los dispositivos, sin poder modifcar las especificaciones y funcionamientos de los mismos, esto es, en esencia, cajas negras, que desconocemos su fincionamiento interno, e incluyen la imposibilidad de modificarlos o reparlos por cuenta propia, estado sujetos a el contrato establecido con los fabricantes, lo cual incluye estar a merced de sus tiempo de servicio y respuestas de mantenimeinto.
 
+En segundo lugar la aceptación de las politicas de uso de las aplicaciones de las distintas plataformas obligan un uso restringido dentro de las pautas del vendero y la cesión de la privacian, en practicametne la totalidad de las capacidades de uso de la aplicación. Esto es, toda interacción del usuario con los dispositivos y otros datos personales que en terminos generales, siempre se piden en los procesos de registros incluyendo DCPs de carater bajo, medios, y bajo segun que dispositivos de caracter alto.
 
-----REVISAR ESTE CONTENIDO
-Una vivienda con inquilinos requiere de dos suministros básicos, luz y agua. Generalmente se incluye un tercero, el gas. Para este proyecto consideraremos sólo los dos primeros, ya que resultan más sencillos de manipular y medir. Es más sencillo cerrar una llave de paso de agua o acceder al cableado eléctrico en los cajetines de las paredes que manipular las tuberías de gas, las cuales deben manipularse con extremo cuidado dada su naturaleza volátil. Esto no significa que no haya riesgos en la manipulación de los otros dos suministros, pero es más seguro incluir un dispositivo en la red eléctrica ya sea mediante enchufes o empalmes, o incluir a un grifo una bomba de agua, que manipular una cañería de gas.
---------
+En ultimo lugar, toda esta transferencia de datos en todas las plataformas esta planetado para ser usadas en servicios en la nube, lo que implica un envio de dichos datos a servicios externos, con medidas de seguridad desconocidas, sin garantias reales de proteccíon de datos y bajo la eterna dependencia de la operatividad de dichos servicios, que segun que paises pueden no estar restringidos a la legalidad del pais en el que vive el usuario final. Se plantea ademas la paradoja de "Mil kilometros por cada metro", esto es, que para encender una bombilla a a un metro del usuario, la opertiva de la infraestrucutra implica que la acción tiene que viajar miles de kilometros para algo tan sencillo como encender un interruptor, lo cual carece de sentido para nostros y ademas, en caso de caida de la red de internet (Ya sea por el ISP, por un bloqueo del servicio en origen, etc ) no se puede operar los dispositivos en la red local.
 
 
-\section{Contexto}
-\label{ch:Capitulo1.2}
+Por todo esto, queremos investigar el desarrollo de un prototipo de solución domotica que evite estas pautas. Sostentado por un software libre, con unas librerias accesibles de manera publica, que se sustente en un hardware facil de adquirir y que con una base fundamental de conocimientos de electronica puedan ser montados y manipulados y personalizados con relativa facilidad. Buscaremos una solución integral de domotica que incluya el software necesario para operar localmente en casa (y a traves de la red de interner), con una APP, que no necesite de servicios externos, ni de la aceptación de politicas de uso privativas y opacas.
 
-Las compañías de suministros se aseguran de medir con exactitud el gasto a facturar del consumo, esto no implica que los consumidores sepan cómo y cuánto se están aprovechando dicho consumo. Existen muchos factores por los cuales se derrochan recursos en un hogar, desde malos hábitos, descuidos o una falsa sensación de control. Con un control digitalizado y una programación adecuada, una casa puede ejecutar una serie de acciones que implican un menor consumo de recursos, un mejor aprovechamiento del suministro de agua/luz y por consecuencia, un ahorro en el bolsillo del ciudadano a la par que un modo de vivir más sostenible.
+No se pretende crear una solución disruptiva en el mercado de la domotica, que enfrente las soluciones ya existentes ofertadas por otras marcas, ni aportar un protocolo nuevo de comunicaciones entre dispositvos IoT, sino en dar la opcion a quien, disponiendo de esta documentación pueda instalar su propio sistema de domotica personalizado. Las soluciones que pueden adquirirse actualmente en el mercado, tras lo años de peruba y error, han alcanzado un proceso de instalacíon muy sencillo para los usuarios finales, esto sin embargo, sera dificil  de abordar en este proyecto, ya que siempre sera necesario que el usuario final disponga de conocimientos especificos de informatica para interpretar los pasos que estaran documentados. En todo caso, se intentara minimizar en la medida de lo posible todos los pasos necesarios para montar la infraesctrucuta, incluyendo la instalación de software y la programacion de scripts, para que el prototipo pueda ser exportado con facilidad y replicarse nuevamente ahorrando tiempo, y simplificando la tarea.
 
-El gasto medio de un hogar en España [según fuentes* INE o bien Instituto para la Diversificación y Ahorro de la Energía (IDAE)]. Existen distintas estrategias para reducir estos costes, algunas impulsadas por iniciativas gubernamentales como la introducida por el Ministerio de Industria, Turismo y Comercio con el bono para canjear de forma gratuita una bombilla convencional por dos de bajo consumo [insertar referencia Ej: \url{http://www.rtve.es/noticias/20090706/industria-comienza-repartir-gratis-20-millones-bombillas-bajo-consumo/283773.shtml}]. Otras mediante subvenciones como las cedidas por el Ministerio de Energía, Turismo y Agenda Digital a través del IDAE[ ref Ej: \url{http://www.idae.es/ayudas-y-financiacion/para-rehabilitacion-de-edificios-programa-pareer/programa-de-ayudas-para-la}].Otras basadas en la adquisición de electrodomésticos con alta eficiencia energética y consejos de `vox populi` que orientan un uso adecuado del agua y la luz. Todas estas estrategias son adecuadas y pueden combinarse entre sí para reducir el consumo y maximizar el ahorro. De hecho, las pautas habitualmente recomendadas a los consumidores desde asociaciones como la OCU [EJ: \url{https://www.ocu.org/vivienda-y-energia/gas-luz/consejos/trucos-ahorrar-energia}] o los de sentido común, son los que pueden repercutir con mayor impacto en la búsqueda de cumplir estos objetivos. (Explicar aquí como los consejos comunes se los salta la gente por el forro, no porque no quieran, sino por la falta de disciplina y como un proceso automático puede ayudar a lograr este ahorro).
+Para disponer de una base tecnologica sólida sobre la que crear esta solución, se ha optado por utilizar una plataforma de hardware amigable como es Raspberry Pi y Arduino, que disponen de una extensa comunidad de usuarios y documentación. No solo se puede reaprovechar gran parte del trabajo ya creado en programación de scripts para componentes de hardware como sensores  y actuadores, sino que cumplen con el objetivo de ofrecer una base de hardware/software libre. Adicionalmente se tratara de alcanzar una cierta descentralziacion de los dispositivos y la propia raspberry, basandose en el concepto de nodo principal, que habitualmente se observa en las plataformas de pago.
 
-Actualmente existen soluciones ofertadas por empresas privadas cuyos productos tiene por objetivo aportar confort al hogar mediante el control remoto o la programación de los dispositivos electrónicos del hogar; sin embargo, sus productos privativos y prácticas empresariales poco éticas despiertan suspicacias entre los consumidores, los cuales no quieren renunciar a su privacidad a cambio de automatismos.
+Todo sensor/actuador que forme parte de red de dispositivos de una solución de domotica actual, es gestionada a traves de este concepto de nodo. En vez de conectar los dipositivos inalámbricos a el router de la casa, se conectan al nodo y este a su vez es quien se conecta a la red local del hogar, para asi conectarse con los servicios externos. En general, las distintsa plataformas  has alcanzado un acuerdo no formalizado de actuación que funciona  de la siguiente forma. El usuario final compra un nuevo dispositivo, lo enciende, dejandolo en un estado de "inclusion" a la red domotica, despues, desde la aplicación de movil, se indica al nodo, qu se quiere añadir un nuevo dispositivo, y tran seguir las indicaciones, el dispositivo se registra en la red del nodo. Esto sin embargo, tiene algunos inconvenientes en el proceso de "inclusion", y auque la probabilidad es baja, puede suceder que dos nodos de distitnas viviendas, que estan registrando dispositivos simultaneamente, terminasen, registrando un dispositivo que no les corresponde.
 
-Otro de los inconvenientes de soluciones privadas se encuentra en el ecosistema de dispositivos y software que cada compañía quiere imponer, no siendo éstos compatibles habitualmente entre distintas compañías, esto es, su interoperatividad, tendencia que sin embargo, parece estar cambiando.
+Se ha planteado este problema, junto con las 3 motivaciones principales, para crear un proceso de "inclusion" de dispositivos al nodo, que parta de una conexion alambrica (via USB) y resuelva este inconveniente, y simplifique el proceso de las soluciones privadas, que en ocasiones pueden fallar.
+
+Respecto a los dispositvos que se pueden incluir en la red del nodo, para el desarrollo de este ptoyecto nos limitaremos a un par de casos de uso, esto es un sensor de temperatura y humedad conectado directamente al nodo, incluyendo un altavoz y un sistema de luces que cubriran un amplio espectro de opciones, y un dispotivio inalammbrico de un sensor/actuador.
+
+
 
 \section{Objetivos}
-\label{ch:Capitulo1.3}
+\label{ch:Capitulo1.2}
 
-Diseñar una solución tecnológica modular y personalizable a las necesidades de cada hogar en función del presupuesto y tipo de vivienda.
+Diseñar e implementar una solucion intengral de domotica modular y autocontenida, que permita mediate las indicaciones de este documento, replicar la instalación y configuración de dicha solucion.
 
-Definición de casos de uso. (al menos 3)
-Implementación efectiva de servicios
-Scripting de bajo nivel
-Scripting de comunicación con la BBDD
-Estrategia de APP para lado cliente
+-Instalación y configuración de un stack de servicios que permitan controlar la suite de domotica desde un servidor alojado en la raspberry Pi.
 
-SEPTIEMBRE:
-Control de versiones con GitFlow
-Look and feel de la APP (Vista principal HOME, vista MORE, vista LOG)
-Infraestructura operativa
-Un caso de uso operativo a nivel de BBDD
+-Desarrollo de una aplicacion movil que permitar al usuario interactuar mediante una API-REST con dicho servidor para ejecutar las acciones y configuraciones
+
+-Implementar con una placa de arduino un dispositivo inalambrico con un sesnor que interactue con nuestra suite de domotica
+
+-Desarrollar un sistema de conexion de dispositivos inalambricos a nuestra suite de domotica.
+
+-Agrupar y exportar el proyecto en una imagen facil de clonar en otra raspberry con un manual sencillo.
 
 \section{Plan de trabajo}
-\label{ch:Capitulo1.4}
+\label{ch:Capitulo1.3}
 
-Dado que el servidor se basará en un conjunto de scripts de lenguaje de python que se encargarán de obtener información de los sensores, para mantener un control de versiones básico usaremos Git. El control de repositorio de Git se instala mediante el paquete 'git-core'. Pueden crearse un servidor de Git que almacene el control de versiones dentro de la misma raspberry sin necesidad de depender de servicios a terceros como GitHub o GitLab.
+El diseño de una suite de domotica, aun creandose desde cero, deberia de poder aprovechar al maximo las tecnologiass y desarrollos de software libres existentes, ya que este es, precisamente, el mayor potencial del desarrollo colaborativo tan caracteristico del sofware libre, que incluyen una extensa comunidad que dia a dia mejoran el resdimeitno y seguridad de cada uno de los modulos de los que se componen. Esto implica un estudio previo de las diferentes opciones disponibles, y una seleccion del software/hardware que mejor se ajuste a nuestro objetivos, mas detallados en la sigiente sección. Podemos separar las distintas fases de la siguiente forma:
 
-Instalamos en el nodo principal los paquetes de pyton:
-\begin{verbatim}
-sudo apt-get install build-essential python-dev
-\end{verbatim}
+1-Investigación: Incluye una evaluación de la disponibilidad de software que cubra las especificaciones que deseamos tener. Sera necesario verificar si, para cada idea de implementación ya existe una solución, y en caso de existir, valorar si merece la pena crear una implementacion propia (por cuestines de apredizaje o versatilidad, adecuación), o utilizar la ya existente.
 
-Aquí hablaríamos de cómo hemos organizado el proyecto, nuestras fechas, metodología ágil, sistema de repositorios, aplicaciones necesarias para el desarrollo del trabajo, bla bla bla...
+2-Control de versiones: utilizar repositorios con control de versiones que permitan el desarrollo simultaneo de distitnos elementos del proyecto sin que suponga colisiones a la hora de juntar los desarrollos, permitiendo separar y clasificar cada uno de estos elementos, para manejar distintos versionados.
+
+3-Experimentar: Aquellas tecnologias que sean reutilizasas deben poder conectarse entre si, con armonia, y facilidad, siendo, en aquellos puntos que sea necesario, ajustar las configuraciones e incluir desarrollos propios que permitan a todas estas tecnologias operar como un unico sistema.
+
+4- Prototipar: Implementar las soluciones propuestas para cada vertiente del proyecto, en un prototipo global, que cubra todos los objetivos propuestos. Iterara el diseño de cada modulo de manera paralela e independiente, evitando que las dificultades aisladas no bloqueen el desarrollo del resto de modulos.
+
+5- Publicar: Encapsular el prototipo en un formato exportable y facil de instalar en cualquier raspberry, poniendo a disposición publica el codigo y manuaales necesarios.
 
 \section{Estructura del documento}
-\label{ch:Capitulo1.5}
+\label{ch:Capitulo1.4}
+
+El documento se estructura como sigue:
+• El capitulo 2 evalua la actual situacion tecnologica y planteamientos de desarrollo disponibles para crear una suite de domotica libre.
+• El capitulo 3 se centra en la definicion de propuesta para crear un prototipo de la suite de domotica.
+• El capitulo 4 contiene el diseño de una arquitectura IoT con aplicacion movil para operar la suite, asi como el criterio de seleccion de equipamiento.
+• El capitulo 5 se dedica al diseño del software que debe correr dentro de la arquitectura asi como su configuracion e implentación.
+• El capitulo 6 propone casos de uso, donde el prototipo opera y da solución a los problemas planteados.
+• El trabajo concluye con unas reflexiones sobre el trabajo hecho y unas líneas de trabajo futuro.
