@@ -1,30 +1,51 @@
 \cleardoublepage
 
-\chapter{Estado del Arte de la Domótica y la Inmótica}
+\chapter{Estado del Arte de la Domótica}
 \label{ch:Capitulo2}
 
 Como definición. el término 'domótica' proviene de la unión de las palabras $domus$ (que significa 'casa' en latín) y $-tica$ (de 'automática', palabra en griego que significa ‘que funciona por sí sola’). Se entiende por domótica al conjunto de sistemas que hacen de una vivienda un edificio inteligente, aportando servicios de gestión energética, seguridad, bienestar y comunicación, y que pueden estar integrados por medio de redes interiores y exteriores de comunicación, cableadas o inalámbricas, y cuyo control goza de cierta ubicuidad, desde dentro y fuera del hogar.
 
-Por 'inmótica' entendemos la incorporación al equipamiento de edificios de uso terciario o industrial (oficinas, edificios corporativos, hoteleros, empresariales y similares) de sistemas de gestión técnica automatizada de las instalaciones, con el objetivo de reducir el consumo de energía, aumentar el confort y la seguridad de estos.
-(Extraído de \url{http://www.altener.es/comunicacion/alternativasenergeticas/domotica-e-inmotica-edificios-inteligentes/}).
 
 Considerar también las conclusiones de sistemas Centralizados y Descentralizados de este artículo.(\url{http://gritosdetecnologia.blogspot.com/2013/04/origen-de-la-domotica.html})
 
-La domótica se remonta a los años 70, uno de los primeros hitos fue el \href{https://es.wikipedia.org/wiki/X10}{protocolo de comunicaciones X-10} de automatización de dispositivos en la línea eléctrica de un hogar. Con él, se puede utilizar la propia red como canal de comunicaciones mediante ráfagas de pulsos. El ancho de banda de 256 dispositivos simultáneos es una cantidad más que suficiente para interactuar con los dispositivos de un hogar, si calculamos que cada elemento susceptible de ser automatizado como por ejemplo persianas, estufas, enchufes, e interruptores ocupase un espacio de este ancho de banda, seguirían sobrando espacios en un piso de 150 metros cuadrados.
+La domótica se remonta a los años 70, uno de los primeros hitos fue el \href{https://es.wikipedia.org/wiki/X10}{protocolo de comunicaciones X-10}~\cite{x10protocolwikipedia} de automatización de dispositivos en la línea eléctrica de un hogar. Con él, se puede utilizar la propia red como canal de comunicaciones mediante ráfagas de pulsos. El ancho de banda de 256 dispositivos simultáneos es una cantidad más que suficiente para interactuar con los dispositivos de un hogar, si calculamos que cada elemento susceptible de ser automatizado como por ejemplo persianas, estufas, enchufes, e interruptores ocupase un espacio de este ancho de banda, seguirían sobrando espacios en un piso de 150 metros cuadrados.
 
 En pleno 2019 pueden adquirirse los dispositivos necesarios para instalar una red X-10 que incluye interruptores, actuadores, sensores, transmisores, interfaces y unidades de control (todos ellos necesarios para obtener el control completo de la red) por precios con rangos entre 20 a 70 euros por cada elemento. Esto supone inversión elevada si se tiene en cuenta un hogar de varias habitaciones. Hay que considerar además ciertas limitaciones como que cada controlador es capaz de manejar un número limitado de dispositivos.
 
 En cuanto a las aplicaciones necesarias para gestionar el sistema, X-10 posee alternativas de código libre para su desarrollo como \href{http://www.minervahome.net/}{Minerva}. También existen interfaces hardware que traducen el protocolo X-10 a APIs de servicios web como el dispositivo \href{http://www.iobridge.com/}{ioBridge} que supuso una disrupción en el ámbito del IoT y la automatización del hogar.
 
-El problema de la solución del X-10 no radica en su protocolo sino en los costes,
+El problema de la solución del X-10 no radica en su protocolo sino en los costes, que generalemente sobrepasan los cientos de euros para las configuraciones mas sencillas. Ademas, esta instalación requiere de un proceso de obra, ya que es necesario empalmar los componente a la red electrica del hogar. En realidad, la opción de usar dispositivos del protocolo X-10 esta comndicionada a que la red electrica del hogar se instalara durante el proceso de edificación comn vistas a utilizar este sistema. De otra forma, sera necesario planificar obras y esto complica la facilidad de crear un prototipo assequeible.
+
+
+
+\section{Frameworks disponibles para la gestión de IoT para SmartHomes}
+\label{ch:Capitulo2.1}
+
+Universall, es una plataforma que ofrece una solcución estandarizada para desarrollar AALs (Ambient asisted living), pero la descartamos ya que en su configuración se mencionana los servicios en la nube.
+
+FiWare: El framework de FireWare se sustenta en la ejecución de dockers que en un principio esta en sintonia con nuestro objetivos, pero esta plataforma esta orientada a explotar su maxima capcidad en la interconexion de servicios de sectores industriales y ciudades inteligentes, lo cual excede de lejos el alcanze necesario para nuestro proyecto.
+
+OpenHab:la opcion mas cercana a nuestro ideal (colisiones de licencia GPL con ELP)
+pimatic: estado de beta
+
+Calaos: Otro poyecto de startup
+
+Domoticz:
+
+Home Asistant : mas nube
+
+OpenMotics: Soluciones cableadas.
+
+Sin frameworks, aunque supone un mayor esfuerzo, puede orientarse mas concreteamente a nuestros objetivos mas cercanos
+
+\section{Protocolos de comunicación y selección}
+\label{ch:Capitulo2.2}
+
 
 El protocolo MQTT
 
 El protocolo AMBIENTAL
 
-FRAMEWORK UNIVERSAAL IoT
-FIWARE
-TRABAJOS de iot
 
 
 Una década después surgiría el SCE (Sistema de Cableado Estructurado) que permitía el trasporte de datos y voz, esto supuso la aparición del concepto Edificio Inteligente. Sin embargo, esto requiera de una instalación compleja difícilmente viable en edificios ya existentes, como es el caso que ocupa el alcance de este proyecto.
