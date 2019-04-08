@@ -13,12 +13,9 @@ En los ultimos años, la domótica ha sufrido un crecimiento acelerado gracias a
 
 En primer lugar la tendencia es ofrecer dispositivos de distintas rangos de precio, que estan diseñados para utilizarse cada uno en sus propios ecosistemas. Esto implica supeditarse a las inposiciones técnicas que cada fabricante decida ofrecer, incluyendo la forma en la que funcionan los dispositivos, sin poder modificar las especificaciones y funcionamientos de los mismos, esto es, en esencia, cajas negras, que desconocemos su fincionamiento interno, e incluyen la imposibilidad de modificarlos o reparlos por cuenta propia, estado sujetos a un contrato establecido con los fabricantes, lo cual incluye estar a merced de su soporte de post-venta y servicio técnico.
 
-En segundo lugar la aceptación de las politicas de uso de las aplicaciones de las distintas plataformas obligan un uso restringido dentro de las pautas del vendero y la cesión de la privacian, en practicametne la totalidad de las capacidades de uso de la aplicación. Esto es, toda interacción del usuario con los dispositivos y otros datos personales que en terminos generales, siempre se piden en los procesos de registros incluyendo DCPs de carater bajo, medios, y bajo segun que dispositivos de caracter alto.
-
-(incluir aqui el estudio de permisos solicitados por las grandes plataformas de suite de domótica en las aplicaciones moviles: MiHome(Xiaomi INc. https://play.google.com/store/apps/details?id=com.xiaomi.smarthome&hl=en (seccion permission), Google Home (Google LLc https://play.google.com/store/apps/details?id=com.google.android.apps.chromecast.app), Amazon Alexa (Amazon Movile LLC https://play.google.com/store/apps/details?id=com.amazon.dee.app). Evidenciar ademas las politicas de uso en sus clausulas mas opacas)
+En segundo lugar, la aceptación de las políticas de uso de las aplicaciones de las distintas plataformas obliga a un uso restringido dentro de las pautas del vender y la cesión de la privacidad, en prácticamente la totalidad de las capacidades de uso de la aplicación. Esto es, toda interacción del usuario con los dispositivos y otros datos personales que, en términos generales, siempre se piden en los procesos de registros incluyendo DCPs de carácter bajo, medios, y bajo según que dispositivos de carácter alto.(incluir aqui el estudio de permisos solicitados por las grandes plataformas de suite de domótica en las aplicaciones moviles: MiHome(Xiaomi INc. \url{https://play.google.com/store/apps/details?id=com.xiaomi.smarthome&hl=en} (seccion permission), Google Home (Google LLc \url{https://play.google.com/store/apps/details?id=com.google.android.apps.chromecast.app}), Amazon Alexa (Amazon Movile LLC \url{https://play.google.com/store/apps/details?id=com.amazon.dee.app}). Evidenciar ademas las politicas de uso en sus clausulas mas opacas)
 
 En ultimo lugar, toda esta transferencia de datos en todas las plataformas esta planetado para ser usadas en servicios en la nube, lo que implica un envio de dichos datos a servicios externos, con medidas de seguridad desconocidas, sin garantias reales de proteccíon de datos y bajo la eterna dependencia de la operatividad de dichos servicios, que segun que paises pueden no estar conformes a la legalidad del pais en el que vive el usuario final. Se plantea ademas la paradoja de "Mil kilometros por cada metro", esto es, que para encender una bombilla a a un metro del usuario, la opertiva de la infraestrucutra implica que los datos de la acción tienen que viajar miles de kilometros para algo tan sencillo como encender un interruptor, lo cual carece de sentido para nosotros y ademas, en caso de caida de la red de internet (Ya sea por el ISP, por un bloqueo del servicio en origen, etc ) no se puede operar los dispositivos en la red local, lo cual no esta justificado.
-
 
 Por todo esto, queremos investigar y crear un prototipo de solución domotica (Suite domótica en adelante) que evite estas pautas anteriormente descritas. Sostentado por un software libre, con unas librerias accesibles de manera publica, basado en un hardware facil de adquirir y que con una base fundamental de conocimientos de electronica, dicha suite pueda ser  manipulada y personalizada con relativa facilidad. Buscaremos una solución integral de domotica que incluya el software necesario para operar localmente en casa (y a traves de la red de interner), con una APP, que no necesite de servicios externos, ni de la aceptación de politicas de uso privativas y opacas.
 
@@ -28,48 +25,56 @@ Para disponer de una base tecnologica sólida sobre la que crear esta solución,
 
 Dicho planteamientos se basa en que todo sensor/actuador que forme parte de red de dispositivos de una solución de domotica actual, es gestionada a traves de un nodo. En vez de conectar los dipositivos inalámbricos a el router de la casa, se conectan al nodo y este, a su vez, es quien se conecta a la red local del hogar, para asi conectarse con los servicios externos. En general, las distintsa plataformas  has alcanzado un acuerdo no formalizado de actuación que funciona de la siguiente forma. El usuario final compra un nuevo dispositivo, lo enciende, dejandolo en un estado de "inclusion" a la red domotica, despues, desde la aplicación de movil, se indica al nodo, que se quiere añadir un nuevo dispositivo, y tran seguir las indicaciones, el dispositivo se registra en la red del nodo. Esto sin embargo, tiene algunos inconvenientes en el proceso de "inclusion", y auque la probabilidad es baja, puede suceder que dos nodos de distitnas viviendas, que estan registrando dispositivos simultaneamente, terminasen, registrando un dispositivo que no les corresponde. Esto es una vulnerabilidad de seguridad grave.
 
-Se ha planteado este problema, junto con las 3 motivaciones principales, para crear un proceso de "inclusion" de dispositivos al nodo, que parta de una conexion alambrica (via USB) y resuelva este inconveniente, y simplifique el proceso de las soluciones privadas, que en ocasiones pueden fallar (Esto jorge te lo explicaremos en nuestra proxima revisión, creemos que te va a gustar la idea).
-
-Respecto a los dispositvos que se pueden incluir en la red del nodo, para el desarrollo de este ptoyecto nos limitaremos a un par de casos de uso, esto es un sensor de temperatura y humedad conectado directamente al nodo, incluyendo un altavoz y un sistema de luces que cubriran un amplio espectro de opciones, y un dispotivio inalammbrico de un sensor/actuador.
-
+Se ha planteado este problema, junto con las 3 motivaciones principales, para crear un proceso de "inclusion" de dispositivos al nodo, que parta de una conexion alambrica (via USB) y resuelva este inconveniente, y simplifique el proceso de las soluciones privadas, que en ocasiones pueden fallar (Esto jorge te lo explicaremos en nuestra proxima revisión, creemos que te va a gustar la idea).Respecto a los dispositvos que se pueden incluir en la red del nodo, para el desarrollo de este ptoyecto nos limitaremos a un par de casos de uso, esto es un sensor de temperatura y humedad conectado directamente al nodo, incluyendo un altavoz y un sistema de luces que cubriran un amplio espectro de opciones, y un dispositivio inalammbrico de un sensor/actuador.
 
 \section{Objetivos}
 \label{ch:Capitulo1.2}
 
-Diseñar e implementar una solucion intengral de domotica modular y autocontenida, que permita mediate las indicaciones de este documento, replicar la instalación y configuración de dicha solucion.
+Diseñar e implementar una solución integral de domótica modular y autocontenida, que permita mediante las indicaciones de este documento, replicar la instalación y configuración de dicha solución.
+\begin{itemize}
+  \item Instalación y configuración de un stack de servicios que permitan controlar la suite de domótica desde un servidor alojado en la raspberry Pi.
 
--Instalación y configuración de un stack de servicios que permitan controlar la suite de domotica desde un servidor alojado en la raspberry Pi.
+  \item Desarrollo de una aplicación movil que permitir al usuario interactuar mediante una API-REST con dicho servidor para ejecutar las acciones y configuraciones
 
--Desarrollo de una aplicacion movil que permitar al usuario interactuar mediante una API-REST con dicho servidor para ejecutar las acciones y configuraciones
+  \item Implementar con una placa de arduino un dispositivo inalámbrico con un sensor que interactúe con nuestra suite de domótica.
 
--Implementar con una placa de arduino un dispositivo inalambrico con un sesnor que interactue con nuestra suite de domotica
+  \item Desarrollar un sistema de conexión de dispositivos inalámbricos a nuestra suite de domótica.
 
--Desarrollar un sistema de conexion de dispositivos inalambricos a nuestra suite de domotica.
-
--Agrupar y exportar el proyecto en una imagen facil de clonar en otra raspberry con un manual sencillo.
+  \item Agrupar y exportar el proyecto en una imagen fácil de clonar en otra raspberry con un manual sencillo.
+\end{itemize}
 
 \section{Plan de trabajo}
 \label{ch:Capitulo1.3}
 
-El diseño de una suite de domotica, aun creandose desde cero, deberia de poder aprovechar al maximo las tecnologiass y desarrollos de software libres existentes, ya que este es, precisamente, el mayor potencial del desarrollo colaborativo tan caracteristico del sofware libre, que incluyen una extensa comunidad que dia a dia mejoran el resdimeitno y seguridad de cada uno de los modulos de los que se componen. Esto implica un estudio previo de las diferentes opciones disponibles, y una seleccion del software/hardware que mejor se ajuste a nuestro objetivos, mas detallados en la sigiente sección. Podemos separar las distintas fases de la siguiente forma:
+El diseño de una suite de domótica, aun creándose desde cero, debería de poder aprovechar al máximo las tecnologías y desarrollos de software libres existentes, ya que este es, precisamente, el mayor potencial del desarrollo colaborativo tan característico del software libre, que incluyen una extensa comunidad que día a día mejoran el rendimiento y seguridad de cada uno de los modulos de los que se componen. Esto implica un estudio previo de las diferentes opciones disponibles, y una selección del software/hardware que mejor se ajuste a nuestros objetivos, más detallados en la siguiente sección. Podemos separar las distintas fases de la siguiente forma:
 
-1-Investigación: Incluye una evaluación de la disponibilidad de software que cubra las especificaciones que deseamos tener. Sera necesario verificar si, para cada idea de implementación ya existe una solución, y en caso de existir, valorar si merece la pena crear una implementacion propia (por cuestines de apredizaje o versatilidad, adecuación), o utilizar la ya existente.
+\begin{enumerate}
+  \item Investigación: Incluye una evaluación de la disponibilidad de software que cubra las especificaciones que deseamos tener. Sera necesario verificar si, para cada idea de implementación ya existe una solución, y en caso de existir, valorar si merece la pena crear una implementación propia (por cuestiones de aprendizaje o versatilidad, adecuación), o utilizar la ya existente.
 
-2-Control de versiones: utilizar repositorios con control de versiones que permitan el desarrollo simultaneo de distitnos elementos del proyecto sin que suponga colisiones a la hora de juntar los desarrollos, permitiendo separar y clasificar cada uno de estos elementos, para manejar distintos versionados.
+  \item Control de versiones: utilizar repositorios con control de versiones que permitan el desarrollo simultaneo de distintos elementos del proyecto sin que suponga colisiones a la hora de juntar los desarrollos, permitiendo separar y clasificar cada uno de estos elementos, para manejar distintos versionados.
 
-3-Experimentar: Aquellas tecnologias que sean reutilizasas deben poder conectarse entre si, con armonia, y facilidad, siendo, en aquellos puntos que sea necesario, ajustar las configuraciones e incluir desarrollos propios que permitan a todas estas tecnologias operar como un unico sistema.
+  \item Experimentar: Aquellas tecnologias que sean reutilizadas deben poder conectarse entre sí, con armonía, y facilidad, siendo, en aquellos puntos que sea necesario, ajustar las configuraciones e incluir desarrollos propios que permitan a todas estas tecnologias operar como un único sistema.
 
-4- Prototipar: Implementar las soluciones propuestas para cada vertiente del proyecto, en un prototipo global, que cubra todos los objetivos propuestos. Iterara el diseño de cada modulo de manera paralela e independiente, evitando que las dificultades aisladas no bloqueen el desarrollo del resto de modulos.
+  \item Prototipar: Implementar las soluciones propuestas para cada vertiente del proyecto, en un prototipo global, que cubra todos los objetivos propuestos. Iterara el diseño de cada módulo de manera paralela e independiente, evitando que las dificultades aisladas no bloqueen el desarrollo del resto de modulos.
 
-5- Publicar: Encapsular el prototipo en un formato exportable y facil de instalar en cualquier raspberry, poniendo a disposición publica el codigo y manuaales necesarios.
+  \item Publicar: Encapsular el prototipo en un formato exportable y fácil de instalar
+\end{enumerate}
 
 \section{Estructura del documento}
 \label{ch:Capitulo1.4}
 
 El documento se estructura como sigue:
-• El capitulo 2 evalua la actual situacion tecnologica y planteamientos de desarrollo disponibles para crear una suite de domotica libre.
-• El capitulo 3 se centra en la definicion de propuesta para crear un prototipo de la suite de domotica.
-• El capitulo 4 contiene el diseño de una arquitectura IoT con aplicacion movil para operar la suite, asi como el criterio de seleccion de equipamiento.
-• El capitulo 5 se dedica al diseño del software que debe correr dentro de la arquitectura asi como su configuracion e implentación.
-• El capitulo 6 propone casos de uso, donde el prototipo opera y da solución a los problemas planteados.
-• El trabajo concluye con unas reflexiones sobre el trabajo hecho y unas líneas de trabajo futuro.
+
+\begin{itemize}
+  \item El capitulo 2 evalua la actual situacion tecnologica y planteamientos de desarrollo disponibles para crear una suite de domotica libre.
+
+  \item El capitulo 3 se centra en la definicion de propuesta para crear un prototipo de la suite de domotica.
+
+  \item El capitulo 4 contiene el diseño de una arquitectura IoT con aplicacion movil para operar la suite, asi como el criterio de seleccion de equipamiento.
+
+  \item El capitulo 5 se dedica al diseño del software que debe correr dentro de la arquitectura asi como su configuracion e implentación.
+
+  \item El capitulo 6 propone casos de uso, donde el prototipo opera y da solución a los problemas planteados.
+
+  \item El trabajo concluye con unas reflexiones sobre el trabajo hecho y unas líneas de trabajo futuro.
+\end{itemize}
