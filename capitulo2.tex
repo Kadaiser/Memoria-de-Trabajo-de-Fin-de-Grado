@@ -21,16 +21,23 @@ Una década después surgiría el SCE (Sistema de Cableado Estructurado) que per
 Con la aparición de las redes inalámbricas, y sus posteriores estándares de comunicaci como el WIFI, se popularizaron los sistemas de domótica aplicada directamente sobre los dispositivos, sin tener en cuenta la red eléctrica que los hace funcionar.
 
 
-
-
 \section{Frameworks disponibles para la gestión de IoT para SmartHomes}
 \label{ch:Capitulo2.1}
 
-Universall, es una plataforma que ofrece una solcución estandarizada para desarrollar AALs (Ambient asisted living), pero la descartamos ya que en su configuración se mencionana los servicios en la nube.
+Un planteamiento recurrente en el diseño de una solución basada en software es acelerar el proceso de desarrollo e implementación utilizando un framework. Es una buena idea. Estas herramientas están, en su mayoría, profundamente documentadas para exprimir sus capacidades al máximo, disponen de versionados y revisiones (en mayor o menor medida) que fortalecen tanto su seguridad, robustez, resiliencia e implementación. Poseen una buena abstracción del hardware en el que se ejecutan, sus servicios son modulares, su arquitectura es escalable.  En ocasiones están basados en software libre y/o gratuito, y disponen de una comunidad activa de usuarios a los que poder preguntar dudas. Estas son cualidades muy importantes, mas alla de las capacidades técnicas que cada opción pueda ofrecer.
+En el mundo del IoT es impórtate determinar el alcance en conectividad que se desea alcanzar y volumen de datos a tratar. Existen frameworks pensados para interconectar ingentes cantidades de dispositivos en grandes extensiones de terreno y bajo el peso de un abrumador volumen de datos que procesar como es el caso de las SmartCities, o la infraestructura del sector primario y secundario. En algunos casos, el alcance es tan extremo que el concepto de IoT evoluciona a IoE (Internet of Everything) y se requiere la presencia de grandes actores tecnológicos, y sus soluciones, para abarcar estos proyectos, como es el caso del framework IBM BlueMix de IBM, el Cisco Virtualized Packet Core de Cisco, AWS IoT de Amazon o Azure IoT de Miscrosoft, por mencionar algunos ejemplos de este calibre.
 
-FiWare: El framework de FireWare se sustenta en la ejecución de dockers que en un principio esta en sintonia con nuestro objetivos, pero esta plataforma esta orientada a explotar su maxima capcidad en la interconexion de servicios de sectores industriales y ciudades inteligentes, lo cual excede de lejos el alcanze necesario para nuestro proyecto.
+Evidentemente, estos frameworks no fueron diseñados pensando en reducidos entornos como los de un hogar, y aunque son compatibles, el tiempo necesario en formación para su uso queda fuera de las capacidades y expectativas de un proyecto de las características que aqui se recoge. Sin embargo, también se dispone de un amplio abanico de opciones a un alcance más acorde a lo esperado de una solución SmartHome.
+
+Existe una serie de criterios que aplicaremos al valorar las opciones de frameworks disponibles, en consonancia con la motivación de este proyecto. Antes de realizar cualquier evaluación sobre las bondades de cada plataforma, es conveniente recordar que en la solución que esperamos crear, se intentara evitar el uso de servicios en la nube o dependencias de APIs externas. Esto responde al objetivo de aislar la suite domótica a desarrollar, de la red de internet, evitando esa dependencia para su operatividad. Por supuesto, no es el objetivo crear una plataforma desconectada, ya que, se espera poder operar de forma remota los dispositivos desde fuera del ámbito de la red local del hogar. Ademas, debera disponer de un licenciamiento de codigo libre y gratuito, en otro caso, estariamos contraviniendo la naturaleza de este proyecto.
+
+
+FiWare esta catalogada como una plataforma de codigo abierto que agrupan un set de estandares universales para el contexto de gestion de datos~\cite{whatisfiware}. Se sustenta en la ejecución del framework sobre Dockers que pueden ser alojados localmente en maquinas dentro del hogar, y aunque esta solución esta orientada a procesar datos en un contexto mas extenso que una SmartHome, puede aislarse de la red de internet. Limitan la portabilidad de las aplicaciones a aquellas que se catalogen como 'Powered by FIWARE', y aunque ofrecen una interfaz estandar para los componentes que integren la solución, con el objetivo de eliminar el bloqueo del proveedor de componentes, no posee un licenciamiento de codigo libre, por ello sera descartado.
 
 OpenHab:la opcion mas cercana a nuestro ideal (colisiones de licencia GPL con ELP)
+
+Universaal, es una plataforma que ofrece una solcución estandarizada para desarrollar AALs (Ambient asisted living), pero la descartamos ya que en su configuración se mencionana los servicios en la nube.
+
 pimatic: estado de beta
 
 Calaos: Otro poyecto de startup
@@ -41,10 +48,18 @@ Home Asistant : mas nube
 
 OpenMotics: Soluciones cableadas.
 
+
+MainFlux: uno libre
+
 Sin frameworks, aunque supone un mayor esfuerzo, puede orientarse mas concreteamente a nuestros objetivos mas cercanos
 
-\section{Protocolos de comunicación y selección}
+\section{Stack de servicios}
 \label{ch:Capitulo2.2}
+
+MEAN vs LAMP
+
+\section{Protocolos de comunicación y selección}
+\label{ch:Capitulo2.3}
 
 
 El protocolo MQTT
