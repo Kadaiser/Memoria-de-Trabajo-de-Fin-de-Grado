@@ -8,6 +8,10 @@ Protocolo de comunicación x10.
 Securing your raspberry pi.
 \newblock Accessed: 2015-10-12.
 
+\bibitem{raspberrypiasaccesspoint}
+Securing your raspberry pi.
+\newblock Accessed: 2015-10-12.
+
 \bibitem{whatisfiware}
 What is fiware.
 \newblock Accessed: 2019-04-09.
@@ -15,6 +19,10 @@ What is fiware.
 \bibitem{openHabRaspberryPi}
 What is fiware.
 \newblock Accessed: 2019-04-10.
+
+\bibitem{mainfluxdoc}
+Drasko DRASKOVIC, 2019.
+\newblock (Drasko DRASKOVIC in the role of BDFL).
 
 \bibitem{eprint49443}
 Jorge Jarne~Brun.
