@@ -54,7 +54,7 @@ Ya que uno de los objetivos del proyecto radica en la condición de disponer de 
 
 Sin frameworks, aunque supone un mayor esfuerzo, puede orientarse mas concreteamente a nuestros objetivos mas cercanos.
 
-\section{Stack de servicios}
+\section{Stack de servicios y protocolos de comunicación}
 \label{ch:Capitulo2.2}
 
 Habiendo elegido no utilizar un framework concreto, queda a nuestra entera disposición seleccionar bajo que servicios operara nuestra solución domótica. Cualquiera de los frameworks anteriormente listados estaban sujetos a una combinación de servicios que les permitía operar dentro de sus especificaciones. En más de la mitad de ellos, se utilizaban servidores web que permitan gestionar la suite domótica vía web, o a través de una app.
@@ -89,17 +89,30 @@ Con esto aún tendríamos que enfrentar un problema adicional, el número de col
 \includegraphics[height=2.5in]{figures/SQLSchemaExample_3.png}
 \end{figure}
 
-Una preocupación que agrava la perspectiva de usar una BBDD relacional es que, en este punto del proyecto, es su escalabilidad horizontal. Si bien las tablas pueden crecer a un gran número de registros, no se prevé almacenar datos con vistas a largo plazo, la mayoría de los valores almacenados serán efímeros en tiempo de utilidad, almenarlos responde solo a la necesidad de obtener comparativas en plazo de tiempo relativamente cortos, como horas, dias, y posiblemente semanas. Mas alla de este rango estos datos no tienen una utilidad real y pueden ser condensados en medias para utilizarse en resúmenes. Por otro lado, disponer de flexibilidad a la hora de configurar la extensión de propiedades de un objeto de la BBDD es uno de los puntos fuertes de una BBDD no relacional.
+Una preocupación que agrava la perspectiva de usar una BBDD relacional es, en este punto del proyecto, su escalabilidad horizontal. Si bien las tablas pueden crecer a un gran número de registros, no se prevé almacenar datos con vistas a largo plazo, la mayoría de los valores almacenados serán efímeros en tiempo de utilidad, almacenarlos responde solo a la necesidad de obtener comparativas en plazos de tiempo relativamente cortos, como horas, dias, y posiblemente semanas. Mas alla de este rango estos datos no tienen una utilidad real y pueden ser condensados en médias para utilizarse en resúmenes. Por otro lado, disponer de flexibilidad a la hora de configurar la extensión de propiedades de un objeto de la BBDD es uno de los puntos fuertes de una BBDD no relacional.
 
-En primer lugar, es necesario que se trate de un servidor web ligero en ejecución. En segundo lougar no es necesario que tenga gran capacidad de atender a muchos usuarios simultanemente.
+En la mayoria de proyectos de IoT observados en nuestras indagaciones, aparece en escena mongoDB. Es una elección popular gracias a su escalabilidad y flexibilidad, esto permite sortear mas facilmente la problematica de adaptarse y anticiparse a los cambios tan continuos que sufre el escenario del IoT. Aparecen nuevos sensores continuamente, que generan nuevas muestras de datos, con funcionalidad deistitnas, en una BBDD relacional es dificil realizar iteraciones del modelo de datos de esta manera. Por otro lado, el proceso de analizar unos datos que evolucionan continuamente, no solo en contenido, sino en forma, hacen que su extracción y procesado se vuelva muy compleja. Las BBDD no relacionales son mas amigables a la hora de definir criterios para extraer informaciones concisas dentro de un documento heterogeneo. Ademas, MongoDB esta pensado para trabajar estrechamente con datos presentados en formato JSON. Esto hace su uso muy conveniente en un entorno de aplicación que se base en estas estructuras de datos como ocurre con los motores de JavaScript de los navegadores o la mayoría de aplicaciones moviles.
 
-MEAN vs LAMP
+Destacar este ultimo aspecto es determinante a la hora de seleccionar el entorno de ejecución que usara el servidor de la aplicación de domótica. En este aspecto, existen multiples estrategias, todas ellas en una primera aproximación valdias. Se puede disponer de un servidor web como Apache o Ngix, programados en lenguaje PHP. El cliente establece conexiones por el protocolo HTTP/HTTPS solicitando procesamientos por aprte del servidor y este entrega una respuesta codificada en texto plano para que el sotware del cliente lo reciba. Esta estrategía es simple pero efectiva, sin embargo, en proyectos de IoT, hay un protocolo originalmente ideado por la compañia de IBM de licencia libre enfocado a una conectividad maquina a maquina (M2M), el código de dicho protocolo fue donado en 2011 al proyecto de Eclipse. Mientras que el protocolo HTTP/HTTPS puede manejar volumenes grandes de información en su trasferencia por la red de comunicaciónes, el protocolo MQTT requiere menos ancho de banda, esta orientado a proyectos con un bajo consumo  y que dispongan de poco recursos de procesamiento. Es importante tener en cuenta que queremos conseguir en una suite domotica, por ejemplo, si hay que obtener la temperatura de una habitación, todo se reduce a un unico dato, un numero (posiblemente decimal), o al menos, eso es lo que un usuario espera recibir. Esto implica que, un sensor de temperatura, en algun lugar de la casa, recibe una petición en la red en la que se encuentra de otro dispositivo, toma la medida y la envia a dicho dispositivo.
+
+Si usamos el planteamiento de un servicio web, el sensor dispondrá de la capacidad de recibir una solicitud en un puerto abierto, cuando reciba la petición adecuada, respondera incluyendo en el cuerpo de la respuesta dicha medida y sera procesada en el dispositivo que creó la petición. Esto significa que cada sensor/actuador sera por si mismo un servidor web con un puerto abierto que atiende peticiones de clientes. Si todos los dispositivos estan conectados en la misma red, salvo que se apliquen restrinciones especificas en el firewall, seran visibles entre si, pudiendo encadenar llamadas y respuestas entre ellos, o a traves de un dispositivo central que se encarge de hacer las solicitudes y cuyas respuestas recibidas sean procesadas para mostrarse en la aplicación movil.
+
+Desde el planteamiento del protocolo MQTT, la estrategia gira en torno al concepto de sucripción de $topics$ o temas, donde los dispositivos publican información de distintos temas y los suscriptiores a dichos temas reciben la información cuando es publicada. A nivel físico, todos los clientes se conectan a un punto central, lo que define una topologia de estrella (con sus ventajas e incovenientes). Dicho nodo central es el servidor definido como $broker$, y es el unico que sabe a que topic esta suscrito cada cliente. Esto significa que cada uno de los sensores/actuadores de la red ignora al resto de los dispositvos, ya que solo atienden la comunicación con el broker a traves de una conexion TCP permanente. Esta estrategia es diferente a la usada en el protocolo HTTP, ya que no es necesario hacer una petición para recibir información de un cliente. Simplemente el broker da o solicita información en los topics a los que los dispositivos estan suscritos. Para proyectos de este tipo, el hecho de que los dispositivos no se relacionen entre si, dan lugar a una gran ventaja, la escalabilidad.
+
+
+-- Resta hablar de Angular y NODE
 
 
 
-\section{Protocolos de comunicación y selección}
+\section{Hardware disponible}
 \label{ch:Capitulo2.3}
 
+raspberry pi
 
-El protocolo MQTT
-El protocolo AMBIENTAL
+zigbee vs z-wave
+
+esp8266
+
+nodemcu
+
+chachivaches y filubercios baratos (el estigma de la calidad y coherencia china)
