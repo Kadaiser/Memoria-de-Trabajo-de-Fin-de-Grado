@@ -61,7 +61,7 @@ Habiendo elegido no utilizar un framework concreto, queda a nuestra entera dispo
 
 Orientando la selección de los servicios necesarios para la creación de un prototipo, que permita alcanzar los objetivos planteados para este proyecto, surge la necesidad de disponer de un servicio de infraestructura web, que permita gestionar la suite domótica cómodamente desde un dispositivo remoto. Sin entrar en definiciones, nos centraremos en que características que mejor se adapten a las necesidades del proyecto.
 
-Para nuestra estrategia de selección de servicios, empezaremos seleccionando la BBDD que cimentaran el resto de stack. Toda aplicación informática, se sustenta en primera instancia sobre el almacenamiento de datos de manera persistente. En esencia, las BBDD se segmentan en 2 categorías principales según como se relacionan entre si dichos datos. Estos son, BBDD relacionales, o BBDD no relacionales. Además de esta segmentación principal, existen otras características importantes en cuanto a la escalabilidad y diseño de cada modelo. Si consideramos como, humanamente, entendemos los datos necesarios para una suite domótica, una de las primeras impresiones, es que no sabemos con certeza cuantos dispositivos de sensorización o actuadores serán necesarios para cada caso de uso. De hecho, es muy probable que un mismo caso de uso disponga de diferentes combinaciones de dispositivos para alcanzar una solución. Es, sin embargo, bastante obvio que básicamente almacenaremos pocos conceptos primarios, los principales son, ubicaciones, dispositivos en las ubicaciones y medidas y/o acciones de los dispositivos.
+Para nuestra estrategia de selección de servicios, empezaremos seleccionando la BBDD que cimentaran el resto de stack. Toda aplicación informática, se sustenta en primera instancia sobre el almacenamiento de datos de manera persistente. En esencia, las BBDD se segmentan en 2 categorías principales según como se relacionan entre si dichos datos. Estos son, BBDD relacionales, o BBDD no relacionales. Además de esta segmentación principal, existen otras características remarcables en cuanto a la escalabilidad y diseño de cada modelo. Si consideramos como, humanamente, entendemos los datos necesarios para una suite domótica, una de las primeras impresiones, es que no sabemos con certeza cuantos dispositivos de sensorización o actuadores serán necesarios para cada caso de uso. De hecho, es muy probable que un mismo caso de uso disponga de diferentes combinaciones de dispositivos para alcanzar una solución. Es, sin embargo, bastante obvio que básicamente almacenaremos pocos conceptos primarios, los principales son, ubicaciones, dispositivos en las ubicaciones y medidas y/o acciones de los dispositivos.
 
 Podría parecer que hablamos de una relación de objetos entre sí, y que un modelo de BBDD relacional es la mejor opción, pero si consideramos que, cada entrada almacenada tendrá una estructura distinta, hace que no sea una opción tan ideal.
 
@@ -93,26 +93,66 @@ Una preocupación que agrava la perspectiva de usar una BBDD relacional es, en e
 
 En la mayoria de proyectos de IoT observados en nuestras indagaciones, aparece en escena mongoDB. Es una elección popular gracias a su escalabilidad y flexibilidad, esto permite sortear mas facilmente la problematica de adaptarse y anticiparse a los cambios tan continuos que sufre el escenario del IoT. Aparecen nuevos sensores continuamente, que generan nuevas muestras de datos, con funcionalidad deistitnas, en una BBDD relacional es dificil realizar iteraciones del modelo de datos de esta manera. Por otro lado, el proceso de analizar unos datos que evolucionan continuamente, no solo en contenido, sino en forma, hacen que su extracción y procesado se vuelva muy compleja. Las BBDD no relacionales son mas amigables a la hora de definir criterios para extraer informaciones concisas dentro de un documento heterogeneo. Ademas, MongoDB esta pensado para trabajar estrechamente con datos presentados en formato JSON. Esto hace su uso muy conveniente en un entorno de aplicación que se base en estas estructuras de datos como ocurre con los motores de JavaScript de los navegadores o la mayoría de aplicaciones moviles.
 
-Destacar este ultimo aspecto es determinante a la hora de seleccionar el entorno de ejecución que usara el servidor de la aplicación de domótica. En este aspecto, existen multiples estrategias, todas ellas en una primera aproximación valdias. Se puede disponer de un servidor web como Apache o Ngix, programados en lenguaje PHP. El cliente establece conexiones por el protocolo HTTP/HTTPS solicitando procesamientos por aprte del servidor y este entrega una respuesta codificada en texto plano para que el sotware del cliente lo reciba. Esta estrategía es simple pero efectiva, sin embargo, en proyectos de IoT, hay un protocolo originalmente ideado por la compañia de IBM de licencia libre enfocado a una conectividad maquina a maquina (M2M), el código de dicho protocolo fue donado en 2011 al proyecto de Eclipse. Mientras que el protocolo HTTP/HTTPS puede manejar volumenes grandes de información en su trasferencia por la red de comunicaciónes, el protocolo MQTT requiere menos ancho de banda, esta orientado a proyectos con un bajo consumo  y que dispongan de poco recursos de procesamiento. Es importante tener en cuenta que queremos conseguir en una suite domotica, por ejemplo, si hay que obtener la temperatura de una habitación, todo se reduce a un unico dato, un numero (posiblemente decimal), o al menos, eso es lo que un usuario espera recibir. Esto implica que, un sensor de temperatura, en algun lugar de la casa, recibe una petición en la red en la que se encuentra de otro dispositivo, toma la medida y la envia a dicho dispositivo.
+Destacar este ultimo aspecto es determinante a la hora de seleccionar el entorno de ejecución que usara el servidor de la aplicación de domótica. En este aspecto, existen multiples estrategias, todas ellas en una primera aproximación valdias. Se puede disponer de un servidor web como Apache o Ngix, programados en lenguaje PHP. El cliente establece conexiones por el protocolo HTTP/HTTPS solicitando procesamientos por aprte del servidor y este entrega una respuesta codificada en texto plano para que el sotware del cliente lo reciba. Esta estrategía es simple pero efectiva, sin embargo, en proyectos de IoT, hay un protocolo originalmente ideado por la compañia de IBM de licencia libre enfocado a una conectividad maquina a maquina (M2M), el código de dicho protocolo fue donado en 2011 al proyecto de Eclipse. Mientras que el protocolo HTTP/HTTPS puede manejar volumenes grandes de información en su trasferencia por la red de comunicaciónes, el protocolo MQTT requiere menos ancho de banda, esta orientado a proyectos con un bajo consumo  y que dispongan de poco recursos de procesamiento. Sin perder de vista el objetivo principal de conseguir en una suite domotica, por ejemplo, si hay que obtener la temperatura de una habitación, todo se reduce a un unico dato, un numero (posiblemente decimal), o al menos, eso es lo que un usuario espera recibir. Esto implica que, un sensor de temperatura, en algun lugar de la casa, recibe una petición en la red en la que se encuentra de otro dispositivo, toma la medida y la envia a dicho dispositivo.
 
 Si usamos el planteamiento de un servicio web, el sensor dispondrá de la capacidad de recibir una solicitud en un puerto abierto, cuando reciba la petición adecuada, respondera incluyendo en el cuerpo de la respuesta dicha medida y sera procesada en el dispositivo que creó la petición. Esto significa que cada sensor/actuador sera por si mismo un servidor web con un puerto abierto que atiende peticiones de clientes. Si todos los dispositivos estan conectados en la misma red, salvo que se apliquen restrinciones especificas en el firewall, seran visibles entre si, pudiendo encadenar llamadas y respuestas entre ellos, o a traves de un dispositivo central que se encarge de hacer las solicitudes y cuyas respuestas recibidas sean procesadas para mostrarse en la aplicación movil.
 
-Desde el planteamiento del protocolo MQTT, la estrategia gira en torno al concepto de sucripción de $topics$ o temas, donde los dispositivos publican información de distintos temas y los suscriptiores a dichos temas reciben la información cuando es publicada. A nivel físico, todos los clientes se conectan a un punto central, lo que define una topologia de estrella (con sus ventajas e incovenientes). Dicho nodo central es el servidor definido como $broker$, y es el unico que sabe a que topic esta suscrito cada cliente. Esto significa que cada uno de los sensores/actuadores de la red ignora al resto de los dispositvos, ya que solo atienden la comunicación con el broker a traves de una conexion TCP permanente. Esta estrategia es diferente a la usada en el protocolo HTTP, ya que no es necesario hacer una petición para recibir información de un cliente. Simplemente el broker da o solicita información en los topics a los que los dispositivos estan suscritos. Para proyectos de este tipo, el hecho de que los dispositivos no se relacionen entre si, dan lugar a una gran ventaja, la escalabilidad.
+Desde el planteamiento del protocolo MQTT, la estrategia gira en torno al concepto de sucripción de $topics$ o temas, donde los dispositivos publican información de distintos temas y los suscriptiores a dichos temas reciben la información cuando es publicada. A nivel físico, todos los clientes se conectan a un punto central, lo que define una topología de estrella (con sus ventajas e incovenientes). Dicho nodo central es el servidor definido como $broker$, y es el unico que sabe a que topic esta suscrito cada cliente. Esto significa que cada uno de los sensores/actuadores de la red ignora al resto de los dispositvos, ya que solo atienden la comunicación con el broker a traves de una conexion TCP permanente. Esta estrategia es diferente a la usada en el protocolo HTTP, ya que no es necesario hacer una petición para recibir información de un cliente. Simplemente el broker da o solicita información en los topics a los que los dispositivos estan suscritos. Para proyectos de este tipo, el hecho de que los dispositivos no se relacionen entre si, dan lugar a una gran ventaja, la escalabilidad.
+
+La escalabilidad de una suite domótica es un factor determinanate al considerar su implementación. Que los dispositivos que conforman la red puedan cambiar con facilidad su organización ,numero o capacidades son un valor añadido.
 
 
 -- Resta hablar de Angular y NODE
 
-
-
 \section{Hardware disponible}
 \label{ch:Capitulo2.3}
 
+Se han descrito algunas de las tecnologias caracteristicas de las aplicaciones, topologias de red y protocolos de comunicación utilizados en domótica. Pero todo este entramado de software y señales deben operar en hardware físico. Mas concretametne en multiples dispositivos de hardware. En \gls{iot} el abanico de fabricantes de dispositivos orientados a sensorización y actuadores es tan extenso en fabricantes y configuraciones que simplemente esta fuera de todo alcance el enumerarlos en este documento, aun asi, considerando los objetivos definidos en el proyecto, que incluyen el uso de hardware open source, y costes de adquisición reducidos, podemos reducir una lista de opciones acotada.
+
+Es importante remarcar en este punto del documento, que len proyectos de \gls{iot}, obtener el mejor balance de coste y eficiencia en la construccion es vital para soluciones profesionales. Para el prototipo que ocupa este proyecto no se espera enfrentar este obstaculo, ya que no se encuentra definido en los objetivos el crear un sistema los mas equilibrado posible, sino uno funcional, respetando un limite de gasto que no supere la cuantia definida de 50 euros. Tampoco esta e los objetivos asegurar un consumo energetico los mas reducido posible por aprte de los dispositivos, pero se valorara la selección de equipamiento que dando la mayor flexibilidad de configuración, se encuentre en valores de consumo lo suficientemetne bajos como para que el prototipo sea fiable al ideal de una suite domótica sostenible.
+
+Partiendo del concepto de suite domótica basado en dispositivos conectados a un nodo principal, que actua como router wifi, posee un adaptador de red adicional que permite una conexión con la red de internet y que sea capaz de ejecutar servicos y aplicaciones actuando como servidor, dichos requisitos nos orientan a un ordenador completo que a una placa microcontroladora dedicada a \gls{iot}. Ademas, sera necesaria la flexibildiad de un SO que nos permita experimentar diferentes experimentos, sin dejar de tener es cuenta que este hardware tendra una disponibilidad continua, y debe tener un consumo energetico bajo y unos recursos suficentes para actuar como cimiento del prototipo.
+
+Hace una decada habria sido necesario apuntar a un equipo muy especilizado y esto generalmente se traduce en un incremento del precio del equipo, hoy, en cambio, disponemos de muchas opciones de pequeños ordenadores con un reducido factor de forma, bajo consumo electrico y recursos mas que suficiente para cubrir muchos prototipos. Hablamos de la muy conocida Raspberry Pi y similares que has surgido con el tiempo (como Orange Pi, Banana Pi, Odroid o Matrix ARM ~\cite{lignuxComparative}). Para el caso que nos ocupa necesitamos que disponga al menos dos adaptares de red, uno de ellos inalambricos, aunque puede subsanarse la falta del mismo mediante USB adptadores (una estrategia muy comun en los primeros modelos de Raspberry Pi hasta la serie 3). No es necesario que disponga de un procesador gráfico ya que operaremos de forma remota mediante conexiones de SSH. Y seria un aspecto muy positivo que disponga de una interfaz para conectar dispositivos USB, este ultimo responde a la posible necesidad de conectar palacas microcontroladoras para su programación.
+
+\begin{figure}[hbt!]
+\centering
+\includegraphics[height=2.5in]{figures/comparativaOrdenadores.png}
+\end{figure}
+
+
 raspberry pi
 
-zigbee vs z-wave
+\begin{figure}[hbt!]
+\centering
+\includegraphics[height=2.5in]{figures/raspberrypi3b.jpg}
+\end{figure}
+
+
+zigbee
+\begin{figure}[hbt!]
+\centering
+\includegraphics[height=2.5in]{figures/ETRX357_ZigBee_module_with_size_ref.jpg}
+\end{figure}
+
+z-wave
+
 
 esp8266
+\begin{figure}[hbt!]
+\centering
+\includegraphics[height=2.5in]{figures/esp8266ex.jpg}
+\end{figure}
+
 
 nodemcu
+\begin{figure}[hbt!]
+\centering
+\includegraphics[height=2.5in]{figures/nodemcu.jpg}
+\end{figure}
 
 chachivaches y filubercios baratos (el estigma de la calidad y coherencia china)
+\begin{figure}[hbt!]
+\centering
+\includegraphics[height=2.5in]{figures/esp8266exRele.jpg}
+\end{figure}
