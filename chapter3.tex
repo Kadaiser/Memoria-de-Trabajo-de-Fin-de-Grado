@@ -71,41 +71,71 @@ About to write to /home/kadaiser/node-app-example/package.json:
 }
 \end{verbatim}
 
-npm install express –-save
-npm install method-override –-save
-npm install body-parser –-save
-npm install python-shell –-save
-npm install mongoose --save
+npm install express
+npm install method-override
+npm install body-parser
+"cors": "^2.8.5",
+"bcryptjs": "^2.4.3",
+"jsonwebtoken": "^8.5.0",
+"passport": "^0.4.0",
+"passport-jwt": "^4.0.0",
+
+"python-shell": "^1.0.6",
+
+Linux:
+You know what you need for you system, basically your appropriate analog of build-essential. Keep rocking!
+
+To compile and install native addons from npm you may also need to install build tools (source):
+
+sudo apt-get install -y build-essential
+Also install libudev:
+
+sudo apt-get install libudev-dev
+
+"usb-detection": "^4.1.0"
+
+Instalación de mongodb
+
+"mongoose": "^5.3.4",
+
+sudo apt-get install libkrb5-dev
+
+"run-rs": "^0.4.0",
 
 
 [JUSTIFICAR POR QUÉ MONGODB]
+1. no es necesario actualizar tablas/columnas si quieres agregar nuevas propiedades
+2. escalabilidad
+3. funciona con json, luego hace la vida más fácil de cara a trabajar con node ya que evitas parsers de entrada/salida de datos.
+
 Instalación de la versión más reciente de mongodb:
 https://docs.mongodb.com/manual/tutorial/install-mongodb-on-debian/
-1. Import the public key used by the package management system.
-\begin{verbatim}
-  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
-\end{verbatim}
 
-1B. Si esto ha fallado con:
+1. Será necesario instalar primero el gestor dirmngr to perform network operations for managing and downloading certificates. Si no lo hacemos, tendremos este error:
 \begin{verbatim}
   gpg: failed to start the dirmngr '/usr/bin/dirmngr': No such file or directory
 \end{verbatim}
-Será necesario instalar previamente el gestor dirmngr to perform network operations for managing and downloading certificates.
+
 \begin{verbatim}
   sudo apt-get install dirmngr --install-recommends
 \end{verbatim}
 
-2. Create a /etc/apt/sources.list.d/mongodb-org-4.0.list file for MongoDB.
+2. Import the public key used by the package management system.
+\begin{verbatim}
+  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+\end{verbatim}
+
+3. Create a /etc/apt/sources.list.d/mongodb-org-4.0.list file for MongoDB.
 \begin{verbatim}
   echo "deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
 \end{verbatim}
 
-3. Reload local package database.
+4. Reload local package database.
 \begin{verbatim}
   sudo apt-get update
 \end{verbatim}
 
-4. Install the MongoDB packages.
+5. Install the MongoDB packages.
 \begin{verbatim}
   sudo apt-get install -y mongodb-org
 \end{verbatim}
@@ -229,4 +259,13 @@ Change the package.json file and add the following line in “scripts” object.
 "scripts": {
     "start": "nodemon server.js"
 },
+
+
+
+(FACILITAR EL DESARROLLO)
+
+Clonar repositorio del código backend para trabajar directamente sobre la RaspBerry PI.
+
+Seguimos los pasos recomendados por Github para generarnos una nueva clave ssh, añadirla tanto al agente ssh del sistema operativo como al repositorio privado en github y utilizarla para cualquier operación git por ssh mediante https.
+https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 
