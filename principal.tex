@@ -105,6 +105,12 @@
 \bibpunct{}{}{,}{s}{}{}
 \usepackage{hypernat}
 
+
+\usepackage[xindy,acronym]{glossaries}
+\makeglossaries
+% load entry definitions from file:
+\loadglsentries{glossary}
+
 % +--------------------------------------------------------------------+
 % | Lastly, the hyperref package allows one to hyperlink cross-        |
 % | references and figures in a LaTeX document.                        |
@@ -292,6 +298,8 @@
 % | on how to enter references.
 % +--------------------------------------------------------------------+
 
+\printglossary
+
 \bibdata{references}
 \bibliography{references}
 \addcontentsline{toc}{chapter}{Bibliography}
@@ -307,8 +315,10 @@
 % | file appendixX.tex for each appendix.                                 |
 % +--------------------------------------------------------------------+
 
-\appendix
-\input{appendixA.tex}
-\input{appendixB.tex}
+
+%\appendix
+%\input{appendixA.tex}
+%\input{appendixB.tex}
+
 
 \end{document}

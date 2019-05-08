@@ -1,0 +1,90 @@
+\ifglsentryexists{IoT}{}%
+{%
+\gls@defglossaryentry{IoT}%
+{%
+name={Internet of Things},%
+sort={Internet of Things},%
+type={main},%
+first={Internet of Things},%
+firstplural={Internet of Thingss},%
+text={Internet of Things},%
+plural={Internet of Thingss},%
+description={referenciar explicaciones de glosario a otros glosarios \gls {foo}},%
+descriptionplural={referenciar explicaciones de glosario a otros glosarios \gls {foo}},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{foo}{}%
+{%
+\gls@defglossaryentry{foo}%
+{%
+name={foo},%
+sort={foo},%
+type={main},%
+first={foo},%
+firstplural={foos},%
+text={foo},%
+plural={foos},%
+description={ strange animal },%
+descriptionplural={ strange animal },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{bce}{}%
+{%
+\gls@defglossaryentry{bce}%
+{%
+name={IOT},%
+sort={IOT},%
+type={acronym},%
+first={Internet of Things\glsspace (IOT)},%
+firstplural={Internet of Things\acrpluralsuffix \glsspace (IOT\acrpluralsuffix )},%
+text={IOT},%
+plural={IOT\acrpluralsuffix },%
+description={Internet de las cosas},%
+descriptionplural={Internet of Things\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Internet of Things},%
+longplural={Internet of Thingss},%
+short={IOT},%
+shortplural={IOTs},%
+counter={page},%
+parent={},%
+%
+}%
+}%

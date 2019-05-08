@@ -1,7 +1,35 @@
 \begin{thebibliography}{1}
 
+\bibitem{x10protocolwikipedia}
+Protocolo de comunicación x10.
+\newblock Accessed: 2019-04-07.
+
 \bibitem{securingyourraspberrypi}
 Securing your raspberry pi.
 \newblock Accessed: 2015-10-12.
+
+\bibitem{raspberrypiasaccesspoint}
+Securing your raspberry pi.
+\newblock Accessed: 2015-10-12.
+
+\bibitem{whatisfiware}
+What is fiware.
+\newblock Accessed: 2019-04-09.
+
+\bibitem{openHabRaspberryPi}
+What is fiware.
+\newblock Accessed: 2019-04-10.
+
+\bibitem{mainfluxdoc}
+Drasko DRASKOVIC, 2019.
+\newblock (Drasko DRASKOVIC in the role of BDFL).
+
+\bibitem{eprint49443}
+Jorge Jarne~Brun.
+\newblock Smart home usando iot y chatbots, 2018.
+
+\bibitem{lignuxComparative}
+Noel, 2015.
+\newblock (Comparativa Raspberry pi, Odroid, Banana pi y Matrix ARM).
 
 \end{thebibliography}
