@@ -1,0 +1,26 @@
+\cleardoublepage
+
+\chapter{Arquitectura}
+\label{makereference4}
+
+
+\section{Equipación}
+\label{makereference4.1}
+
+Existen múltiples niveles de implementación del prototipo planteado en este documento. En función de la cantidad de módulos operativos se requerirá una mayor cantidad de hardware para la sensorización y los actuadores implicados. El nivel más básico e imprescindible implica un ordenador con SO Linux que actuara como controlador de la infraestructura de dispositivos que dan forma al sistema en su conjunto. Esto permite un gran abanico de opciones, de entre las cuales el presente documento explica la implementación mediante un ordenador compacto de la marca Raspberry Pi. La selección particular de este hardware se apoya en dos características esenciales en el desarrollo de este proyecto: es barato y de bajo consumo eléctrico. Además, goza de presencia en el mercado de dispositivos, por lo cual es fácil de adquirir y ha acumulado una extensa comunidad de usuarios que facilitan su uso mediante tutoriales y experimentos. Como motivos adicionales se encuentra su reducido tamaño que permite ubicarlo con facilidad en lugares estrechos o difícilmente accesibles y su imperceptible ruido al operar.
+
+\section{Criterio de selección del equipamiento y Software}
+\label{makereference1.4}
+El modelo concreto para el desarrollo del prototipo es Rapsberry Pi3b+ que dispone de capacidad de procesador y memoria RAM suficiente para operar todo el software necesario. Este modelo no integra un almacenamiento interno para el usuario, pero su interfaz incluye una ranura de tarjetas micro-SD compatible con todas las opciones de tamaño de almacenamiento disponibles en el mercado. Se precisan de al menos 16 GB de espacio disponible en la memoria del sistema, y es recomendable exceder este mínimo siempre que sea posible, ya que la acumulación de datos con el paso del tiempo por parte del dispositivo crecerá indefinidamente.
+
+Los scripts necesarios para interactuar con los sensores y actuadores conectados se programarán en python para este proyecto, ya que es un lenguaje con una acelerada curva de aprendizaje, gran recorrido y una de las selecciones más comunes para la programación de bajo nivel. Además, se dispone de una enorme abanico de librerías ya creadas y revisadas para programar sensores, como Adafruit. Muchos de los sensores utilizados en el desarrollo de este proyecto son de bajo coste, y eso implica métricas menos exactas, pero gracias a las librerías de Adafruit se puede obtener datos con suficiente precisión para cubrir los objetivos planteados.
+
+
+Tambien será necesario incluir qué hardware y software (SO, paquetes, entornos de desarrollo, etc) usaremos y una justificación para cada caso.
+
+Dado que el servidor se basará en un conjunto de scripts de lenguaje de python que se encargarán de obtener información de los sensores, para mantener un control de versiones básico usaremos Git. El control de repositorio de Git se instala mediante el paquete 'git-core'. Pueden crearse un servidor de Git que almacene el control de versiones dentro de la misma raspberry sin necesidad de depender de servicios a terceros como GitHub o GitLab.
+
+Instalamos en el nodo principal los paquetes de pyton:
+\begin{verbatim}
+sudo apt-get install build-essential python-dev
+\end{verbatim}

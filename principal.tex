@@ -105,6 +105,12 @@
 \bibpunct{}{}{,}{s}{}{}
 \usepackage{hypernat}
 
+
+\usepackage[xindy,acronym]{glossaries}
+\makeglossaries
+% load entry definitions from file:
+\loadglsentries{glossary}
+
 % +--------------------------------------------------------------------+
 % | Lastly, the hyperref package allows one to hyperlink cross-        |
 % | references and figures in a LaTeX document.                        |
@@ -162,7 +168,7 @@
 
    \input{prologue.tex}
    \input{resumen.tex}
-   
+
    \pdfbookmark[0]{Resumen}{PDFResumenPage}
 
     \input{abstract.tex}
@@ -260,16 +266,12 @@
 % +--------------------------------------------------------------------+
 
 \input{capitulo1.tex}
-
-% +--------------------------------------------------------------------+
-% | Uncomment the lines below to add additional chapters.  Name the
-% | files chapter2.tex for Chapter 2, chapter3.tex for Chapter 3, etc.
-% +--------------------------------------------------------------------+
-
-%\input{chapter2.tex}
-%\input{chapter3.tex}
-%\input{chapter4.tex}
-%\input{chapter5.tex}
+\input{capitulo2.tex}
+\input{capitulo3.tex}
+\input{capitulo4.tex}
+\input{capitulo5.tex}
+\input{capitulo6.tex}
+\input{capitulo7.tex}
 
 % +-------------------------------------------------------------------------+
 % | References                                                              |
@@ -296,6 +298,8 @@
 % | on how to enter references.
 % +--------------------------------------------------------------------+
 
+\printglossary
+
 \bibdata{references}
 \bibliography{references}
 \addcontentsline{toc}{chapter}{Bibliography}
@@ -311,8 +315,10 @@
 % | file appendixX.tex for each appendix.                                 |
 % +--------------------------------------------------------------------+
 
-\appendix
-\input{appendixA.tex}
-\input{appendixB.tex}
+
+%\appendix
+%\input{appendixA.tex}
+%\input{appendixB.tex}
+
 
 \end{document}
