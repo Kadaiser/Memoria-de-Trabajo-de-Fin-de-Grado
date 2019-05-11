@@ -3,16 +3,24 @@
 \chapter{Estado del Arte de la Domótica}
 \label{ch:Capitulo2}
 
-Como definición. el término 'domótica' proviene de la unión de las palabras $domus$ (que significa 'casa' en latín) y $-tica$ (de 'automática', palabra en griego que significa ‘que funciona por sí sola’). Se entiende por domótica al conjunto de sistemas que hacen de una vivienda un edificio inteligente, aportando servicios de gestión energética, seguridad, bienestar y comunicación, y que pueden estar integrados por medio de redes interiores y exteriores de comunicación, cableadas o inalámbricas, y cuyo control goza de cierta ubicuidad, desde dentro y fuera del hogar.
+Como definición. el término 'domótica' proviene de la unión de las palabras $domus$ (que significa 'casa' en latín) y $-tica$ (de 'automática', palabra en griego que significa ‘que funciona por sí sola’). Se entiende por domótica al conjunto de sistemas que hacen de una vivienda un edificio inteligente, aportando servicios de gestión energética, seguridad, bienestar y comunicación, y que pueden estar integrados por medio de redes interiores y exteriores de comunicación, cableadas o inalámbricas, y cuyo control goza de cierta ubicuidad, desde dentro y fuera del hogar. De esta definición no se desglosa nada que concuerde con los problemas descritos en el capitulo 1. 'Para que una casa funcione por si sola', no parece estrictamente necesario que, lo que la casa hace, lo tenga que saber una persona ajena a la casa, mas concretamente, de una persona que no vive en la casa. El termino de funcionar de forma autonoma, en realidad, es fulminado frontalmente, si la solución pasa por que la casa sea autonoma por un servicio externo y no por las capacidadades de la propia casa.
 
 
 Considerar también las conclusiones de sistemas Centralizados y Descentralizados de este artículo.(\url{http://gritosdetecnologia.blogspot.com/2013/04/origen-de-la-domotica.html})
+
+Para disponer de una base tecnológica sólida sobre la que crear esta solución, se ha optado por plantear el uso de hardware amigable como Raspberry Pi y Arduino, que disponen de una extensa comunidad de usuarios y documentación. No solo se puede reaprovechar gran parte del trabajo ya creado en programación de scripts para dispositivos como sensores y actuadores, sino que cumplen con el objetivo de ofrecer una base de hardware/software libre. Adicionalmente se tratará de alcanzar una cierta descentralización de los dispositivos y la propia raspberry, basándose en el concepto de nodo principal (gateway), que habitualmente se observa en las plataformas de pago.
+
+\vspace{1.5cm}
+
+Dichos planteamientos se basan en que todo sensor/actuador que forme parte de red de dispositivos de una solución de domótica actual, es gestionada a través de un nodo. En vez de conectar los dispositivos inalámbricos a el router de la casa, se conectan al nodo y este, a su vez, es quien se conecta a la red local del hogar, para asi conectarse con los servicios externos. En general, las distintas plataformas has alcanzado un acuerdo no formalizado de actuación que funciona de la siguiente forma. El usuario final compra un nuevo dispositivo, lo enciende, dejándolo en un estado de "inclusión" a la red domótica, después, desde la aplicación de movil, se indica al nodo, que se quiere añadir un nuevo dispositivo, y tras seguir las indicaciones, el dispositivo se registra en la red del nodo. Esto, sin embargo, tiene algunos inconvenientes en el proceso de "inclusión", y aunque la probabilidad es baja, puede suceder que dos nodos de distintas viviendas, que están registrando dispositivos simultáneamente, terminasen, registrando un dispositivo que no les corresponde. Esto es una vulnerabilidad de seguridad grave y una vertiente adicional que incluir en las motivaciones del estudio y desarrollo de una suite domótica libre que permita nuevas formulas de funcionamiento.
+
+Se ha planteado este problema, junto con las 3 motivaciones principales, para crear un proceso de "inclusión" de dispositivos al nodo, que parta de una conexión alámbrica (vía USB) y resuelva este inconveniente, y simplifique el proceso de las soluciones privadas, que en ocasiones pueden fallar.
 
 
 \section{Politicas de privacidad de marcas con gran presencia de mercado}
 \label{ch:Capitulo2.1}
 
-En la descripción de motivaciones del proyecto del capítulo 1, mencionábamos tres marcas que ofrecen suites de domótica a nivel internacional. Todo lo que gira en torno al concepto 'política de privacidad' o 'términos de condiciones de uso', se traduce lamentablemente de forma común, en una aceptación a ciegas de los contratos por parte del usuario final. Esta causa viene motivada generalmente por las complejidades de obtener, abstraer y entender los extensos puntos que conforman estos textos legales, que siguen estando muy lejos de ser amigables. A continuación, observamos como se presentan dichos textos en los siguientes productos de consumo del hogar.
+En la descripción de motivaciones del proyecto del capítulo 1, mencionábamos tres marcas que ofrecen suites de domótica a nivel internacional. Todo lo que gira en torno al concepto 'política de privacidad' o 'términos de condiciones de uso', se traduce, como la experiencia nos ha enseñado, en una aceptación a ciegas de los contratos por parte del usuario final. Esta causa viene motivada generalmente por la complejidad de obtener, abstraer y entender los extensos puntos que conforman estos textos legales, que siguen estando muy lejos de ser amigables. Observamos como se presentan dichos textos en los siguientes productos de consumo del hogar.
 
 \vspace{1.5cm}
 
@@ -42,7 +50,7 @@ Existe una serie de criterios que aplicaremos al valorar las opciones de framewo
 
 \vspace{1.5cm}
 
-FiWare esta catalogada como una plataforma de codigo abierto que agrupan un set de estandares universales para el contexto de gestion de datos~\cite{whatisfiware}. Se sustenta en la ejecución del framework sobre Dockers que pueden ser alojados localmente en maquinas dentro del hogar, y aunque esta solución esta orientada a procesar datos en un contexto mas extenso que una SmartHome, puede aislarse de la red de internet. Limitan la portabilidad de las aplicaciones a aquellas que se catalogen como 'Powered by FIWARE', y aunque ofrecen una interfaz estandar para los componentes que integren la solución, con el objetivo de eliminar el bloqueo del proveedor de componentes, no posee un licenciamiento de codigo libre, por ello sera descartado.
+FiWare esta catalogada como una plataforma de codigo abierto que agrupan un set de estandares universales para el contexto de gestion de datos~\cite{whatisfiware}. Se sustenta en la ejecución del framework sobre Dockers que pueden ser alojados localmente en maquinas dentro del hogar, y aunque esta solución esta orientada a procesar datos en un contexto mas extenso que una SmartHome, puede aislarse de la red de internet. Limitan la portabilidad de las aplicaciones a aquellas que se catalogen como 'Powered by FIWARE', y aunque ofrecen una interfaz estandar para los componentes que integren la solución, con el objetivo de eliminar el bloqueo del proveedor de componentes, no posee un licenciamiento de codigo libre, aunque si es de codigo abierto, por ello sera descartado.
 
 \vspace{1.5cm}
 
@@ -197,7 +205,7 @@ Raspberry Pi es posiblemente el uno de los mejores ejemplos de hardware abierto 
 \vspace{1.5cm}
 
 
-Esto cubriría el soporte físico necesario para crear un gateway. Pero por si solo no es suficiente. Los dispositivos que conectaremos a esta solución pueden presentarse en distintas opciones de hardware que pueden operar entre si y con el propio gateway mediante conectividad \gsl{wifi}. Gracias a los protocolos de comunicación disponibles, un gateway puede comunicarse con dispositivos de distintos fabricantes, presentando en la aplicación a todos ellos como dispositivos homogéneos con diferentes funciones.
+Esto cubriría el soporte físico necesario para crear un gateway. Pero por si solo no es suficiente. Los dispositivos que conectaremos a esta solución pueden presentarse en distintas opciones de hardware que pueden operar entre si y con el propio gateway mediante conectividad \gls{wifi}. Gracias a los protocolos de comunicación disponibles, un gateway puede comunicarse con dispositivos de distintos fabricantes, presentando en la aplicación a todos ellos como dispositivos homogéneos con diferentes funciones.
 
 \vspace{1.5cm}
 
@@ -214,7 +222,7 @@ Uno de los ejemplos mas conocidos y amigables de usar en placas micro-controlado
 \vspace{1.5cm}
 
 En los últimos años ha aparecido un pequeño microcontrolador con chip de \gls{wifi} conocido generalmente como modulo ESP-01. Este chip permite una comunicación con el protocolo TCP/IP en una red inalámbrica. Se clasifica como hardware RF/IF y RFID CI de transceptor RF, capaz de operar con el protocolo 802.11b/g/n  de 2.4GHz. El modelo ESP8266 que actualmente se comercializa posee capacidades superiores a su predecesora ESP8265 incluye una mayor capacidad de memoria flash interna, suficiente para abordar la mayoría de dispositivos \gls{iot} que pretendan actuar como actuadores o sensores.
-Sin embargo, trabajar y programar estos chips puede resultar engorroso si no se dispone de USB con interfaz para escritura en serie, también puede hacerse con una placa de Arduino separando la cucaracha del microcontrolador del Aurdino y cableando la conexión necesaria para programarse desde un ordenador. 
+Sin embargo, trabajar y programar estos chips puede resultar engorroso si no se dispone de USB con interfaz para escritura en serie, también puede hacerse con una placa de Arduino separando la cucaracha del microcontrolador del Aurdino y cableando la conexión necesaria para programarse desde un ordenador.
 
 \begin{figure}[hbt!]
 \centering
@@ -245,4 +253,3 @@ Con las complicaciones de alimentación del modulo ESP8266 surge al poco tiempo 
 \includegraphics[height=2.5in]{figures/nodemcu.jpg}
 \caption[captura de una nodeMCU]{Microcontroladora NodeMCU\footnotemark}
 \end{figure}
-
