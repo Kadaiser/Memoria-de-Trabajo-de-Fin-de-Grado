@@ -1,39 +1,45 @@
 \begin{thebibliography}{1}
 
 \bibitem{x10protocolwikipedia}
-Protocolo de comunicación x10.
+Wikipedia Comunity.
+\newblock Protocolo de comunicación x10.
 \newblock Accessed: 2019-04-07.
-
-\bibitem{securingyourraspberrypi}
-Securing your raspberry pi.
-\newblock Accessed: 2015-10-12.
-
-\bibitem{raspberrypiasaccesspoint}
-Securing your raspberry pi.
-\newblock Accessed: 2015-10-12.
-
-\bibitem{whatisfiware}
-What is fiware.
-\newblock Accessed: 2019-04-09.
-
-\bibitem{openHabRaspberryPi}
-What is fiware.
-\newblock Accessed: 2019-04-10.
 
 \bibitem{mainfluxdoc}
 Drasko DRASKOVIC, 2019.
 \newblock (Drasko DRASKOVIC in the role of BDFL).
 
+\bibitem{whatisfiware}
+FIWARE FOUNDATION.
+\newblock What is fiware.
+\newblock Accessed: 2019-04-09.
+
 \bibitem{raspberry_schematics}
 Raspberry~Pi Foundation.
 \newblock (Esquemática de raspberry Pi Modelo 3B).
+
+\bibitem{securingyourraspberrypi}
+Raspberry~Pi Foundation.
+\newblock {\em Securing your Raspberry Pi}.
+\newblock Accessed: 2015-10-12.
+
+\bibitem{raspberrypiasaccesspoint}
+Raspberry~Pi Foundation.
+\newblock {\em Securing your Raspberry Pi}.
+\newblock Accessed: 2015-10-12.
 
 \bibitem{eprint49443}
 Jorge Jarne~Brun.
 \newblock Smart home usando iot y chatbots, 2018.
 
 \bibitem{lignuxComparative}
-Noel, 2015.
+Noel.
+\newblock Comparativa raspberry pi, odroid, banana pi y matrix arm, 2015.
 \newblock (Comparativa Raspberry pi, Odroid, Banana pi y Matrix ARM).
+
+\bibitem{openHabRaspberryPi}
+openHAB Community.
+\newblock What is fiware.
+\newblock Accessed: 2019-04-10.
 
 \end{thebibliography}
