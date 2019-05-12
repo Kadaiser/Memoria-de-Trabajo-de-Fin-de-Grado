@@ -11,10 +11,10 @@
 % +--------------------------------------------------------------------+
 
 \chapter{Intrucciones de configuración}
-\label{Appendix:Key1}
+\label{AppendiA:Key1}
 
 \section{Proceso de configuración de conexion SSH para el Gateway}
-\label{Appendix:Key2}
+\label{AppendiA:Key2}
 
 En Windows puede utilizarse aplicaciones de gestión de claves como 'puttygen'. En la sección de parámetros de generación de las claves se define SSH-2 RSA de 2048bits y en la sección de acciones pulsamos en 'genérate'. Tras unos movimientos aleatorios de ratón se generará la clave pública en el área de texto. Se deben guardar ambas claves mediante los botones 'save public key' y 'save private key'. Esta última será guardada con una contraseña definida en los inputs de la aplicación para tal fin. La clave privada será almacenada en formato PPK para ser rápidamente usada por aplicaciones de conexión por terminal remota como 'PUTTY'. Es recomendable exportar dicho fichero a formato OpenSSH mediante la misma aplicación de generación de claves, en la sección 'Conversions' del menú desplegable y seleccionando la opción 'Export OpenSSH key', definimos un nombre para el fichero de salida y pulsamos 'save'. Esta misma operación puede realizarse desde una terminal de un SO Linux mediante el comando \verb|ssh-keygen -t rsa| que generará por defecto la claves en el directorio \path{/home/username/.ssh/} bajo el nombre \verb|id_rsa.pub| e \verb|id_rsa| para las claves pública y privada respectivamente.
 
@@ -39,7 +39,7 @@ En concreto modificaremos el puerto de entrada para redirigir la conexión del p
 En este mismo fichero establecemos unos límites concretos en los valores de tiempo de gracia \verb|LoginGraceTime 5| de apenas 5 segundos, impedimos el acceso del usuario root desde una conexión externa \verb|PermitRootLogin no|, limitamos el número de intentos de conexión \verb|MaxAuthTries 3| y el número máximo de sesiones simultáneas \verb|MaxSessions|. Para admitir las conexiones SSH mediante una autentificación con clave es necesario habilitar la autentificación de clave pública \verb|PubkeyAuthentication yes| y definir la ruta del fichero con la clave publica almacenada localmente en el servidor \verb|AuthorizedKeysFile| \path{.net/.aut} (véase que en este caso hemos definido una ruta manualmente indicando que la clave pública se encuentra en un fichero oculto nombrado \verb|aut| en la ruta \path{/home/pi/.net}). Como refuerzo adicional configuramos el servidor para denegar todo intento de conexión mediante contraseña plana \verb|PasswordAuthentication no|, y adicionalmente limitar el acceso sólo a las cuentas de usuarios designadas \verb|AllowUsers edomus|. Definidos los nuevos cambios de configuración, es necesario reiniciar el servicio.
 
 \section{Proceso de instalación y configuración para GPIO}
-\label{Appendix:Key3}
+\label{AppendiA:Key3}
 
 
 Instalamos en el nodo principal los paquetes de pyton:
@@ -48,4 +48,4 @@ sudo apt-get install build-essential python-dev
 \end{verbatim}
 
 \section{Proceso de subida de sckets pacas nodeMCU desde Raspberry Pi}
-\label{Appendix:Key4}
+\label{AppendiA:Key4}
