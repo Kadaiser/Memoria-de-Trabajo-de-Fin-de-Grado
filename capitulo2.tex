@@ -67,18 +67,29 @@ OpenHab es otro nombre que es recomendado frecuentemente en foros y ponencias de
 
 En el proceso de estudio de diversos frameworks encontramos otras opciones. En realidad el abanico de soluciones disponibles es muy extenso:
 
-\begin{itemize}
-\item thingsboard
-\item Pimatic
-\item Calaos: Home automation solution and a complete distro
-\item Domoticz
-\item Home Asistant: Home automation platform running on Python 3
-\item OpenMotics : Complete home automation platform
-\item Jeedom
-\item MisterHouse: Supports X10, voice recognition and several serial devices
-\end{itemize}
+\begin{table}[hbtp]
+    \begin{center}
 
-Ya que uno de los objetivos del proyecto radica en la condición de disponer de una licencia libre, nuestra investigación nos ha llevado a conocer MainFlux. Se cataloga como una plataforma tecnológica de código abierto y patente libre con licencia Apache 2..0. Incluso ofrece un dispositivo gateway para soluciones industriales y de computación desarrollada por la misma Linux Foundatión. Esta planteado como PaaS para integrar aplicaciones que interactúan con los dispositivos de la SmartHome mediante un gateway. La plataforma, dispone de una versión gratuita para ser alojado localmente en un Docker o un equipo con SO Linux. Su documentación clarifica que el desarrollo de aplicaciones que conectaran a Mainflux se realizaran a través de protocolos bridging (como HTTP, MQTT,WebSocket, CoAP)~\cite{mainfluxdoc}.
+    %\begin{tabular}[c]{|c|c|c|}
+    \begin{tabular}{|l|l|l|l|l|l|l|l|}
+        \hline
+        & Thingsboard & Pimatic & Calaos & Domoticz & OpenMotics  & MisterHouse & Home Asistant \\
+        \hline \hline
+        Free Source & SI & SI & SI & SI & SI & SI & SI\\ \hline
+        Open Source & SI & SI & SI & SI & SI & SI & SI\\ \hline
+        Estandar Zigbee & SI & SI & SI & SI & SI & SI & SI\\ \hline
+        Protocolo MQTT & SI & SI & SI & SI & SI & SI & SI\\ \hline
+        Protocolo X10 & SI & SI & SI & SI & SI & SI & SI\\ \hline
+        Protocolo Https & SI & SI & SI & SI & SI & SI & SI\\ \hline
+        \hline
+    \end{tabular}
+    \caption{Tabla de comparativas con diferentes }
+    \label{table1}
+   \end{center}
+\end{table}
+
+
+Ya que uno de los objetivos del proyecto radica en la condición de disponer de una licencia libre, nuestra investigación nos ha llevado a conocer MainFlux. Se cataloga como una plataforma tecnológica de código abierto y patente libre con licencia Apache 2..0. Incluso ofrece un dispositivo gateway para soluciones industriales y de computación desarrollada por la misma Linux Foundatión. Esta planteado como \gls{paas} para integrar aplicaciones que interactúan con los dispositivos de la SmartHome mediante un gateway. La plataforma, dispone de una versión gratuita para ser alojado localmente en un Docker o un equipo con SO Linux. Su documentación clarifica que el desarrollo de aplicaciones que conectaran a Mainflux se realizaran a través de protocolos bridging (como HTTP, MQTT,WebSocket, CoAP)~\cite{mainfluxdoc}.
 
 
 La opción de trabajar sin \gls{framework}, aunque supone un mayor esfuerzo, puede despejar ideas preconcebidas que se plantean en las diversas soluciones, dando la opción de experimentar más abiertamente, sin las restricciones tecnológicas impuestas por las aproximaciones de dichos \gls{framework}.

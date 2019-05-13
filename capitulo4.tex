@@ -6,20 +6,38 @@
 \section{Equipación}
 \label{makereference4.1}
 
-Existen múltiples niveles de implementación del prototipo planteado en este documento. En función de la cantidad de módulos operativos se requerirá una mayor cantidad de hardware para la sensorización y los actuadores implicados. El nivel más básico e imprescindible implica un ordenador con SO Linux que actuara como controlador de la infraestructura de dispositivos que dan forma al sistema en su conjunto. Esto permite un gran abanico de opciones, de entre las cuales el presente documento explica la implementación mediante un ordenador compacto de la marca Raspberry Pi. La selección particular de este hardware se apoya en dos características esenciales en el desarrollo de este proyecto: es barato y de bajo consumo eléctrico. Además, goza de presencia en el mercado de dispositivos, por lo cual es fácil de adquirir y ha acumulado una extensa comunidad de usuarios que facilitan su uso mediante tutoriales y experimentos. Como motivos adicionales se encuentra su reducido tamaño que permite ubicarlo con facilidad en lugares estrechos o difícilmente accesibles y su imperceptible ruido al operar.
+Existen múltiples niveles de implementación del prototipo planteado en este documento. En función de la cantidad de módulos operativos se requerirá una mayor cantidad de hardware para la sensorización y los actuadores implicados. El nivel más básico e imprescindible implica un ordenador con SO Linux que actuara como controlador de la infraestructura de dispositivos que dan forma al sistema en su conjunto, esto es el Nodo.
 
-\section{Criterio de selección del equipamiento y Software}
+\section{Definición del nodo principal}
 \label{makereference4.2}
-El modelo concreto para el desarrollo del prototipo es Rapsberry Pi3b+ que dispone de capacidad de procesador y memoria RAM suficiente para operar todo el software necesario. Este modelo no integra un almacenamiento interno para el usuario, pero su interfaz incluye una ranura de tarjetas micro-SD compatible con todas las opciones de tamaño de almacenamiento disponibles en el mercado. Se precisan de al menos 16 GB de espacio disponible en la memoria del sistema, y es recomendable exceder este mínimo siempre que sea posible, ya que la acumulación de datos con el paso del tiempo por parte del dispositivo crecerá indefinidamente.
 
-Los scripts necesarios para interactuar con los sensores y actuadores conectados se programarán en python para este proyecto, ya que es un lenguaje con una acelerada curva de aprendizaje, gran recorrido y una de las selecciones más comunes para la programación de bajo nivel. Además, se dispone de una enorme abanico de librerías ya creadas y revisadas para programar sensores, como Adafruit. Muchos de los sensores utilizados en el desarrollo de este proyecto son de bajo coste, y eso implica métricas menos exactas, pero gracias a las librerías de Adafruit se puede obtener datos con suficiente precisión para cubrir los objetivos planteados.
+El \gls{gateway} representa el núcleo de una suite domótica. Los sensores y actuadores dispuestos en un hogar lo usan como centro neurálgico para que el sistema opere. Si bien los sensores son capaces de registrar datos por su cuenta, estos deben ser entregados en el \gls{gateway} para ser útiles. 
 
+Como soporte de hardware  se usara un ordenador compacto de la marca Raspberry Pi. La selección particular de este dispositivo se apoya en dos características esenciales en el desarrollo de este proyecto: es barato, de bajo consumo eléctrico y su licenciamiento es libre. Además, goza de presencia en el mercado de electrónica, por lo cual es fácil de adquirir y ha acumulado una extensa comunidad de usuarios que muestran su uso mediante tutoriales y experimentos. Como motivos adicionales se encuentra su reducido tamaño que permite ubicarlo con facilidad en lugares estrechos o difícilmente accesibles y su imperceptible ruido al operar. El modelo concreto para el desarrollo del prototipo es Rapsberry Pi3b+ que dispone de capacidad de procesador y memoria RAM suficiente para operar todo el software necesario. Este modelo no integra un almacenamiento interno para el usuario, pero su interfaz incluye una ranura de tarjetas micro-SD compatible con todas las opciones de tamaño de almacenamiento disponibles en el mercado. Se precisan de al menos 4 \gls{gb} de espacio disponible en la memoria del sistema, y es recomendable exceder este mínimo siempre que sea posible, ya que la acumulación de datos con el paso del tiempo por parte del dispositivo crecerá indefinidamente.
 
-Dado que el servidor se basará en un conjunto de scripts de lenguaje de python que se encargarán de obtener información de los sensores, para mantener un control de versiones básico usaremos Git. El control de repositorio de Git se instala mediante el paquete 'git-core'. Pueden crearse un servidor de Git que almacene el control de versiones dentro de la misma raspberry sin necesidad de depender de servicios a terceros como GitHub o GitLab.
+\begin{figure}[hbt!]
+\centering
+\includegraphics[height=2.5in]{figures/diagrams/physical-devices/back-devices.png}
+\caption[Diagrama de despligue de back-end]{Diagrama de despligue de dispositivos y gateway\footnotemark}
+\end{figure}
 
-
-\section{Criterio de selección Software}
+\section{Criterio de selección del dispositivos y Software}
 \label{makereference4.3}
+
+\begin{figure}[hbt!]
+\centering
+\includegraphics[height=2.5in]{figures/diagrams/physical-devices/front-back.png}
+\caption[front-back]{front-back\footnotemark}
+\end{figure}
+
+Los scripts necesarios para interactuar con los sensores y actuadores conectados se programarán en \gls{phyton}para este proyecto, ya que es un lenguaje con una acelerada curva de aprendizaje, gran recorrido y una de las selecciones más comunes para la programación de bajo nivel. Además, se dispone de una enorme abanico de librerías ya creadas y revisadas para programar sensores, como Adafruit. Muchos de los sensores utilizados en el desarrollo de este proyecto son de bajo coste, y eso implica métricas menos exactas, pero gracias a las librerías de Adafruit se puede obtener datos con suficiente precisión para cubrir los objetivos planteados.
+
+
+Dado que el servidor se basará en un conjunto de scripts de lenguaje de python que se encargarán de obtener información de los sensores, para mantener un control de versiones básico usaremos Git. El control de repositorio de Git se instala mediante el paquete 'git-core'. Pueden crearse un servidor de Git que almacene el control de versiones dentro de la misma Raspberry sin necesidad de depender de servicios a terceros como GitHub o GitLab.
+
+
+\section{Criterio de selección servicios}
+\label{makereference4.4}
 La selección de un servicio para la gestión de la \gls{bbdd}
 
 
