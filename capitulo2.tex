@@ -132,7 +132,7 @@ Si usamos el planteamiento de un servicio web, el sensor dispondrá de la capaci
  -- OJO
  un servicio web puede ser caro para un arduino. Hay papers sobre el consumo energético de servicios web vs mqtt
 
-Desde el planteamiento del protocolo MQTT, la estrategia gira en torno al concepto de suscripción de $topics$ o temas, donde los dispositivos publican información de distintos temas y los suscriptores a dichos temas reciben la información cuando es publicada. A nivel físico, todos los clientes se conectan a un punto central, lo que define una topología de estrella (con sus ventajas e incovenientes). Dicho nodo central es el servidor definido como $broker$, y es el único que sabe a qué topic está suscrito cada cliente. Esto significa que cada uno de los sensores/actuadores de la red ignora al resto de los dispositivos, ya que sólo atienden la comunicación con el broker a través de una conexión TCP permanente. Esta estrategia es diferente a la usada en el protocolo HTTP, ya que no es necesario hacer una petición para recibir información de un cliente. Simplemente el broker da o solicita información en los topics a los que los dispositivos están suscritos. Para proyectos de este tipo, el hecho de que los dispositivos no se relacionen entre sí, dan lugar a una gran ventaja, la escalabilidad.
+Desde el planteamiento del protocolo \gls{mqtt}, la estrategia gira en torno al concepto de suscripción de $topics$ o temas, donde los dispositivos publican información de distintos temas y los suscriptores a dichos temas reciben la información cuando es publicada. A nivel físico, todos los clientes se conectan a un punto central, lo que define una topología de estrella (con sus ventajas e incovenientes). Dicho nodo central es el servidor definido como $broker$, y es el único que sabe a qué topic está suscrito cada cliente. Esto significa que cada uno de los sensores/actuadores de la red ignora al resto de los dispositivos, ya que sólo atienden la comunicación con el broker a través de una conexión TCP permanente. Esta estrategia es diferente a la usada en el protocolo HTTP, ya que no es necesario hacer una petición para recibir información de un cliente. Simplemente el broker da o solicita información en los topics a los que los dispositivos están suscritos. Para proyectos de este tipo, el hecho de que los dispositivos no se relacionen entre sí, dan lugar a una gran ventaja, la escalabilidad.
 
 \vspace{1.5cm}
 
@@ -152,21 +152,24 @@ En pleno 2019 pueden adquirirse los dispositivos necesarios para instalar una re
 
 \vspace{1.5cm}
 
-En cuanto a las aplicaciones necesarias para gestionar el sistema, X-10 posee alternativas de código libre para su desarrollo como \href{http://www.minervahome.net/}{Minerva}. También existen interfaces hardware que traducen el protocolo X-10 a APIs de servicios web como el dispositivo \href{http://www.iobridge.com/}{ioBridge} que supuso una disrupción en el ámbito del IoT y la automatización del hogar.
+En cuanto a las aplicaciones necesarias para gestionar el sistema, X-10 posee alternativas de código libre para su desarrollo como \href{http://www.minervahome.net/}{Minerva}. También existen interfaces hardware que traducen el protocolo X-10 a APIs de servicios web como el dispositivo \href{http://www.iobridge.com/}{ioBridge} que supuso una disrupción en el ámbito del \gls{iot} y la automatización del hogar.
 
-\vspace{1.5cm}
+\vspace{1cm}
 
 El problema de la solución del X-10 no radica en su protocolo sino en los costes, que generalmente sobrepasan los cientos de euros para las configuraciones mas sencillas. Además, esta instalación requiere de un proceso de obra, ya que es necesario empalmar los componente a la red eléctrica del hogar. En realidad, la opción de usar dispositivos del protocolo X-10 esta condicionada a que la red eléctrica del hogar se instalara durante el proceso de edificación con vistas a utilizar este sistema. De otra forma, será necesario planificar obras y esto complica la facilidad de crear un prototipo asequible.
 
-\vspace{1.5cm}
+\vspace{1cm}
 
-Una década después surgiría el SCE (Sistema de Cableado Estructurado) que permitía el trasporte de datos y voz, esto supuso la aparición del concepto Edificio Inteligente. Sin embargo, esto requiera de una instalación compleja difícilmente viable en edificios ya existentes, como es el caso que ocupa el alcance de este proyecto. Con la aparición de las redes inalámbricas, y sus posteriores estándares de comunicación como el WIFI, se popularizaron los sistemas de domótica aplicada directamente sobre los dispositivos, sin tener en cuenta la red eléctrica que los hace funcionar.
+Una década después surgiría el SCE (Sistema de Cableado Estructurado) que permitía el trasporte de datos y voz, esto supuso la aparición del concepto Edificio Inteligente. Sin embargo, esto requiera de una instalación compleja difícilmente viable en edificios ya existentes, como es el caso que ocupa el alcance de este proyecto. Con la aparición de las redes inalámbricas, y sus posteriores estándares de comunicación como el WIFI, se popularizaron los sistemas de domótica aplicada directamente sobre los dispositivos, sin tener en cuenta la red eléctrica que los hace funcionar. 
 
-zigbee
+\vspace{1cm}
+
+ A inicios del milenio se aprobó la especificación del estándar de Zigbee, basado en el estándar IEEE 802.15.4 de redes inalámbricas de área personal (WPAM). Se destacan las características de bajo consumo, topología y fácil integración, que lo convierten en una de las opciones mas adecuadas para proyectos de \gls{iot}. Permite la creación de dispositivos con batería gracias a un consumo de apenas 30mA  trasmitiendo datos inalámbricos y de apenas 3 micro Amperios en reposo. Poder desplegar una red \gls{wifi} en malla posee un atractivo especial que puede ser una de las mejores estrategias en hogares con múltiples plantas, donde la fuerza de señal inalámbrica se disipa con rapidez al tener que atravesar los suelos y paredes. Su precio lo convierte en un producto muy competitivo, y puede adquirirse por menos de una docena de euros en tiendas digitales en internet. Otro aspecto particularmente atractivo es la seguridad, existen controles de acceso de los dispositivos con autenticación y cifrado de clave simétrica, asi como comprobación de integridad de mensajes, estas técnicas reducen la posibilidad de que las comunicaciones entre dispositivos puedan verse comprometidas. Las pruebas de laboratorio realizadas por el INCIBE demuestran que una configuración adecuada hace de la red de dispositivos con estándar Zigbee una solución robusta~\cite{incibe_zigbee}.
+ 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[height=2.5in]{figures/ETRX357_ZigBee_module_with_size_ref.jpg}
-\caption[captura de una Raspberry]{Ordenador Raspberry Pi 3B\footnotemark}
+\caption[Madulo transductor de 2.4Gh Zigbee ETRX357]{Modulo trasductor de Zigbee\footnotemark}
 \end{figure}
 
 
