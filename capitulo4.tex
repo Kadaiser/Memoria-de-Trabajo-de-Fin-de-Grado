@@ -3,7 +3,7 @@
 \chapter{Arquitectura}
 \label{makereference4}
 
-\section{Equipación}
+\section{Equipamiento}
 \label{makereference4.1}
 
 Existen múltiples niveles de implementación del prototipo planteado en este documento. En función de la cantidad de módulos operativos se requerirá una mayor cantidad de hardware para la sensorización y los actuadores implicados. El nivel más básico e imprescindible implica un ordenador con SO Linux que actuara como controlador de la infraestructura de dispositivos que dan forma al sistema en su conjunto, esto es el Nodo.
@@ -18,7 +18,7 @@ Como soporte de hardware  se usara un ordenador compacto de la marca Raspberry P
 \begin{figure}[hbt!]
 \centering
 \includegraphics[height=2.5in]{figures/diagrams/physical-devices/back-devices.png}
-\caption[Diagrama de despligue de back-end]{Diagrama de despligue de dispositivos y gateway\footnotemark}
+\caption[Diagrama de despliegue de back-end]{Diagrama de despliegue de dispositivos y gateway\footnotemark}
 \end{figure}
 
 \section{Criterio de selección del dispositivos y Software}
@@ -27,14 +27,8 @@ Como soporte de hardware  se usara un ordenador compacto de la marca Raspberry P
 \begin{figure}[hbt!]
 \centering
 \includegraphics[height=2.5in]{figures/diagrams/physical-devices/front-back.png}
-\caption[front-back]{front-back\footnotemark}
+\caption[Despligue de front]{despliegue de front\footnotemark}
 \end{figure}
-
-Los scripts necesarios para interactuar con los sensores y actuadores conectados se programarán en \gls{phyton}para este proyecto, ya que es un lenguaje con una acelerada curva de aprendizaje, gran recorrido y una de las selecciones más comunes para la programación de bajo nivel. Además, se dispone de una enorme abanico de librerías ya creadas y revisadas para programar sensores, como Adafruit. Muchos de los sensores utilizados en el desarrollo de este proyecto son de bajo coste, y eso implica métricas menos exactas, pero gracias a las librerías de Adafruit se puede obtener datos con suficiente precisión para cubrir los objetivos planteados.
-
-
-Dado que el servidor se basará en un conjunto de scripts de lenguaje de python que se encargarán de obtener información de los sensores, para mantener un control de versiones básico usaremos Git. El control de repositorio de Git se instala mediante el paquete 'git-core'. Pueden crearse un servidor de Git que almacene el control de versiones dentro de la misma Raspberry sin necesidad de depender de servicios a terceros como GitHub o GitLab.
-
 
 \section{Criterio de selección servicios}
 \label{makereference4.4}
@@ -47,6 +41,7 @@ Podría parecer que hablamos de una relación de objetos entre sí, y que un mod
 \begin{figure}[hbt!]
 \centering
 \includegraphics[height=2.5in]{figures/SQLSchemaExample_1.png}
+\caption[Primer planteamiento de diseño de BBDD relacional]{Primer planteamiento de diseño de BBDD relacional\footnotemark}
 \end{figure}
 
 \vspace{1.5cm}
@@ -58,6 +53,7 @@ no hay transitividad dura entre room y device, lo cual hace que sean independien
 \begin{figure}[hbt!]
 \centering
 \includegraphics[height=2.5in]{figures/SQLSchemaExample_2.png}
+\caption[Segundo planteamiento de diseño de BBDD relacional]{Primer planteamiento de diseño de BBDD relacional\footnotemark}
 \end{figure}
 
 \vspace{1.5cm}
@@ -67,6 +63,7 @@ Con esto aún tendríamos que enfrentar un problema adicional, el número de col
 \begin{figure}[hbt!]
 \centering
 \includegraphics[height=2.5in]{figures/SQLSchemaExample_3.png}
+\caption[Tercer planteamiento de diseño de BBDD relacional]{Primer planteamiento de diseño de BBDD relacional\footnotemark}
 \end{figure}
 
 Una preocupación que agrava la perspectiva de usar una \gls{bbdd} relacional es, en este punto del proyecto, su escalabilidad horizontal. Si bien las tablas pueden crecer a un gran número de registros, no se prevé almacenar datos con vistas a largo plazo, la mayoría de los valores almacenados serán efímeros en tiempo de utilidad, almacenarlos responde solo a la necesidad de obtener comparativas en plazos de tiempo relativamente cortos, como horas, días, y posiblemente semanas. Mas allá de este rango estos datos no tienen una utilidad real y pueden ser condensados en medidas para utilizarse en resúmenes. Por otro lado, disponer de flexibilidad a la hora de configurar la extensión de propiedades de un objeto de la \gls{bbdd} es uno de los puntos fuertes de una \gls{bbdd} no relacional.
