@@ -13,9 +13,23 @@
 
 Establecemos la capacidad de la Raspberry Pi 3 para su módulo de comunicación wifi de actuar como punto de acceso en modo NAT~\cite{raspberrypiasaccesspoint}. Se configura una red con acceso vía usuario y contraseña, con WPA2 y gestión de claves WPA-PSK. De esta forma, el nodo será capaz de desplegar una red inalámbrica que permitirá a otros dispositivos incorporarse a la suite domótica.
 
-En orden de subir sketcs a una arduino desde una Raspeberry Pi, es necesario isntalar las paqueterias del compilardor \verb|sudo apt-get install arduino-mk|, tras la instalación, en la ruta \verb|/usr/sahre/arduino| pueden encontrar binarios y una capeta llamada \verb|examples| que permiten cargan sketchs inmediatamente para comprobar el correcto funcionamiento del la placa microcontroladora. Para compilar dicho sketcs se necesita referenciar el fichero arduino.mk. De los ejemplo podemos verificar rampidamente el correcto funcionamiento de la microcontroladores utilizamos el mas basico de los sketcs, situado en \verb|/usr/share/arduino/examples/01.Basic/Blink/Blink.ino|, este ejemplo es muy basico, un loop que enciende y apaga el led integrado en la placa microcontroladora cada 1000 milisegundos. Este , es por defecto el sketch que generelamente los disitntos fabricantes de placas microcontroladoras de con procesador ATmega328P suelen dejar cargado a modo de test. Alterando el valor basico de sleep entre lineas de encendido y apagado a un valor menor como 50 milisegundos se puede comprobar si la comunicación del puerto com, y el compilador suben correctamente el codigo a la placa. Es importante verificar este punto antes de continuar y esta simple prueba cofirma que la configuración actual esta bien.
+En orden de subir sketcs a una arduino desde una Raspeberry Pi, es necesario isntalar las paqueterias del compilador sudo apt-get install arduino-mk, tras la instalación, en la ruta /usr/sahre/arduino pueden encontrar binarios y una capeta llamada examples que permiten cargan sketchs inmediatamente para comprobar el correcto funcionamiento del la placa microcontroladora. Para compilar dicho sketcs se necesita referenciar el fichero arduino.mk. De los ejemplo podemos verificar rampidamente el correcto funcionamiento de la microcontroladores utilizamos el mas basico de los sketcs, situado en /usr/share/arduino/examples/01.Basic/Blink/Blink.ino, este ejemplo es muy basico, un loop que enciende y apaga el led integrado en la placa microcontroladora cada 1000 milisegundos. Este , es por defecto el sketch que generelamente los disitntos fabricantes de placas microcontroladoras de con procesador ATmega328P suelen dejar cargado a modo de test. Alterando el valor basico de sleep entre lineas de encendido y apagado a un valor menor como 50 milisegundos se puede comprobar si la comunicación del puerto com, y el compilador suben correctamente el codigo a la placa. Es importante verificar este punto antes de continuar y esta simple prueba cofirma que la configuración actual esta bien.
 
 Para facilitar el proceso de subida de codigo a la placa de arduino, crearemos un Makefile hijo que enlace parametros al compilador.
 
 
-Ahoera bien, tengamos en cuenta que las especificaciones del modulo esp8266 de wifi conectado a arduino requieren de una laimentación de 3.3V que pueden ser suministrados por la placa microcontroladora, sin embargo, esto nos deja con un problema de intensidad en la alimentación del modulo, ya que el pin de 3.3V disponible en la placa posees un amperaje de 50mA y se requieren de unos 200mA para garatizar una comunicación estable.
+Ahora bien, tengamos en cuenta que las especificaciones del modulo esp8266 de wifi conectado a arduino requieren de una alimentación de 3.3V que pueden ser suministrados por la placa microcontroladora, sin embargo, esto nos deja con un problema de intensidad en la alimentación del modulo, ya que el pin de 3.3V disponible en la placa posees un amperaje de 50mA y se requieren de unos 200mA para garatizar una comunicación estable.
+
+
+mqtt
+\url{https://theembeddedlab.com/tutorials/install-mosquitto-on-a-raspberry-pi}
+\verb|-h BROKER -t TOPIC|
+
+\verb|mosquittosub -h localhost -t casa/comedor/temperatura|
+\verb|mosquittopub -h localhost -t casa/comedor/temperatura -m "Temperatura: 25ºC"|
+
+
+usando comunicacion cifrada en nodeucm esp8266
+https://github.com/esp8266/arduino-esp8266fs-plugin
+cifrado tls open source
+\url{https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/WiFiClientSecure.h#L52-L66}
