@@ -50,17 +50,17 @@ sudo apt-get update
 sudo apt-get install mosquitto
 \end{verbatim}
 
-Si durante el proceso de instalación se encontrases errores de dependencias, algo común en distribuciones Raspbian, puede revisarse el apartado de Trobuleshooting.
+Si durante el proceso de instalación se encontrase errores de dependencias, algo común en distribuciones Raspbian, puede revisarse el apartado de Trobuleshooting.
 
 
 \section{Proceso de instalación y configuración de Arduino en linea de comandos}
 \label{AppendiA:Key4}
 
-Al tratarse el \gls{so} del nodo principal de un entorno de terminal \gls{cli}, no podemos utilizar el \gls{ide} de Arduino de escritorio, que pese a disponer de compilaciones para la mayoría de distribuciones de \verb|GNU\Linux|, se requiere de un entorno gráfico para  para su ejecución. Sin embargo, en 2018 la compañía de Arduino anuncio arduino-cli, que se presenta como la alternativa \gls{cli} del \gls{ide} de Arduino. Aunque sigue siendo una herramienta de software aun en desarrollo, ya dispone de las funcionalidades necesarias para compilar y subir un sketch con librerías en una placa de terceros como las nodemcu. El proceso de instalación y configuración aplicado en este proyecto se sucede de la siguiente manera.
+Al tratarse el \gls{so} del nodo principal de un entorno de terminal \gls{cli}, no podrá utilizarse el \gls{ide} de Arduino de escritorio, que pese a disponer de compilaciones para la mayoría de distribuciones de \verb|GNU\Linux|, requiere de un entorno gráfico para  para su ejecución. Sin embargo, en 2018 la compañía de Arduino anuncio arduino-cli, que se presenta como la alternativa \gls{cli} del \gls{ide} de Arduino. Aunque sigue siendo una herramienta de software aun en desarrollo, ya dispone de las funcionalidades necesarias para compilar y subir un \gls{sketch} con librerías en una placa de terceros como las nodemcu. El proceso de instalación y configuración aplicado en este proyecto se sucede de la siguiente manera.
 
 \vspace{0.5cm}
 
-Se dispone de alternativas adicionales de instalación como la compilación mediante Go, opción que quedo descartada tras las complicaciones de versiones de compilador que generaban error en el proceso de instalación por ello se opto por la instalación manual. Primero se a de descargar el binario ejecutable de arduino-cli para la arquitectura correspondiente. En el modelo de Raspberry Pi 3B+ se dispone de un procesador ARMv7, es importante asegurarse de comprobar que la versión descargada de la sección de releases corresponda con el equipo, esto puede verificarse en Raspbian mediante el comando less /proc/cpuinfo. Durante el desarrollo de este prototipo, la versión de aruduino-cli era 0.0.100. 
+Se dispone de alternativas adicionales de instalación como la compilación mediante Go, opción que quedo descartada tras las complicaciones de versiones de compilador que generaban error en el proceso de instalación. Por ello, se opto por la instalación manual. Primero se ha de descargar el binario ejecutable de arduino-cli para la arquitectura correspondiente. En el modelo de Raspberry Pi 3B+ se dispone de un procesador ARMv7, es importante asegurarse de comprobar que la versión descargada de la sección de releases corresponda con el equipo, esto puede verificarse en Raspbian mediante el comando \verb|less /proc/cpuinfo|. Durante el desarrollo de este prototipo, la versión de aruduino-cli era 0.0.100. 
 
 \begin{verbatim}
 wget https://github.com/arduino/arduino-cli/releases/download/{version}/{paquete}
@@ -69,7 +69,7 @@ sudo mv arduino-cli /bin/ && rm arduino-cli_0.0.100_Linux_ARMv7.tar.gz
 \end{verbatim}
 
 De esta manera, habiendo ubicado el binario en una ruta del PATH de ejecutables disponible para el usuario, se puede ejecutar el software desde cualquier ubicación.
-El comando arduino-cli debe ejecutarse una primera vez para generar las carpetas necesarias para le generación de sketchs, ubicar librerías para el código y demás ficheros que permitirán subir código a las placas, se generara una carpeta en la raiz del usuario llamada Arduino, desde la cual se gestionaran los proyectos. Por defecto, arduino-cli dispone de la información necesaria para utilizar las placas genéricas de Arduino, dado que se utilizaran placas ensambladas por terceros con el modulo \gls{wifi} esp8266 integrado sera necesario importar las librerías necesarias.
+El comando arduino-cli debe ejecutarse una primera vez para generar las carpetas necesarias para le generación de sketchs, ubicar librerías para el código y demás ficheros que permitirán subir código a las placas, se generara una carpeta en la raiz del usuario llamada Arduino, desde la cual se gestionaran los proyectos. Por defecto, arduino-cli dispone de la información necesaria para utilizar las placas genéricas de Arduino. Dado que se utilizaran placas ensambladas por terceros con el modulo \gls{wifi} esp8266 integrado, sera necesario importar las librerías necesarias.
 
 \begin{verbatim}
     arduino-cli
@@ -85,7 +85,7 @@ board_manager:
         - http://arduino.esp8266.com/stable/package_esp8266com_index.json
 \end{verbatim}
     
-A continuación se debe refrescar la lista de placas disponibles en los registros de la aplicación y verificar la identidad de la placa. En este punto se debe conectar mediante USB una placa nodeMCU a algun ode los puertos disponibles de la Raspberry. Para verificar que se ha conectado correctamente, pueden consultare comandos como dmesg tail o la ruta /dev en la cual debe aprecer el dispositivo generalmente reconocido como ttyUSB0 o ttyAMA0, aunque dicho valor puede variar segun distribución y modelo de placa de arduino, para poder operar sobre el dispositivo sin la necesidad de permisos de root, facilitando asi las operaciones de arduino-cli, es recomendable habilitar permisos de lectura y escritura sobre el dispositivo conectado.
+A continuación se debe refrescar la lista de placas disponibles en los registros de la aplicación y verificar la identidad de la placa. En este punto se debe conectar mediante USB una placa nodeMCU a alguno de los puertos \gls{usb} disponibles de la Raspberry. Para verificar que se ha conectado correctamente, pueden consultare comandos como \verb|dmesg tail| o la ruta /dev en la cual debe aprecer el dispositivo generalmente reconocido como \verb|ttyUSB0|, aunque dicho valor puede variar según distribución y modelo de placa de Arduino. Para poder operar sobre el dispositivo sin la necesidad de permisos de root, facilitando asi las operaciones de arduino-cli, es recomendable habilitar permisos de lectura y escritura sobre el dispositivo conectado.
 
 \begin{verbatim}
     sudo chmod a+rw /dev/ttyUSB0
@@ -95,7 +95,7 @@ A continuación se debe refrescar la lista de placas disponibles en los registro
     arduino-cli board listall
 \end{verbatim}
 
-En la lista resultante debe aparecer las placas externas con su denominación FQBN, dicha denominación es el argumento que se proveerá en la subida de sketch mediante arduino-cli. A conctinuación debe comprobarse que puede compilarse y subir correctamente un sketch sencillo para verificar que todo el proceso de instalación y configuración ha sido correcto.
+En la lista resultante debe aparecer las placas externas con su denominación FQBN, dicha denominación es el argumento que se proveerá en la subida de \gls{sketch} mediante arduino-cli. A continuación debe comprobarse que puede compilarse y subir correctamente un  \gls{sketch} sencillo para verificar que todo el proceso de instalación y configuración ha sido correcto.
 
 \begin{verbatim}
     cd ~/Arduino
@@ -133,7 +133,7 @@ A continuación debe compilarse el proyecto y subirse a la placa, una vez termin
     arduino-cli upload -p /dev/ttyUSB0 --fqbn esp8266:esp8266:nodemcuv2 test/test
 \end{verbatim}
 
-Habiendo verificado el proceso de subida es necesario probar que la conexión inalámbrica y la comunicación mediante el protocolo \gls{mqtt} es correcta, con un código distinto. Instanciar un nuevo proyecto, incluir el código, subir el sketch en la placa y probar la comunicación de la placa con el servidor. Es necesario además agregar las librerías necesarias, en el caso que ocupa este proyecto se utiliza la librería PubSubClient de Nick O'Leary, un cliente ligero de MQTT que posee buena estabilidad y facil integración en código.
+Habiendo verificado el proceso de subida es necesario probar que la conexión inalámbrica y la comunicación mediante el protocolo \gls{mqtt} es correcta, con un código distinto. Instanciar un nuevo proyecto, incluir el código, subir el \gls{sketch} en la placa y probar la comunicación de la placa con el servidor. Es necesario además agregar las librerías necesarias, en el caso que ocupa este proyecto se utiliza la librería \verb|PubSubClient de Nick O'Leary|, un cliente ligero de MQTT que posee buena estabilidad y facil integración en código.
 
 \begin{verbatim}
     cd ~/Arduino
@@ -174,11 +174,9 @@ void setup_wifi() {
 void callback(char* topic, byte* payload, unsigned int length) {
   // Switch on the LED if an 1 was received as first character
   if ((char)payload[0] == '1') {
-    digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
-    // but actually the LED is on; this is because
-    // it is acive low on the ESP-01)
+    digitalWrite(BUILTIN_LED, LOW); 
   } else {
-    digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
+    digitalWrite(BUILTIN_LED, HIGH);
   }
 }
  
@@ -192,7 +190,7 @@ void reconnect() {
     // Attempt to connect
     if (client.connect(clientId.c_str())) {
       client.publish("outTopic", "hello world");
-      client.subscribe("*/test");
+      client.subscribe("test");
     } else {
       delay(5000);
     }
@@ -200,7 +198,7 @@ void reconnect() {
 }
 
 void setup() {
-  pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
+  pinMode(BUILTIN_LED, OUTPUT);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
@@ -222,10 +220,12 @@ void loop() {
 }
 \end{verbatim}
 
-Una vez subido el sketch a la placa según los pasos anteriormente indicados, podemos realizar una llamada a la placa mediante el cliente de \gls{mqtt} instalado en el nodo principal. El cual generara una salida de texto sin fin. Con esto, queda probado que el proceso de subida y la placa están en condiciones óptimas de funcionamiento.
+Una vez subido el sketch a la placa según los pasos anteriormente indicados, podemos realizar una llamada a la placa mediante el cliente de \gls{mqtt} instalado en el nodo principal. El cual generara una salida de texto sin fin. También se puede operar el led embebido en la placa con el argumento 0 o 1. Con esto, queda probado que el proceso de subida y la placa están en condiciones óptimas de funcionamiento.
 
 \begin{verbatim}
     mosquitto_sub -h localhost -t test/msg
+    mosquitto_pub -h localhost  -t test -m "1"
+    mosquitto_pub -h localhost  -t test -m "0"
 \end{verbatim}
 
 \section{Scritps de generación de sckets placas nodeMCU desde Raspberry Pi}
@@ -243,7 +243,7 @@ Crear un sketch mediante un script puede variar en su complejidad en el grado de
   \item Nombre de la estancia en la que se planea ubicar la placa microcontroladora.
 \end{itemize}
 
-El objetivo ultimo del \gls{script} es generar un \gls{sketch} de Arduino que pueda compilarse correctamente, sin embargo, hasta que se reciben los argumentos solo es posible disponer de una plantilla genérica con secciones que deben ser rellenadas en base a las opciones. El modelo de plantilla básico puede constituirse con código previamente escrito en diferentes ficheros para luego ser ordenadamente ensamblada en un único fichero de código. En el caso de este proyecto se creara una estructura de carpetas constituida por un directorio principal, el script generador, un directorio con las secciones de código común a todos los sketchs y directorios separados para cada sensor/actuador disponible en la aplicación. Para la prueba inicial incluiremos el código del sensor DHT11 para un configurar una placa detectora de temperatura y humedad. En términos generales, un sensor/actuador requiere de 3 bloques de código que integrar en código común, las librerías y constantes, la configuración inicial del setup, y el código del bucle que sera requerido por el protocolo \gls{mqtt} para responder al servidor.
+El objetivo ultimo del \gls{script} es generar un \gls{sketch} de Arduino que pueda compilarse y subirse a la placa correctamente, sin embargo, hasta que se reciben los argumentos solo es posible disponer de una plantilla genérica con secciones que deben ser rellenadas en base a las opciones disponibles. El modelo de plantilla básico puede constituirse con código previamente escrito en diferentes ficheros para luego ser ordenadamente ensamblados en un único fichero de código. En el caso de este proyecto, se crea una estructura de carpetas constituida por un directorio principal, el script generador, un directorio con las secciones de código común a todos los sketchs y directorios separados para cada sensor/actuador disponible en la aplicación. Para la prueba inicial incluiremos el código del sensor DHT11 para un configurar una placa detectora de temperatura y humedad. En términos generales, un sensor/actuador requiere de 4 bloques de código que integrar en código común, las librerías y constantes, la configuración inicial del setup, la resolución de callback que atiende peticiones concretas del servidor y el código del bucle que sera requerido por el protocolo \gls{mqtt} para publicar de maera constante..
 
 \begin{verbatim}
     cd ~
@@ -252,19 +252,21 @@ El objetivo ultimo del \gls{script} es generar un \gls{sketch} de Arduino que pu
     mkdir sketchgenerator/general
     touch sketchgenerator/general/loop
     touch sketchgenerator/general/setup
+    touch sketchgenerator/general/callback
     mkdir sketchgenerator/dht
     touch sketchgenerator/dht/dht11Lib
     touch sketchgenerator/dht/dht11Loop
     touch sketchgenerator/dht/dht11Setup
+    touch sketchgenerator/dht/dht11Callback
 \end{verbatim}
 
-Con esta estructura, el \gls{script} tendra que construir un ficehro de extensión .ino válido en la ruta de destino necesaria para que posteriormente arduino-cli pueda compilarlo y subirlo a la placa microcontroladora conectada a un puerto USB del nodo principal. Primero consideraremos el codigo de uso comun a todos los \gls{sketch}.
+Con esta estructura, el \gls{script} tendrá que construir un fichero de extensión .ino válido en la ruta de destino necesaria para que posteriormente arduino-cli pueda compilarlo y subirlo a la placa microcontroladora conectada a un puerto \gls{usb} del nodo principal. Primero consideraremos el código de uso común a todos los \gls{sketch}.
 
 \begin{verbatim}
     nano sketchgenerator/general/setup
 \end{verbatim}
 
-Considerando que el sensor DHT11 posee cierto código que se incluye en la función setup, se usara una cadena de caracteres a modo de centinela, el cual sera sustituido por el código definido en un fichero concreto (dht11Setup, en este caso) situado en el directorio del sensor definido por los argumentos del srcipt generador. Dicho centinela en este codigo aparece como \verb|SETUP_THING|.
+Considerando que el sensor DHT11 posee cierto código que se incluye en la función setup, se usara una cadena de caracteres a modo de centinela, el cual sera sustituido por el código definido en un fichero concreto (dht11Setup, en este caso) situado en el directorio del sensor definido por los argumentos del srcipt generador. Dicho centinela en este código aparece como \verb|SETUP_THING|. Adicionalmente, en este segmento, y demás casos, se incluirá el centinela \verb|ID_DEVICE| que sera entregado en los argumentos del script para identificar una placa de manera inequívoca por parte del servidor.
 
 \begin{verbatim}
 long lastMsg = 0;
@@ -288,25 +290,30 @@ void setup_wifi() {
   }
 }
 
-void callback(char* topic, byte* payload, unsigned int length) {
-  if ((char)payload[0] == '1') {
-    digitalWrite(BUILTIN_LED, LOW);
-  } else {
-    digitalWrite(BUILTIN_LED, HIGH);
-  }
-}
-
 void reconnect() {
   while (!client.connected()) {
-    if (client.connect("ESP8266Client")) {
-      client.publish("outTopic", "hello world");
-      client.subscribe("inTopic");
+    if (client.connect("ID_DEVICE")) {
+      client.publish("ID_DEVICE/status", "hello world");
+      client.subscribe("ID_DEVICE");
     } else {
       delay(5000);
     }
   }
 }
 \end{verbatim}
+
+Para que el servidor pueda realizar peticiones concretas a una placa, está, debe resolver mediante la función callback los argumentos de entrada por \gls{mqtt} cuando se invoque un topic al que este suscrita dicha placa. En esta sección del codigo se incluye un centinela \verb|CALLBACK_THING| que sera sustituido por la logica correspondiente a cada sensor/actuador. En general, esta sección de codigo esta planificada para ser usado por actuadores que pueden tener distintos estados, como un rele (encendido o apagado).
+
+\begin{verbatim}
+    nano sketchgenerator/general/callback
+\end{verbatim}
+
+\begin{verbatim}
+void callback(char* topic, byte* payload, unsigned int length) {
+  CALLBACK_THING
+}
+\end{verbatim}
+
 
 El siguiente segmento de código común corresponde al bucle sin fin de un \gls{sketch}. Al igual que en el caso anterior, una sección del código deberá ser rellenada por las particularidades del sensor. Para este caso se ha definido un centinela \verb|MAIN_BODY|.
 
@@ -351,9 +358,26 @@ Tambien es necesario el segmento de codigo que se incluye en la fución setup.
 dht.begin();
 \end{verbatim}
 
+La sección de callback de este sensor es limitada, ya que a la hora de atender peticiones expresas del servidor, como maximo se podria requerir las medidas del sensor, como añadido funcional, podemos manipular la luz integrada del sensor.
+
+\begin{verbatim}
+    nano sketchgenerator/dht/dht11Callback
+\end{verbatim}
+
+\begin{verbatim}
+if ((char)payload[0] == '1')
+{
+    digitalWrite(BUILTIN_LED, LOW);
+}
+else
+{
+    digitalWrite(BUILTIN_LED, HIGH);
+}
+\end{verbatim}
+
 Y por ultimo el segmento de código que sera invocado en la función loop que incluye la respuesta del cliente \gls{mqtt}. Este segmento de código también incluye centinelas que deben ser sustituidos en base a los argumentos del generador de \gls{sketch}, ya que de otra forma no seria posible definir los topics a los que responderá la placa cuando el nodo solicite información.
 \begin{verbatim}
-    nano sketchgenerator/dht/dht11Lib
+    nano sketchgenerator/dht/dht11Loop
 \end{verbatim}
 
 \begin{verbatim}
@@ -382,7 +406,13 @@ Con todo este código por segmentado puede constituirse un \gls{sketch} valido s
 \begin{verbatim}
 #!/bin/bash
 
-destinyPath=../sketchbook/nodemcu.ino
+# store arguments
+args=("$@")
+# get number of elements
+ELEMENTS=${#args[@]}
+
+
+destinyPath=../Arduino/generatedino/generatedino.ino
 
 BASICLIBRARIES="#include <ESP8266WiFi.h>\n#include <PubSubClient.h>"
 
@@ -392,19 +422,22 @@ echo -e $BASICLIBRARIES "\n\n"> $destinyPath
 #$2 pint for I/O in sensor
 [ $# -eq 0 ] && { echo "Usage: $1 sensor path"; exit 1; }
 [ ! -f "$1" ] && { echo "Error: $1 file not found."; exit 2; }
-file=$1
-pin="D$2"
+file=${args[0]}
+PIN="D${args[1]}"
+DEVICE=${args[2]}
+BOARD=${args[3]}
+
 #Si fichero existe y no es vacio
 if [ -s $file ]
 then
         while IFS= read -r line
         do
-        replace="${line/ARGUMENT_PIN/$pin}"
+        replace="${line/ARGUMENT_PIN/$PIN}"
         echo -e $replace >> $destinyPath
         done < "$file"
 else
         echo -e "FICHERO SOLICITADO NO EXISTE\n"
-        exit
+        exit 2;
 fi
 
 ACCESS_POINT="const char* ssid = \"edomus\";\n"
@@ -416,8 +449,6 @@ WIFI_CLI="PubSubClient client(espClient);\n"
 
 echo -e $ACCESS_POINT$PASSWORD$MQTT_SERVER$WIFI_CONST$WIFI_CLI >> $destinyPath
 
-
-
 #GET SETUP FOR SELECTED THING
 thingSetup=""
 [ ! -f "$1Setup" ] && { echo "Error: $1Setup file not found."; exit 2; }
@@ -425,17 +456,82 @@ if [ -s "$1Setup" ]
 then
         while IFS= read -r line
         do
-        thingSetup+=$line
+        replace="${line/ID_DEVICE/$DEVICE}"
+        thingSetup+=$replace
         done < "$1Setup"
 fi
-
 [ ! -f "general/setup" ] && { echo "Error: setup file not found."; exit 2; }
 if [ -s "general/setup" ]
 then
         while IFS= read -r line
         do
         main="${line/SETUP_THING/$thingSetup}"
+        main="${main//ID_DEVICE/$DEVICE}"
         echo -e $main >> $destinyPath
         done < "general/setup"
 fi
+
+#GET CALLBACK FOR SELECTED THING
+callbackSetup=""
+[ ! -f "$1Callback" ] && { echo "Error: $1Setup file not found."; exit 2; }
+if [ -s "$1Callback" ]
+then
+        while IFS= read -r line
+        do
+        replace="${line/ID_DEVICE/$DEVICE}"
+        replace+="\n"
+        callbackSetup+=$replace
+        done < "$1Callback"
+fi
+[ ! -f "general/callback" ] && { echo "Error: setup file not found."; exit 2; }
+if [ -s "general/callback" ]
+then
+        while IFS= read -r line
+        do
+        main="${line/CALLBACK_THING/$callbackSetup}"
+        echo -e $main >> $destinyPath
+        done < "general/callback"
+fi
+
+#GET LOOP BODY FOR SELECTED THING
+thingLoop=""
+[ ! -f "$1Loop" ] && { echo "Error: $1Loop file not found."; exit 2; }
+if [ -s "$1Loop" ]
+then
+        while IFS= read -r line
+        do
+        replace="${line/ID_DEVICE/$DEVICE}"
+        thingLoop+=$replace"\n"
+        done < "$1Loop"
+fi
+
+[ ! -f "general/loop" ] && { echo "Error: loop file not found."; exit 2; }
+if [ -s "general/loop" ]
+then
+        while IFS= read -r line
+        do
+        main="${line/MAIN_BODY/$thingLoop}"
+        replace="${main/ID_DEVICE/$DEVICE}"
+        echo -e $replace >> $destinyPath
+        done < "general/loop"
+fi
+
+\end{verbatim}
+
+En este punto el script es capaz de generar el sketch en la ruta definida para el proyecto genérico. Sin embargo, los procesos de compilación y subida serán realizados por el software de arduino-cli. Es por ello, que debe incluirse en el script el siguiente bloque de comandos, que realizaran el proceso restante.
+
+\begin{verbatim}
+#compile the sketch
+arduino-cli compile --fqbn $BOARD /home/kadaiser/Arduino/generatedino --debug
+
+#fix permisions for device
+sudo chmod a+wr /dev/ttyUSB0
+
+#upload the sketch
+arduino-cli upload -p /dev/ttyUSB0 --fqbn $BOARD /home/kadaiser/Arduino/generatedino
+\end{verbatim}
+
+El comando del \gls{script} para la configuración de prueba es:
+\begin{verbatim}
+./sketchgenerator dht/dht11 4 nodemcu823234 esp8266:esp8266:nodemcuv2
 \end{verbatim}
