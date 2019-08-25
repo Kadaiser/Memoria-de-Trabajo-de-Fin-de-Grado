@@ -40,7 +40,7 @@ En este mismo fichero establecemos unos límites concretos en los valores de tie
 
 
 \label{AppendiA:Key3}
-\section{Instalación de mosquito}
+\section{Instalación de aplicaciones y servicios}
 Lo primero es descargar la signing key o clave de firma utilizando el comando wget.Añadimos la clave para a una lista para autenticar el paquete que vamos a descargar más tarde.
 
 \begin{verbatim}
@@ -50,7 +50,7 @@ sudo apt-get update
 sudo apt-get install mosquitto
 \end{verbatim}
 
-Si durante el proceso de instalación se encontrase errores de dependencias, algo común en distribuciones Raspbian, puede revisarse el apartado de Trobuleshooting.
+Si durante el proceso de instalación se encontrase errores de dependencias, algo común en distribuciones Raspbian, puede revisarse el apartado del apéndice~\ref{AppendiB:Key3} de Troubleshooting.
 
 
 \section{Proceso de instalación y configuración de Arduino en linea de comandos}
@@ -518,7 +518,7 @@ fi
 
 \end{verbatim}
 
-En este punto el script es capaz de generar el sketch en la ruta definida para el proyecto genérico. Sin embargo, los procesos de compilación y subida serán realizados por el software de arduino-cli. Es por ello, que debe incluirse en el script el siguiente bloque de comandos, que realizaran el proceso restante.
+En este punto el \gls{script} es capaz de generar el sketch en la ruta definida para el proyecto genérico. Sin embargo, los procesos de compilación y subida serán realizados por el software de \verb|arduino-cli|. Es por ello, que debe incluirse en el \gls{script} el siguiente bloque de comandos, que realizaran el proceso restante.
 
 \begin{verbatim}
 #compile the sketch
