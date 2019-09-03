@@ -375,55 +375,83 @@ Para el endpoint \verb|/api/board|, se asocian 2 entradas atendidas por el \verb
 
 Toda petición http que no sea encaminada a un método mediante esta metodología será automáticamente rechazada. Esto permite controlar severamente los caminos por los cuales se ejecutará una lógica en base a una petición http, y por ende constituye una medida de seguridad adicional por el principio básico de conocer y controlar todas las posibles entradas al servidor con un flujo único y específico para cada una de ellas, para minimizar brechas de seguridad.
 
-\subsection{Diagramas de clases de los Controllers, Helpers, Models y Providers}
+\subsection{Diagramas de clases de los Controllers, Helpers y Models}
 \label{makereference4.6.4}
 
 [HABLAR AQUÍ DE CONTROLLERS]
 
-[core.controller.js
-  prepareCoreInstances,
-  setupCoreMonitors,
-  _launchStoredSubscriptions,
-  _releaseDaemons
-]
+El \verb|core.controller.js| se encarga de lanzar aquellos procesos que deben estar listos tras la inicialización base del servidor NodeJS. Una vez el servidor ha conectado su cliente de Mongo a la instancia de MongoDB, está listo para interactuar con toda la información almacenada anteriormente en la \gls{bbdd}, y el proceso de \verb|app.js| se encarga de lanzar el método \verb|setupCoreMonitors| del coreController. Este método lanza dos de sus métodos internos, por un lado \verb|_launchStoredSubscriptions| y posteriormente \verb|_releaseDaemons|, finalizando así la preparación inicial del servidor.
 
-[room.controller.js
-initializeRooms
-roomDaemon
-getAllRooms
-getRoomById
-addRoom
-deleteRoom
-renameRoom
-]
+\vspace{0.5cm}
 
-[thing.controller.js
-  initializeThings,
-  getThingsByRoom,
-  thingDaemon,
-  addThing,
-  getAllThings,
-  getThingById,
-  deleteThing,
-  renameThing,
-  processCommand
-]
+El método \verb|_launchStoredSubscriptions| se encarga de extraer de la base de datos la lista actual de things y, mediante el método \verb|generateSubscriptionData| del \verb|thing.helper.js|, genera una lista de objetos con información de suscripciones MQTT para cada thing que esté operativa (es decir, vinculadas a una habitación). Tras esto, transfiere dicha lista al \verb|mqtt.service.js| para que inicialice su servicio mediante su método \verb|initializeClient|.
+Posteriormente, el método \verb|_releaseDaemons| se encarga de lanzar, a intervalos regulares de 5 segundos, a los \textit{daemons} (denominados así por sus características de funcionamiento) para que paulatinamente realicen sus operaciones regulares, mediante el método \verb|roomDaemon| del \verb|room.controller.js| y el método \verb|thingDaemon| del \verb|thing.controller.js|. Serán explicados en detalle en sus respectivos apartados.
 
-[link.controller.js
-  linkRoom,
-  unlinkRoom,
-  flagAsMainThing
-]
+\vspace{1cm}
 
-[board.controller.js
-  getAllBoards,
-  getUSBConnectedBoard
-]
+El \verb|room.controller.js| se encarga de, por un lado, correr el \verb|roomDaemon| mencionado previamente, y por otro, exponer sus métodos vinculados a la API REST.
+Por un lado, el \verb|roomDaemon| (recordemos que este método es invocado de forma regular cada 5 segundos de operación del servidor) se encarga de calcular la media de las medidas de los sensores DHT11 y MQ135 que haya en cada habitación, y almacenar dicho cálculo en el campo sensorMeasures de cada habitación. Esta operación se lleva a cabo siguiendo los siguientes pasos:
+\begin{enumerate}
+    \item Extrae las rooms disponibles en la colección de Rooms de MongoDB, y para cada habitación, lleva a cabo los pasos siguientes pasos.
+    \item Obtiene la lista de things vinculada a dicha habitación mediante el método \verb|getThingsByRoom| del \verb|thing.controller.js|, y discrimina en dos listas diferentes los things que corresponden a sensores DHT11 y los que corresponden a sensores MQ135.
+    \item Con la ayuda del \verb|thing.helper.js|, los métodos \verb|getDHT11AvgInfo| y \verb|getMQ135AvgInfo| calculan la información media útil de dichos sensores.
+    \item Actualiza la room analizada en la MongoDB con esta información almacenada en su campo \verb|sensorMeasures|.
+\end{enumerate}
 
-[user.controller.js
-  getAllBoards,
-  getUSBConnectedBoard
-]
+\vspace{0.5cm}
+
+El método \verb|getAllRooms| extrae de la MongoDB la lista de rooms almacenadas, y si la operación ha tenido éxito, resuelve la petición http con un código 200 y la lista de rooms en el body de la respuesta; de lo contrario, devuelve un código 500 y un mensaje de error.
+El método \verb|getRoomById| extrae de la MongoDB la room con el campo id igual al parámetro id en la URL de la petición http, y si la operación ha tenido éxito, resuelve la petición http con un código 200 y la room recuperada en el body de la respuesta; de lo contrario, devuelve un código 500 y un mensaje de error.
+El método \verb|addRoom| crea un objeto del tipo Room con un id pseudoaleatorio y los campos customName y type coincidentes con los valores del body de la petición http. A continuación, procede a salvar este objeto en la colección de Rooms de la MongoDB, y si la operación ha tenido éxito, resuelve la petición http con un código 200 y la nueva room creada en el body de la respuesta; de lo contrario, devuelve un código 500 y un mensaje de error.
+El método \verb|deleteRoom| elimina de la MongoDB la room con el campo id igual al parámetro id en la URL de la petición http, y si la operación ha tenido éxito, resuelve la petición http con un código 200 y un mensaje de éxito; de lo contrario, devuelve un código 500 y un mensaje de error.
+El método \verb|renameRoom| modifica en la MongoDB la room con el campo id igual al parámetro id en la URL de la petición http, sustituyendo el valor de su campo customName por el proporcionado en la petición http, y si la operación ha tenido éxito, resuelve la petición http con un código 200 y un mensaje de éxito; de lo contrario, devuelve un código 500 y un mensaje de error.
+
+\vspace{1cm}
+
+El \verb|thing.controller.js| se encarga principalmente de, por un lado, correr el \verb|thingDaemon| mencionado previamente, y por otro, exponer sus métodos vinculados a la API REST.
+En este caso, por el momento, el método \verb|thingDaemon| no contiene operaciones requeridas pero se mantiene por su potencial utilidad en futuras versiones del proyecto.
+
+\vspace{0.5cm}
+
+El método \verb|getAllThings| extrae de la MongoDB la lista de things almacenadas, y si la operación ha tenido éxito, resuelve la petición http con un código 200 y la lista de things en el body de la respuesta; de lo contrario, devuelve un código 500 y un mensaje de error.
+El método \verb|getThingsByRoom| realiza la misma operación que el \verb|getAllThings|, pero sólo extrae de la MongoDB la lista de things almacenadas vinculadas a una room en particular, y devuelve el valor. Este método no atiende a la API REST, sólo responde como utilidad del controller en sí.
+El método \verb|getThingById| extrae de la MongoDB la thing con el campo id igual al parámetro id en la URL de la petición http, y si la operación ha tenido éxito, resuelve la petición http con un código 200 y la thing recuperada en el body de la respuesta; de lo contrario, devuelve un código 500 y un mensaje de error.
+El método \verb|addThing| crea un objeto del tipo Thing con un id pseudoaleatorio y los campos customName, type y model coincidentes con los valores del body de la petición http. Además, en su campo typeProperties, almacena una estructura con datos por defecto dependiendo del type y model especificados (gracias al método \verb|getModelStructure| del \verb|thing.helper.js|). A continuación, procede a salvar este objeto en la colección de Things de la MongoDB, y si la operación ha tenido éxito, resuelve la petición http con un código 200 y la nueva thing creada en el body de la respuesta; de lo contrario, devuelve un código 500 y un mensaje de error.
+El método \verb|deleteThing| elimina de la MongoDB la thing con el campo id igual al parámetro id en la URL de la petición http, y si la operación ha tenido éxito, resuelve la petición http con un código 200 y un mensaje de éxito; de lo contrario, devuelve un código 500 y un mensaje de error.
+El método \verb|renameThing| modifica en la MongoDB la thing con el campo id igual al parámetro id en la URL de la petición http, sustituyendo el valor de su campo customName por el proporcionado en la petición http, y si la operación ha tenido éxito, resuelve la petición http con un código 200 y un mensaje de éxito; de lo contrario, devuelve un código 500 y un mensaje de error.
+El método \verb|processCommand| se encarga de procesar un comando específico para la thing con id igual al parámetro id de la petición http. Primero, obtiene la thing coincidente almacenada en la MongoDB; segundo, obtiene una instancia del controlador específico para dicha thing según su tipo; y por último, ejecuta el método \verb|processRequest| de dicha instancia con los datos de la thing y el comando de la petición. El resultado de este último método expone un flujo de éxito y otro de fracaso. Si la operación ha tenido éxito, resuelve la petición http con un código 200 y un objeto JSON confirmando el éxito del comando solicitado; de lo contrario, devuelve un código 500 y un mensaje de error.
+
+\vspace{1cm}
+
+El \verb|link.controller.js| se encarga de exponer sus métodos vinculados a la API REST.
+
+\vspace{0.5cm}
+
+El método \verb|linkRoom| se encarga de vincular una thing a una room y de ordenar todo lo necesario para el funcionamiento de dicha thing de forma independiente. Con el fin de evitar repeticiones, se refiere a la sección \ref{ch:Capitulo5.3.2} para la explicación de este método, pues el contexto proporcionado en dicha sección ofrece una mejor visión del cometido de este método.
+El método \verb|unlinkRoom| realiza una operación inversa al \verb|linkRoom|. Así, se encarga de eliminar las referencias mutuas entre la thing de la petición y su room asociada en sus respectivas colecciones Rooms y Things; y cuando esto ha ocurrido con éxito, se encarga de llamar al método \verb|removeSubscription| del \verb|mqtt.service.js| para eliminar tanto la suscripción de \textit{idThing/status} como la de \textit{idThing/answer}; y si la operación ha tenido éxito, resuelve la petición http con un código 200 y un mensaje de éxito; de lo contrario, devuelve un código 500 y un mensaje de error.
+El método \verb|flagAsMainThing| se encarga de marcar a la thing de la petición http como principal de su tipo en su room vinculada. Por un lado, actualiza el campo \verb|flaggedAsMain| de la thing (previamente actualiza el mismo campo la anterior thing del mismo tipo marcada como principal antes que ésta, si existe, sustituyéndola así); por otro lado, actualiza en la MongoDB el campo \verb|mainThingsId| de la room asociada en la propiedad pertinente según el tipo de la thing; y si la operación ha tenido éxito, resuelve la petición http con un código 200 y un mensaje de éxito; de lo contrario, devuelve un código 500 y un mensaje de error.
+
+\vspace{1cm}
+
+El \verb|board.controller.js| se encarga de exponer sus métodos vinculados a la API REST.
+
+\vspace{0.5cm}
+
+El método \verb|getAllBoards| extrae de la MongoDB la lista de boards almacenadas, y si la operación ha tenido éxito, resuelve la petición http con un código 200 y la lista de boards en el body de la respuesta; de lo contrario, devuelve un código 500 y un mensaje de error.
+El método \verb|getUSBConnectedBoard| se encarga de devolver la board conectada en ese momento al puerto USB de la Raspberry Pi. Con el fin de evitar repeticiones, se refiere al paso 4 de la sección \ref{ch:Capitulo5.3.4} para la explicación de este método, pues el contexto proporcionado en dicha sección ofrece una mejor visión del cometido de este método.
+
+\vspace{1cm}
+
+El \verb|user.controller.js| se encarga de exponer sus métodos vinculados a la API REST.
+
+\vspace{0.5cm}
+
+El método \verb|registerUser| comprueba en la colección Users de la MongoDB si existe un usuario con el email proporcionado en la petición http. Si ya existe, devuelve un código 500 y un mensaje de error; si no existe, crea un nuevo objeto User con las características email y password del body de la petición y lo almacena en la MongoDB. Si la operación ha tenido éxito, resuelve la petición http con un código 200 y un mensaje de éxito; de lo contrario, devuelve un código 500 y un mensaje de error.
+El método \verb|loginUser| comprueba en la colección Users de la MongoDB si existe un usuario con el email proporcionado en la petición http. Mediante el método del esquema User \verb|comparePassword|, procede a devolver si el login ocurre con éxito o no, resolviendo la petición http con un código 200 y un objeto JSON con el email y un token válido (creado por el método privado \verb|_createToken|) o bien devolviendo un código 400 y un mensaje de error.
+El método privado \verb|_createToken| hace uso del plugin JWT para crear un token único con el id de usuario y su email, siguiendo la configuración existente en los campos \verb|JWT_SECRET| y \verb|TOKEN_EXPIRE_TIME| del \verb|server.config.js|.
+
+[HABLAR AQUÍ DE LIGHT CONTROLLER]
+[HABLAR AQUÍ DE SENSOR CONTROLLER]
 
 [HABLAR AQUÍ DE HELPERS]
 [thing.helper.js
@@ -442,8 +470,8 @@ renameRoom
 [Modelo Thing, diagrama y corresponde a la collección Things]
 [Modelo User, diagrama y corresponde a la collección Users]
 
-
-[HABLAR AQUÍ DE PROVIDERS]
+\subsection{Diagramas de clases de los Providers}
+\label{makereference4.6.5}
 
 [mongo.db.js _connect]
 
