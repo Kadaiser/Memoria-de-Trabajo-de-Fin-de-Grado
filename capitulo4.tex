@@ -264,14 +264,42 @@ La thing store también expone el método \verb|cleanUserThings|, accedido y usa
 \section{Arquitectura del servidor de NodeJS}
 \label{makereference4.6}
 
+\subsection{Consideraciones previas}
+\label{makereference4.6.1}
+
+El desarrollo de la aplicación backend ha seguido la línea del stack MEAN, esto es, MongoDB, ExpressJS, Angular (éste sólo en el frontend) y NodeJS. Los beneficios de seguir dicho stack son sencillamente los de sus frameworks y herramientas: MongoDB aporta los beneficios de una \gls{bbdd} no relacional, enormemente alineado con las características del proyecto, según el cual podríamos almacenar grandes cantidades de datos con diferentes estructuras JSON bajo la misma lista de documentos sin perder velocidad de acceso o escritura; ExpressJS nos permite elaborar una API REST completa salvando los principales escollos que NodeJS podría presentarnos para tal fin, pues sus herramientas base para el tratamiento de peticiones http se presentan intrincadas y poco intuitivas; y NodeJS se beneficia de infinitas librerías de sencillo uso, constantemente probadas y actualizadas por su amplia comunidad, proveyéndonos en este caso de muchas utilidades que nos ayudan a evitar desarrollos difíciles e innecesarios no intrínsecos a una suite domótica (como es nuestro fin) y cuyos beneficios enumeraremos más adelante.
+
+\subsection{Estructura básica}
+\label{makereference4.6.2}
+
+A grandes rasgos, la aplicación backend está estructurada en:
+\begin{enumerate}
+ \item Enrutadores, por lo general tendremos uno por cada nombre en nuestra API REST (los conoceremos como \textit{routers}); gracias a ExpressJS, permiten encaminar cada petición http recibida en el servidor según su tipo CRUD (GET, POST, PUT o DELETE) y la estructura de la URL asociada, para ser atendida por el método específico que debe procesar dicha petición.
+ \item Controladores, por lo general tendremos uno por cada nombre en nuestra API REST (los conoceremos como \textit{controllers}); encuadran un contexto en el que se crea, manipula, sirve, guarda y destruye elementos de la estructura de datos asociada, además de exponer una serie de métodos, generalmente uno por cada posible entrada de la API para el nombre de dicha API asociado a la estructura de datos en uso.
+ \item Modelos, de los que tendremos uno por cada estructura de datos existente (los conoceremos como \textit{models}); definirán la estructura JSON que debe seguir un objeto para ser incluido en una collección de MongoDB, y que utilizaremos para generar y reconocer objetos de dicho tipo de estructura de datos y poder mejorar la interacción con la \gls{bbdd} de MongoDB.
+ \item Servicios, que al igual que en el proyecto frotend, ejercerán de cómodas APIs contra diferentes servicios, como pueda ser la \gls{bbdd} de MongoDB, el protocolo \gls{mqtt} y otros módulos de utilidades (los conoceremos como \textit{providers} o \textit{services}); por lo general, podrían ser prácticamente independientes y ser copiados tal cual a cualquier otro proyecto (a falta de ligeras adaptaciones que en lineas generales facilitan su explotación en cada caso) y proporcionan una capa de abstracción adicional que delimita la responsabilidad del módulo que hace uso de dicho servicio y reduce su complejidad de código.
+ \item Módulos de soporte, por lo general tendremos tantos como sean necesarios, y cada uno se dedica exclusivamente a un tipo de estructura de datos (los conoceremos como helpers); ofrecen sus métodos tanto a su controller asociado como a otros controllers, de forma desacoplada con el fin de aligerar la carga de código del controller asociado.
+ \item Módulos intermediarios, que aportan utilidades adicionales a la hora de procesar peticiones http (los conoceremos como \textit{middlewares}); gracias a ExpressJS, permitirán enriquecer el tratamiento de dichas peticiones para establecer filtros adicionales o transformaciones de los datos de la petición.
+ \item Archivos de configuración y de constantes, que permitirán aislar adecuadamente el uso de constantes útiles a lo largo de toda la aplicación, de una forma centralizada, independiente y de fácil acceso y modificación.
+\end{enumerate}
+
+Con el fin de comprender el esquema utilizado y establecer una alineación con el frontend, la nomenclatura utilizada para cada tipo de datos será la misma que en el proyecto cliente.
+
+\subsection{Flujo de enrutado de las peticiones HTTP}
+\label{makereference4.6.3}
 
 \begin{figure}[hbt!]
 \centering
 \includegraphics[height=2.5in]{figures/diagrams/back/router-flow/api-entry.png}
 \caption[api-entry]{Base API Entry Schema\footnotemark}
+\label{fig:back-api-entry}
 \end{figure}
 
-[EXPLICAR AQUÍ LA ENTRADA DEL ROUTER Y LA API EXPUESTA]
+Como hemos explicado anteriormente, ExpressJS es utilizado para el enrutado de toda petición HTTP que alcance la aplicación backend. Durante la inicialización del servidor, mediante el método \verb|listen| en el \verb|server.js| se utiliza el objeto \verb|app| expuesto en el \verb|src/app.js| (un objeto generado por el framework ExpressJS) para generar un servidor que atenderá todas las peticiones HTTP en el puerto que se le configure, en este caso, se ha designado el puerto 3000.
+\vspace{0.5cm}
+Posteriormente, se lanza el setup del enrutador con el método \verb|setupRouting| del módulo \verb|router.js|, el cual se encarga de importar todos los routers existentes y vincularlos a cada uno de los endpoints que serán atendidos mediante el método \verb|use| del objeto \verb|app|. Así, suponiendo que se recibe una petición http con la ruta \verb|/api/thing|, ésta será redirigida al router \verb|thingRouter| mediante el método y sus parámetros \verb|use(ROUTER_CONFIG.EP_GLOBAL.THINGS, thingRouter)|. El primer nivel de encaminamiento de las peticiones es tal que el mostrado en la Figura \ref{fig:back-api-entry}.
+\vspace{0.5cm}
+Una vez la petición ha sido encaminada a un router en particular, entramos en el segundo nivel de encaminamiento. En este punto, el router se encarga de importar el controller específico para su tipo de datos y de encaminar cada endpoint a la función final de un controller que atenderá a dicha petición. ExpressJS nos permite registrar dicha función a ejecutar para unas características particulares de petición, de forma que con unos sencillos métodos, podremos asociar dicho método dependiendo del tipo CRUD de la petición atendida y de las características de su URL. Así, suponiendo que nuestro \verb|thing.router.js| atiende una petición PUT en la url \verb|/api/thing/rename/:id|, mediante el método \verb|put| podremos encaminar dicha petición a ser atendida por el método \verb|renameThing| del \verb|thing.controller.js|. Este segundo nivel de encaminamiento de las peticiones es tal que el mostrado en cada una de las figuras siguientes, brevemente descrito para cada endpoint.
 
 \begin{figure}[hbt!]
 \centering
@@ -279,7 +307,12 @@ La thing store también expone el método \verb|cleanUserThings|, accedido y usa
 \caption[link-endpoints]{Link API Schema\footnotemark}
 \end{figure}
 
-[EXPLICAR AQUÍ LOS ENDPOINTS DE LINK]
+Para el endpoint \verb|/api/link|, se asocian 3 entradas atendidas por el \verb|link.router.js|:
+\begin{enumerate}
+\item En la ruta \verb|/api/link/|, las peticiones POST serán atendidas por el método \verb|linkRoom|.
+\item En la ruta \verb|/api/link/|, las peticiones PUT serán atendidas por el método \verb|unlinkRoom|.
+\item En la ruta \verb|/api/link/main|, las peticiones PUT serán atendidas por el método \verb|flagAsMainThing|.
+\end{enumerate}
 
 \begin{figure}[hbt!]
 \centering
@@ -287,7 +320,14 @@ La thing store también expone el método \verb|cleanUserThings|, accedido y usa
 \caption[room-endpoints]{Room API Schema\footnotemark}
 \end{figure}
 
-[EXPLICAR AQUÍ LOS ENDPOINTS DE ROOM]
+Para el endpoint \verb|/api/room|, se asocian 5 entradas atendidas por el \verb|room.router.js|:
+\begin{enumerate}
+\item En la ruta \verb|/api/room/|, las peticiones GET serán atendidas por el método \verb|getAllRooms|.
+\item En la ruta \verb|/api/room/|, las peticiones POST serán atendidas por el método \verb|addRoom|.
+\item En la ruta \verb|/api/room/:id|, las peticiones GET serán atendidas por el método \verb|getRoomById|.
+\item En la ruta \verb|/api/room/:id|, las peticiones DELETE serán atendidas por el método \verb|deleteRoom|.
+\item En la ruta \verb|/api/room/rename/:id|, las peticiones PUT serán atendidas por el método \verb|renameRoom|.
+\end{enumerate}
 
 \begin{figure}[hbt!]
 \centering
@@ -295,7 +335,15 @@ La thing store también expone el método \verb|cleanUserThings|, accedido y usa
 \caption[thing-endpoints]{Thing API Schema\footnotemark}
 \end{figure}
 
-[EXPLICAR AQUÍ LOS ENDPOINTS DE THING]
+Para el endpoint \verb|/api/thing|, se asocian 6 entradas atendidas por el \verb|thing.router.js|:
+\begin{enumerate}
+\item En la ruta \verb|/api/thing/|, las peticiones GET serán atendidas por el método \verb|getAllThings|.
+\item En la ruta \verb|/api/thing/|, las peticiones POST serán atendidas por el método \verb|addThing|.
+\item En la ruta \verb|/api/thing/:id|, las peticiones GET serán atendidas por el método \verb|getThingById|.
+\item En la ruta \verb|/api/thing/:id|, las peticiones DELETE serán atendidas por el método \verb|deleteThing|.
+\item En la ruta \verb|/api/thing/rename/:id|, las peticiones PUT serán atendidas por el método \verb|renameThing|.
+\item En la ruta \verb|/api/thing/command/:id|, las peticiones PUT serán atendidas por el método \verb|processCommand|.
+\end{enumerate}
 
 \begin{figure}[hbt!]
 \centering
@@ -303,7 +351,11 @@ La thing store también expone el método \verb|cleanUserThings|, accedido y usa
 \caption[user-endpoints]{User API Schema\footnotemark}
 \end{figure}
 
-[EXPLICAR AQUÍ LOS ENDPOINTS DE USER]
+Para el endpoint \verb|/api/user|, se asocian 2 entradas atendidas por el \verb|user.router.js|:
+\begin{enumerate}
+\item En la ruta \verb|/api/link/login|, las peticiones POST serán atendidas por el método \verb|loginUser|.
+\item En la ruta \verb|/api/link/register|, las peticiones POST serán atendidas por el método \verb|registerUser|.
+\end{enumerate}
 
 \begin{figure}[hbt!]
 \centering
@@ -311,7 +363,117 @@ La thing store también expone el método \verb|cleanUserThings|, accedido y usa
 \caption[board-endpoints]{Board API Schema\footnotemark}
 \end{figure}
 
-[EXPLICAR AQUÍ LOS ENDPOINTS DE BOARD]
+Para el endpoint \verb|/api/board|, se asocian 2 entradas atendidas por el \verb|board.router.js|:
+\begin{enumerate}
+\item En la ruta \verb|/api/board/|, las peticiones GET serán atendidas por el método \verb|getAllBoards|.
+\item En la ruta \verb|/api/board/detect|, las peticiones GET serán atendidas por el método \verb|getUSBConnectedBoard|.
+\end{enumerate}
+
+[HABLAR AQUÍ DE MIDDLEWARES]
+[passport.middleware.js]
+
+
+Toda petición http que no sea encaminada a un método mediante esta metodología será automáticamente rechazada. Esto permite controlar severamente los caminos por los cuales se ejecutará una lógica en base a una petición http, y por ende constituye una medida de seguridad adicional por el principio básico de conocer y controlar todas las posibles entradas al servidor con un flujo único y específico para cada una de ellas, para minimizar brechas de seguridad.
+
+\subsection{Diagramas de clases de los Controllers, Helpers, Models y Providers}
+\label{makereference4.6.4}
+
+[HABLAR AQUÍ DE CONTROLLERS]
+
+[core.controller.js
+  prepareCoreInstances,
+  setupCoreMonitors,
+  _launchStoredSubscriptions,
+  _releaseDaemons
+]
+
+[room.controller.js
+initializeRooms
+roomDaemon
+getAllRooms
+getRoomById
+addRoom
+deleteRoom
+renameRoom
+]
+
+[thing.controller.js
+  initializeThings,
+  getThingsByRoom,
+  thingDaemon,
+  addThing,
+  getAllThings,
+  getThingById,
+  deleteThing,
+  renameThing,
+  processCommand
+]
+
+[link.controller.js
+  linkRoom,
+  unlinkRoom,
+  flagAsMainThing
+]
+
+[board.controller.js
+  getAllBoards,
+  getUSBConnectedBoard
+]
+
+[user.controller.js
+  getAllBoards,
+  getUSBConnectedBoard
+]
+
+[HABLAR AQUÍ DE HELPERS]
+[thing.helper.js
+  translateCommand,
+  getThingControllerInstance,
+  generateSubscriptionData,
+  getModelStructure,
+  getDHT11AvgInfo,
+  getMQ135AvgInfo
+]
+
+[HABLAR AQUÍ DE MODELS]
+
+[Modelo Board, diagrama y corresponde a la collección Boards]
+[Modelo Room, diagrama y corresponde a la collección Rooms]
+[Modelo Thing, diagrama y corresponde a la collección Things]
+[Modelo User, diagrama y corresponde a la collección Users]
+
+
+[HABLAR AQUÍ DE PROVIDERS]
+
+[mongo.db.js _connect]
+
+[mqtt.service.js
+  initializeClient,
+  stopClient,
+  addSubscription,
+  removeSubscription,
+  publish
+  
+  _loadSubscriptions
+  _subscribeTopic
+  _unsubscribeTopic
+  _publishTopic
+  _initMessageListener
+  _formTopic
+  _findSubscriptionIndex
+  _processMessage
+  ]
+  
+  [shell.service.js 
+  compileAndUploadToBoard
+  _execAsync
+  ]
+
+  [usb.service.js 
+  initListening,
+  stopListening,
+  getCurrentConnectedUSB,
+  ]
 
 \section{Instalación y configuración del nodo principal}
 \label{makereference4.7}
