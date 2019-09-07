@@ -18,10 +18,9 @@ Como estrategia, un sensor tomara medidas indefinidamente y los volcara en un fi
 
 \section{Caso de uso: Vincular un dispositivo registrado a una habitación}
 \label{ch:Capitulo5.2}
-Precondiciones:
-    -El usuario ha registrado en la aplicación una habitación para esta bodega y ha registrado una luz de tipo led.
+El usuario previamente ha registrado en la aplicación una habitación para esta bodega y ha registrado una luz de tipo led. En este momento desea poder vincular esa luz a la bodega, de forma que pueda encenderla y apagarla y observar el estado actual de la luz desde su aplicación. A continuación se describe el proceso por el cual el usuario selecciona las características de la vinculación que va a llevar a cabo (eligiendo la luz, la habitación a la cual vincularla, el modelo de la placa en la cual montará la luz y el pin en el que la conectará) y conecta la placa por USB a la Raspberry (para que el servidor genere, compile y cargue los scripts necesarios en la placa para que ésta interactúe con la luz y con el nodo principal). Cuando este proceso finaliza, la placa está correctamente vinculada y tanto el backend como el frontend están alineados en información, de forma que el backend será capaz de comunicarse directamente con la luz y retransmitir su estado al frontend, y el frontend podrá controlar su estado mediante comandos lanzados al backend. El usuario podrá observar que la luz ya aparece vinculada estrictamente a la bodega.
 \subsection{Fase 1: Lado aplicación móvil}
-\label{ch:Capitulo6.2.1}
+\label{ch:Capitulo5.2.1}
 \begin{enumerate}
 \item  El usuario accede al menú en la pestaña inferior derecha, a su vez al menú \textit{Connect}, localiza la thing que quiere vincular (representada mediante el \verb|thing-block.component|, en este caso la luz de tipo led y procede a deslizarla hacia la izquierda y pulsar en el botón \textit{Link}. Esto desencadena el envío de un evento que escucha el componente padre, \verb|connect.ts|, y lo vincula a la ejecución de su método \verb|linkThing|. Éste se encarga de mostrar el elemento modal que contendrá el asistente de vinculación de la thing a una habitación, cuya lógica estará dispuesta en \verb|wizard-link.modal|. A partir de aquí a cada paso del asistente se le requerirá al usuario información imprescindible para la vinculación, y no podrá avanzar al siguiente paso con el botón \textit{Next} hasta que cumpla lo solicitado en cada paso.
 
@@ -89,8 +88,7 @@ Precondiciones:
 
 \section{Caso de uso: Encender un dispositivo luminoso de tipo led}
 \label{ch:Capitulo5.3}
-Precondiciones:
-    -El usuario ha registrado en la aplicación una habitación para esta bodega, ha registrado una luz de tipo led y la ha vinculado a dicha bodega mediante lo explicado en el caso de uso anterior.
+El usuario ha registrado en la aplicación una habitación para esta bodega, ha registrado una luz de tipo led y la ha vinculado a dicha bodega mediante lo explicado en el caso de uso anterior. En este momento, el usuario decide encender dicha luz. El proceso descrito a continuación detalla cómo el frontend responde al input del usuario que desplaza el interruptor de luz en el componente visual, comunicando el comando de encendido al servidor mediante una petición http, cómo el backend procesa el comando para entender qué acción debe llevar a cabo y envía por MQTT el mensaje adecuado a la luz adecuada, y cómo se produce la respuesta desde la placa, el backend reacciona a la respuesta por MQTT de la placa, actualiza el estado de la luz en su base de datos y devuelve la petición http al frontend, el cual procesa la respuesta desplazando el botón e iluminando el componente visual de la luz.
 
 \subsection{Fase 1: Lado aplicación móvil}
 \label{ch:Capitulo5.3.1}
@@ -156,7 +154,7 @@ Precondiciones:
 
 \section{Caso de uso: Procesamiento de información de un sensor}
 \label{ch:Capitulo5.4}
-Datos de ejemplo: se utilizará un sensor de humedad y temperatura, modelo DHT11.
+El usuario ha registrado en la aplicación una habitación para esta bodega, ha registrado un sensor de tipo DHT11 (sensor de temperatura y humedad) y lo ha vinculado a dicha bodega mediante lo explicado en el caso de uso de la sección \ref{ch:Capitulo5.3}. En este momento, el usuario decide averiguar la temperatura y humedad de la bodega. El proceso descrito a continuación detalla cómo la placa publica mediante MQTT la información de su sensor DHT11, cómo el backend escucha y procesa el mensaje de estado del sensor, actualiza la base de datos del backend almacenando la nueva información, y cómo el frontend pide periódicamente información al backend sobre las habitaciones y las things conectadas, proporcionando al usuario una información en tiempo real de los dispositivos, y por ende, de la temperatura y humedad de la bodega.
 
 \subsection{Fase 1: Lado dispositivo}
 \label{ch:Capitulo5.4.1}
@@ -169,12 +167,21 @@ Precondiciones: el cliente \gls{mqtt} del servidor ha sido inicializado mediante
 \begin{enumerate}
 \item  Se recibe un mensaje \gls{mqtt} con el string \verb|"{\"temperature\": 28, \"humidity\": 53}"| en el topic \textit{thingId/status}. La escucha de mensajes \gls{mqtt} en el \verb|mqtt.service.js| ejecuta un proceso que extrae el id de thing \textit{thingId} y la categoría \textit{status} y llama al método interno \verb|_processMessage|, con esos datos y el string.
 
-\item  Este método delega en \verb|_findSubscriptionIndex| la necesidad de localizar la información de la suscripción correspondiente en la lista interna y, si existe ejecuta el callback asociado a esta thing para la categoría \textit{status}, en este caso, se trata del método \verb|processStatus| del \verb|sensor.controller.js|.
+\item  Este método delega en \verb|_findSubscriptionIndex| la necesidad de localizar la información de la suscripción correspondiente en la lista interna y, si existe, ejecuta el callback asociado a esta thing para la categoría \textit{status}, en este caso, se trata del método \verb|processStatus| del \verb|sensor.controller.js|.
 
 \item  En el \verb|sensor.controller.js|, se intenta parsear el mensaje mediante el método \verb|_parseMessage|, y se espera que devuelva un objeto JSON.
 
-\item  Si lo devuelve con éxito, actualizará la thing en la MongoDB con el objeto JSON parseado en el campo \verb|sensorMeasures| de la propiedad \verb|typeProperties|, con el método update del modelo \textbf{Thing} (esquema de la DB).
+\item  Si lo devuelve con éxito, actualizará la thing en la MongoDB con el objeto JSON parseado en el campo \verb|sensorMeasures| de la propiedad \verb|typeProperties|, con el método update del modelo \textbf{Thing} (esquema de la MongoDB).
 \end{enumerate}
 
-\subsection{Fase Auxiliar: recuperación de datos en tiempo real}
+\subsection{Fases paralelas: cálculo de datos generales de la habitación asociada y recuperación de datos en tiempo real}
 \label{ch:Capitulo5.4.3}
+La aplicación backend corre el proceso \verb|roomDaemon| del módulo \verb|room.controller.js| explicado en la sección \ref{makereference4.6.4}, mediante el cual evalua a intervalos regulares de 5 segundos la información general de una habitación en particular con los cálculos medios de las medidas de los sensores asociados a dicha habitación, y almacena dicha información de la habitación en la colección de Rooms, asociando la información a la habitación.
+\vspace{0.5cm}
+De la misma forma y al mismo tiempo, la aplicación frontend corre el proceso \verb|_synchronizeData| de la \verb|room.store.ts| y el proceso \verb|_synchronizeData| de la \verb|thing.store.ts|, mediante los cuales recupera del backend a intervalos regulares de 5 segundos la información actual de rooms y things. Los procesos están descritos en la sección \ref{makereference4.6.5}. En pro de la claridad, describiremos el proceso relativo al caso de uso actual hablando únicamente del flujo para las rooms, pero tenga en cuenta el lector que a la vez ocurre el proceso paralelo para las things, con sus métodos homónimos en sus respectivos módulos homónimos.
+
+\begin{enumerate}
+\item La lógica asociada a la vista que esté usando el usuario en ese momento es la que se suscribe al observable \verb|roomsChange| de la \verb|room.store.ts|, siguiendo el patrón Observer/Subscribe. Puede darse el caso tanto en la vista global \verb|home.ts|, en la que observamos los datos resumidos de todas las habitaciones registradas y será la descrita en esta subsección, como en la vista particular de la room \verb|room.ts|, para el caso actual la bodega, en la que observaremos los datos generales de la habitación así como los datos individuales de cada dispositivo asociado.
+\item Según se ha descrito al principio de esta subsección, cuando la aplicación recupera los datos y progresa la ejecución del método \verb|_synchronizeData| de la \verb|room.store.ts|, se notifica al suscriptor del paso anterior la lista actualizada de rooms, de forma que se ejecuta el desencadenante del suscriptor creado en el constructor de \verb|home.ts|. Dicho desencadenante lanza el método privado \verb|indexThingsInRooms| para encajar la información actualizada de cada thing en cada room asociada, dentro de una lista de rooms.
+\item Mediante el paradigma de componentes, el template \verb|home.html| instancia un componente \verb|room.preview.component| por cada room de la lista anterior, y le transfiere la información de dicha room. El template de dicho componente encuentra los valores generales de temperatura y humedad dentro del campo \verb|sensorMeasures| del objeto \verb|room| y los muestra finalmente como valores numéricos para información del usuario.
+\end{enumerate}

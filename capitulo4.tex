@@ -8,7 +8,11 @@
 
 Existen múltiples niveles de implementación del prototipo planteado en este documento. En función de la cantidad de módulos operativos se requerirá una mayor cantidad de hardware para la sensorización y los actuadores implicados. El nivel más básico e imprescindible implica un ordenador con SO Linux que actuará como controlador de la infraestructura de dispositivos que dan forma al sistema en su conjunto, esto será referido en adelante como el nodo principal.
 
-\section{Definición del nodo principal}
+\vspace{1cm}
+
+Para disponer de una base tecnológica sólida, pero fácil de adquirir, sobre la que experimentar y entender la complejidad de una suite domótica y sus planteamientos, se opta por usar hardware amigable como Raspberry Pi y Arduino, que disponen de una extensa comunidad de usuarios y documentación. En esa misma linea se buscará software libre. No sólo se puede aprovechar gran parte del trabajo ya creado en programación de \gls{script} para dispositivos como sensores y actuadores, sino que cumplen con el objetivo de ofrecer libertad para el usuario final de adaptar y modificar a su criterio.
+
+\section{Definición del gateway}
 \label{makereference4.2}
 
 El nodo principal representa el núcleo de una suite domótica. Los sensores y actuadores dispuestos en un hogar lo usan como centro neurálgico para que el sistema opere, y la aplicación móvil lo usa como servidor para obtener la información registrada por esos dispositivos e interactuar con ellos. Si bien los sensores son capaces de registrar datos por su cuenta, estos deben ser entregados en el \gls{gateway} para ser procesados de forma útil respeto al resto de la infraestructura. 
@@ -23,7 +27,7 @@ El nodo principal ejecuta Raspbian. Un \gls{so} \verb|GNU/Linux| diseñado espec
 
 \vspace{1cm}
 
-Una vez establecidos los medios de comunicación, se instalarán aplicaciones que permitirán ejecutar los servicios necesarios para actuar como nodo central. La estrategia de comunicación entre los distintos dispositivos que conforman la suite domótica se basa en un servidor \verb|NodeJs| que establece conexiones vía \gls{wifi} con los sensores y actuadores mediante el protocolo \gls{mqtt}, y este a su vez con la aplicación móvil vía \gls{wifi} o internet, mediante el protocolo \gls{https}. Se realizara una descripción mas concisa del software necesario en el nodo principal en el apartado \ref{makereference4.3}.
+Una vez establecidos los medios de comunicación, se instalarán aplicaciones que permitirán ejecutar los servicios necesarios para actuar como nodo central. La estrategia de comunicación entre los distintos dispositivos que conforman la suite domótica se basa en un servidor \verb|NodeJs| que establece conexiones vía \gls{wifi} con los sensores y actuadores mediante el protocolo \gls{mqtt}, y este a su vez con la aplicación móvil vía \gls{wifi} o internet, mediante el protocolo \gls{https}. Se realizara una descripción mas concisa del software necesario en el nodo principal en el apartado \ref{makereference4.4}.
 
 
 
@@ -33,8 +37,38 @@ Una vez establecidos los medios de comunicación, se instalarán aplicaciones qu
 \caption[Diagrama de despliegue de back-end]{Diagrama de despliegue de dispositivos y gateway\footnotemark}
 \end{figure}
 
-\section{Criterio de selección de dispositivos y Software}
+\section{Instalación y configuración del gateway}
 \label{makereference4.3}
+ Utilizando los repositorios de distribuciones oficiales de Sistemas operativos de Raspberry Pi, descargamos la versión ``Lite'' de Raspbian. Para establecer una conexión SSH por terminal es necesario crear un fichero con nombre \verb|ssh| en la raiz de la unidad de almacenamiento donde previamente se haya montado la imagen descargada. La distribución de Raspbian originalmente estaba configurada por defecto con la conexión de SSH abierta en el puerto 22, pudiendo accederse con el usuario \verb|pi| y la contraseña \verb|raspberry|. Este dato era ignorado por los usuarios menos experimentados y esto supuso una brecha de seguridad en todos las distribuciones que no fueron configuradas a posteriori por los usuarios según las indicaciones de la propia \href{https://www.raspberrypi.org/documentation/configuration/security.md}{documentación de Raspberry}~\cite{securingyourraspberrypi}. En el primer arranque del SO de la Raspberry se establecerán las configuraciones básicas para las sucesivas conexiones SSH basadas en autenticación con claves privadas.
+
+ De las estrategias disponibles para esta configuración, se crearán las claves en el equipo remoto que se conectará a la Raspberry, entregando mediante la primera conexión SSH con terminal la clave pública y almacenando la clave privada en el equipo remoto, reduciendo así el riesgo de ser expuesta fuera del dominio local del equipo. Para disponer de flexibilidad de conexión independientemente del SO del equipo remoto, la clave privada tendra un formato OpenSSH, fácil de incluir en SO Windows ya sea mediante conversión de la clave a formato PPK o como fichero accesible para aplicaciones de desarrollo, transferencias de ficheros, y/o control de versiones que integran conexiones SSH configurables (GitHub, Filezilla, Eclipse, etc). Los pasos necesarios para establecer conexiones cifradas robustas pueden encontrarse en el Anexo A seccion de implementación del Gateway.
+
+Establecemos la capacidad de la Raspberry Pi 3 para su módulo de comunicación wifi de actuar como punto de acceso en modo NAT~\cite{raspberrypiasaccesspoint}. Se configura una red con acceso vía usuario y contraseña, con WPA2 y gestión de claves WPA-PSK. De esta forma, el nodo será capaz de desplegar una red inalámbrica que permitirá a otros dispositivos incorporarse a la suite domótica.
+
+En orden de subir sketcs a una Arduino desde una Raspeberry Pi, es necesario instalar las paqueterías del compilador sudo apt-get install arduino-mk, tras la instalación, en la ruta /usr/sahre/arduino pueden encontrar binarios y una capeta llamada examples que permiten cargan sketchs inmediatamente para comprobar el correcto funcionamiento del la placa microcontroladora. Para compilar dicho sketcs se necesita hacer referencia al fichero arduino.mk. De los ejemplo podemos verificar rampidamente el correcto funcionamiento de la microcontroladores utilizamos el mas básico de los \gls{sketch}, situado en /usr/share/arduino/examples/01.Basic/Blink/Blink.ino, este ejemplo es muy básico, un loop que enciende y apaga el led integrado en la placa microcontroladora cada 1000 milisegundos. Este , es por defecto el sketch que generelamente los disitntos fabricantes de placas microcontroladoras de con procesador ATmega328P suelen dejar cargado a modo de test. Alterando el valor básico de sleep entre lineas de encendido y apagado a un valor menor como 50 milisegundos se puede comprobar si la comunicación del puerto com, y el compilador suben correctamente el código a la placa. Es importante verificar este punto antes de continuar y esta simple prueba cofirma que la configuración actual esta bien.
+
+Para facilitar el proceso de subida de código a la placa de Arduino, crearemos un Makefile hijo que enlace parametros al compilador.
+
+
+Ahora bien, tengamos en cuenta que las especificaciones del modulo esp8266 de wifi conectado a Arduino requieren de una alimentación de 3.3V que pueden ser suministrados por la placa microcontroladora, sin embargo, esto nos deja con un problema de intensidad en la alimentación del modulo, ya que el pin de 3.3V disponible en la placa posees un amperaje de 50mA y se requieren de unos 200mA para garantizar una comunicación estable.
+
+
+mqtt
+\url{https://theembeddedlab.com/tutorials/install-mosquitto-on-a-raspberry-pi}
+\verb|-h BROKER -t TOPIC|
+
+\verb|mosquittosub -h localhost -t casa/comedor/temperatura|
+\verb|mosquittopub -h localhost -t casa/comedor/temperatura -m "Temperatura: 25ºC"|
+
+
+usando comunicacion cifrada en nodeucm esp8266
+https://github.com/esp8266/arduino-esp8266fs-plugin
+cifrado tls open source
+\url{https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/WiFiClientSecure.h#L52-L66}
+
+
+\section{Criterio de selección de dispositivos y Software}
+\label{makereference4.4}
 
 \begin{figure}[hbt!]
 \centering
@@ -43,7 +77,7 @@ Una vez establecidos los medios de comunicación, se instalarán aplicaciones qu
 \end{figure}
 
 \section{Criterio de selección servicios}
-\label{makereference4.4}
+\label{makereference4.5}
 La selección de un servicio para la gestión de la \gls{bbdd}
 
 
@@ -82,17 +116,17 @@ Una preocupación que agrava la perspectiva de usar una \gls{bbdd} relacional es
 
 
 \section{Arquitectura de la aplicación frontend}
-\label{makereference4.5}
+\label{makereference4.6}
 
 \subsection{Consideraciones previas}
-\label{makereference4.5.1}
+\label{makereference4.6.1}
 
 El desarrollo de la app frontend se ha servido de dos frameworks para salvar ciertos escollos básicos no relacionados con la implementación de la suite domótica. Por un lado, se ha hecho uso del framework Open Source Ionic (en su versión 3), que es un framework Open Source para la construcción de aplicaciones híbridas multiplataforma, que nos permitirá portar la aplicación para cualquier dispositivo móvil Android a través de Cordova, y que además nos permitirá hacer uso de capacidades nativas de los dispositivos móviles (como el módulo de Wifi) gracias a los plugins existentes para ello. Además, Ionic proporciona grandes herramientas en cuanto a la maquetación responsive, lo cual ayuda en la creación de una aplicación móvil sin necesidad de invertir grandes esfuerzos en alcanzar un aspecto, usabilidad y elegancia mínimos y pudiendo redirigir ese esfuerzo a otros terrenos más fructíferos. Ionic está basado en Angular, el otro framework del que se ha hecho uso (en su versión 5) especialmente por su enfoque en una arquitectura basada en componentes que puedan ser reutilizados con mucha facilidad a lo largo de toda la aplicación. Las versiones modernas de Angular hacen uso de TypeScript para la programación de su lógica de negocio, lo que permite una mayor limpieza de código, mejores herramientas de tipado estricto y redunda en mayor escalabilidad. Angular se programa en TypeScript para la lógica de negocio, SASS para los estilos css y HTML para la maquetación.
 
 \vspace{0.5cm}
 
 \subsection{Estructura básica}
-\label{makereference4.5.2}
+\label{makereference4.6.2}
 
 A grandes rasgos, la aplicación frontend está estructurada en:
 \begin{enumerate}
@@ -108,7 +142,7 @@ A grandes rasgos, la aplicación frontend está estructurada en:
 Con el fin de comprender el esquema utilizado, mencionaremos los tipos de estructura existentes, aun cuando detallaremos su flujo más adelante: tendremos los dispositivos, que serán conocidos como \textit{things} (siendo posiblemente lo más adecuado debido a su famosa acepción en el \gls{iot}); las habitaciones, que mencionaremos aquí y allá como \textit{rooms}; los usuarios, que conoceremos como \textit{users}; las placas, que mencionaremos como \textit{boards}; y los datos de aplicación generales, a los que nos referiremos como \textit{application data}. Se observará que, en todos los casos, nos conviene referirlos en su traducción al inglés por facilidad a la hora de seguir el hilo del flujo en el código.
 
 \subsection{Patrón del flujo de datos}
-\label{makereference4.5.3}
+\label{makereference4.6.3}
 
 En pro de aplicar una arquitectura que intenta aplicar los principios de separación de responsabilidades y capas de abstracción, a continuación explicamos los patrones que sigue la estructura del proyecto frontend.
 
@@ -157,7 +191,7 @@ Es necesario apuntar que todos los api service que hemos creado (en general un p
 \vspace{0.5cm}
 
 De la misma forma y con el mismo objetivo que para el api provider, se crea un módulo database service (específicamente orientado para el mismo tipo de datos que la store), que permite a la store interactuar con la \gls{bbdd} local para almacenar, recuperar o borrar cualquier entrada de ese tipo. En este proyecto, de entre las posibilidades existentes, hacemos uso de la base de datos IndexedDB, propia del motor web del dispositivo. Es una base de datos No-SQL que está orientada al almacenamiento de entradas de gran tamaño, y no bloquea la entrada-salida del hilo principal, de forma que es ideal para almacenar objetos JSON, que puedan tener estructuras y tamaños variables. En particular, cada database service se creará de forma que ataque específicamente a una única tabla, nombrada con el mismo tipo de datos, con el objetivo de reforzar la mantenibilidad del código y la separación de responsabilidades. Así, de nuevo, la store se permite desconocer si sus datos deben tener una estructura, codificación o formato en particular dependiendo de las características de la \gls{bbdd}: delega esa responsabilidad en el database service, el cual debe garantizar que los datos sean devueltos a la store en el mismo formato en que fueron entregados en primera instancia. 
-Los módulos database service, a diferencia de los api providers, no heredan de un mismo módulo, pero queda pendiente como una mejora posible puesto que cada uno puede ser creado con una configuración particular (como ya ocurre) y, con la excepción de algunos métodos, se puede refactorizar todos aquellos que sean comunes en una clase padre. En la Figura \ref{fig:database-service} se expone la clase que sigue RoomDatabaseService, muy similar a la que siguen el resto de database services con sus configuraciones propias. Hemos adjuntado un diagrama de cada uno de ellos en el apartado \ref{makereference4.5.4}.
+Los módulos database service, a diferencia de los api providers, no heredan de un mismo módulo, pero queda pendiente como una mejora posible puesto que cada uno puede ser creado con una configuración particular (como ya ocurre) y, con la excepción de algunos métodos, se puede refactorizar todos aquellos que sean comunes en una clase padre. En la Figura \ref{fig:database-service} se expone la clase que sigue RoomDatabaseService, muy similar a la que siguen el resto de database services con sus configuraciones propias. Hemos adjuntado un diagrama de cada uno de ellos en el apartado \ref{makereference4.6.4}.
 
 
 \begin{figure}[hbt!]
@@ -168,12 +202,12 @@ Los módulos database service, a diferencia de los api providers, no heredan de 
 \end{figure}
 
 \subsection{Diagramas de clases de las Stores, Models y Services}
-\label{makereference4.5.4}
+\label{makereference4.6.4}
 
 [EXPLICAR AQUÍ EL PROCESO DE INICIALIZACIÓN DE LA APP]
 
 \subsection{Diagramas de clases de las Stores, Models y Services}
-\label{makereference4.5.5}
+\label{makereference4.6.5}
 
 \begin{figure}[hbt!]
 \centering
@@ -262,15 +296,15 @@ La thing store también expone el método \verb|cleanUserThings|, accedido y usa
 [EXPLICAR AQUÍ LOS SERVICES]
 
 \section{Arquitectura del servidor de NodeJS}
-\label{makereference4.6}
+\label{makereference4.7}
 
 \subsection{Consideraciones previas}
-\label{makereference4.6.1}
+\label{makereference4.7.1}
 
 El desarrollo de la aplicación backend ha seguido la línea del stack MEAN, esto es, MongoDB, ExpressJS, Angular (éste sólo en el frontend) y NodeJS. Los beneficios de seguir dicho stack son sencillamente los de sus frameworks y herramientas: MongoDB aporta los beneficios de una \gls{bbdd} no relacional, enormemente alineado con las características del proyecto, según el cual podríamos almacenar grandes cantidades de datos con diferentes estructuras JSON bajo la misma lista de documentos sin perder velocidad de acceso o escritura; ExpressJS nos permite elaborar una API REST completa salvando los principales escollos que NodeJS podría presentarnos para tal fin, pues sus herramientas base para el tratamiento de peticiones http se presentan intrincadas y poco intuitivas; y NodeJS se beneficia de infinitas librerías de sencillo uso, constantemente probadas y actualizadas por su amplia comunidad, proveyéndonos en este caso de muchas utilidades que nos ayudan a evitar desarrollos difíciles e innecesarios no intrínsecos a una suite domótica (como es nuestro fin) y cuyos beneficios enumeraremos más adelante.
 
 \subsection{Estructura básica}
-\label{makereference4.6.2}
+\label{makereference4.7.2}
 
 A grandes rasgos, la aplicación backend está estructurada en:
 \begin{enumerate}
@@ -286,7 +320,7 @@ A grandes rasgos, la aplicación backend está estructurada en:
 Con el fin de comprender el esquema utilizado y establecer una alineación con el frontend, la nomenclatura utilizada para cada tipo de datos será la misma que en el proyecto cliente.
 
 \subsection{Flujo de enrutado de las peticiones HTTP}
-\label{makereference4.6.3}
+\label{makereference4.7.3}
 
 \begin{figure}[hbt!]
 \centering
@@ -376,7 +410,7 @@ Para el endpoint \verb|/api/board|, se asocian 2 entradas atendidas por el \verb
 Toda petición http que no sea encaminada a un método mediante esta metodología será automáticamente rechazada. Esto permite controlar severamente los caminos por los cuales se ejecutará una lógica en base a una petición http, y por ende constituye una medida de seguridad adicional por el principio básico de conocer y controlar todas las posibles entradas al servidor con un flujo único y específico para cada una de ellas, para minimizar brechas de seguridad.
 
 \subsection{Diagramas de clases de los Controllers, Helpers y Models}
-\label{makereference4.6.4}
+\label{makereference4.7.4}
 
 [HABLAR AQUÍ DE CONTROLLERS]
 
@@ -471,7 +505,7 @@ El método privado \verb|_createToken| hace uso del plugin JWT para crear un tok
 [Modelo User, diagrama y corresponde a la collección Users]
 
 \subsection{Diagramas de clases de los Providers}
-\label{makereference4.6.5}
+\label{makereference4.7.5}
 
 [mongo.db.js _connect]
 
@@ -502,32 +536,3 @@ El método privado \verb|_createToken| hace uso del plugin JWT para crear un tok
   stopListening,
   getCurrentConnectedUSB,
   ]
-
-\section{Instalación y configuración del nodo principal}
-\label{makereference4.7}
- Utilizando los repositorios de distribuciones oficiales de Sistemas operativos de Raspberry Pi, descargamos la versión ``Lite'' de Raspbian. Para establecer una conexión SSH por terminal es necesario crear un fichero con nombre \verb|ssh| en la raiz de la unidad de almacenamiento donde previamente se haya montado la imagen descargada. La distribución de Raspbian originalmente estaba configurada por defecto con la conexión de SSH abierta en el puerto 22, pudiendo accederse con el usuario \verb|pi| y la contraseña \verb|raspberry|. Este dato era ignorado por los usuarios menos experimentados y esto supuso una brecha de seguridad en todos las distribuciones que no fueron configuradas a posteriori por los usuarios según las indicaciones de la propia \href{https://www.raspberrypi.org/documentation/configuration/security.md}{documentación de Raspberry}~\cite{securingyourraspberrypi}. En el primer arranque del SO de la Raspberry se establecerán las configuraciones básicas para las sucesivas conexiones SSH basadas en autenticación con claves privadas.
-
- De las estrategias disponibles para esta configuración, se crearán las claves en el equipo remoto que se conectará a la Raspberry, entregando mediante la primera conexión SSH con terminal la clave pública y almacenando la clave privada en el equipo remoto, reduciendo así el riesgo de ser expuesta fuera del dominio local del equipo. Para disponer de flexibilidad de conexión independientemente del SO del equipo remoto, la clave privada tendra un formato OpenSSH, fácil de incluir en SO Windows ya sea mediante conversión de la clave a formato PPK o como fichero accesible para aplicaciones de desarrollo, transferencias de ficheros, y/o control de versiones que integran conexiones SSH configurables (GitHub, Filezilla, Eclipse, etc). Los pasos necesarios para establecer conexiones cifradas robustas pueden encontrarse en el Anexo A seccion de implementación del Gateway.
-
-Establecemos la capacidad de la Raspberry Pi 3 para su módulo de comunicación wifi de actuar como punto de acceso en modo NAT~\cite{raspberrypiasaccesspoint}. Se configura una red con acceso vía usuario y contraseña, con WPA2 y gestión de claves WPA-PSK. De esta forma, el nodo será capaz de desplegar una red inalámbrica que permitirá a otros dispositivos incorporarse a la suite domótica.
-
-En orden de subir sketcs a una Arduino desde una Raspeberry Pi, es necesario instalar las paqueterías del compilador sudo apt-get install arduino-mk, tras la instalación, en la ruta /usr/sahre/arduino pueden encontrar binarios y una capeta llamada examples que permiten cargan sketchs inmediatamente para comprobar el correcto funcionamiento del la placa microcontroladora. Para compilar dicho sketcs se necesita hacer referencia al fichero arduino.mk. De los ejemplo podemos verificar rampidamente el correcto funcionamiento de la microcontroladores utilizamos el mas básico de los \gls{sketch}, situado en /usr/share/arduino/examples/01.Basic/Blink/Blink.ino, este ejemplo es muy básico, un loop que enciende y apaga el led integrado en la placa microcontroladora cada 1000 milisegundos. Este , es por defecto el sketch que generelamente los disitntos fabricantes de placas microcontroladoras de con procesador ATmega328P suelen dejar cargado a modo de test. Alterando el valor basico de sleep entre lineas de encendido y apagado a un valor menor como 50 milisegundos se puede comprobar si la comunicación del puerto com, y el compilador suben correctamente el codigo a la placa. Es importante verificar este punto antes de continuar y esta simple prueba cofirma que la configuración actual esta bien.
-
-Para facilitar el proceso de subida de codigo a la placa de arduino, crearemos un Makefile hijo que enlace parametros al compilador.
-
-
-Ahora bien, tengamos en cuenta que las especificaciones del modulo esp8266 de wifi conectado a Arduino requieren de una alimentación de 3.3V que pueden ser suministrados por la placa microcontroladora, sin embargo, esto nos deja con un problema de intensidad en la alimentación del modulo, ya que el pin de 3.3V disponible en la placa posees un amperaje de 50mA y se requieren de unos 200mA para garantizar una comunicación estable.
-
-
-mqtt
-\url{https://theembeddedlab.com/tutorials/install-mosquitto-on-a-raspberry-pi}
-\verb|-h BROKER -t TOPIC|
-
-\verb|mosquittosub -h localhost -t casa/comedor/temperatura|
-\verb|mosquittopub -h localhost -t casa/comedor/temperatura -m "Temperatura: 25ºC"|
-
-
-usando comunicacion cifrada en nodeucm esp8266
-https://github.com/esp8266/arduino-esp8266fs-plugin
-cifrado tls open source
-\url{https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/WiFiClientSecure.h#L52-L66}
