@@ -30,6 +30,11 @@ La librería pubSubClient~\cite{pubsubclientapi} utilizada en la generación de 
 
 El segundo paso requiere que el \gls{broker} de información del nodo principal resuelva las conexiones mediante el protocolo \gls{tls} en lugar de \gls{tcp} simple. Esta estrategia debe estudiarse antes de su implementación, ya que este protocolo, siendo mas seguro, implica una mayor sobrecarga en la red con los \gls{handshake} de conexiones de corta duración, como ocurre con los actuadores, cuya comunicación se limita a recibir un comando y reportar un resultado. También debe considerarse la mayor carga de proceso que se aplica a los dispositivos y el propio nodo principal. En una red con una veintena de dispositivos que establecen comunicaciones de corta duración con contenidos de mensajes de apenas un par de decenas de caracteres, la sobrecarga de comunicación puede ser decrimental hasta el punto de hacer que la suite funcione anormalmente lenta. Por ello, la primera capa de cifrado en la red inalámbrica sera una ampliación obligatoria y la segunda capa debe ser estudiada antes de su aplicación.
 
+usando comunicacion cifrada en nodeucm esp8266
+https://github.com/esp8266/arduino-esp8266fs-plugin
+cifrado tls open source
+\url{https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/WiFiClientSecure.h#L52-L66}
+
 \section{Mejora en la cobertura inalámbrica de la suite domótica}
 \label{ch:Capitulo6.2}
 

@@ -19,6 +19,15 @@ Como estrategia, un sensor tomara medidas indefinidamente y los volcara en un fi
 \section{Caso de uso: Vincular un dispositivo registrado a una habitación}
 \label{ch:Capitulo5.2}
 El usuario previamente ha registrado en la aplicación una habitación para esta bodega y ha registrado una luz de tipo led. En este momento desea poder vincular esa luz a la bodega, de forma que pueda encenderla y apagarla y observar el estado actual de la luz desde su aplicación. A continuación se describe el proceso por el cual el usuario selecciona las características de la vinculación que va a llevar a cabo (eligiendo la luz, la habitación a la cual vincularla, el modelo de la placa en la cual montará la luz y el pin en el que la conectará) y conecta la placa por USB a la Raspberry (para que el servidor genere, compile y cargue los scripts necesarios en la placa para que ésta interactúe con la luz y con el nodo principal). Cuando este proceso finaliza, la placa está correctamente vinculada y tanto el backend como el frontend están alineados en información, de forma que el backend será capaz de comunicarse directamente con la luz y retransmitir su estado al frontend, y el frontend podrá controlar su estado mediante comandos lanzados al backend. El usuario podrá observar que la luz ya aparece vinculada estrictamente a la bodega.
+El diagrama explicativo de este caso de uso es la Figura \ref{fig:usecase1}
+
+\begin{figure}[hbt!]
+\centering
+\includegraphics[height=8in]{figures/diagrams/use-cases/linkRoom.png}
+\caption[usecase1]{Diagrama de comunicación entre frontend, backend y placa para vincular un dispositivo a una habitación\footnotemark}
+\label{fig:usecase1}
+\end{figure}
+
 \subsection{Fase 1: Lado aplicación móvil}
 \label{ch:Capitulo5.2.1}
 \begin{enumerate}
@@ -89,6 +98,13 @@ Precondiciones:
 \section{Caso de uso: Encender un dispositivo luminoso de tipo led}
 \label{ch:Capitulo5.3}
 El usuario ha registrado en la aplicación una habitación para esta bodega, ha registrado una luz de tipo led y la ha vinculado a dicha bodega mediante lo explicado en el caso de uso anterior. En este momento, el usuario decide encender dicha luz. El proceso descrito a continuación detalla cómo el frontend responde al input del usuario que desplaza el interruptor de luz en el componente visual, comunicando el comando de encendido al servidor mediante una petición http, cómo el backend procesa el comando para entender qué acción debe llevar a cabo y envía por MQTT el mensaje adecuado a la luz adecuada, y cómo se produce la respuesta desde la placa, el backend reacciona a la respuesta por MQTT de la placa, actualiza el estado de la luz en su base de datos y devuelve la petición http al frontend, el cual procesa la respuesta desplazando el botón e iluminando el componente visual de la luz.
+El diagrama explicativo de este caso de uso se muestra en la Figura \ref{usecase2}.
+
+\begin{figure}[hbt!]
+\label{usecase2}
+\includegraphics[height=8in]{figures/diagrams/use-cases/turnOnLight.png}
+\caption[usecase2]{Diagrama de comunicación entre frontend, backend y placa para encender un dispositivo led\footnotemark}
+\end{figure}
 
 \subsection{Fase 1: Lado aplicación móvil}
 \label{ch:Capitulo5.3.1}
@@ -155,6 +171,14 @@ El usuario ha registrado en la aplicación una habitación para esta bodega, ha 
 \section{Caso de uso: Procesamiento de información de un sensor}
 \label{ch:Capitulo5.4}
 El usuario ha registrado en la aplicación una habitación para esta bodega, ha registrado un sensor de tipo DHT11 (sensor de temperatura y humedad) y lo ha vinculado a dicha bodega mediante lo explicado en el caso de uso de la sección \ref{ch:Capitulo5.3}. En este momento, el usuario decide averiguar la temperatura y humedad de la bodega. El proceso descrito a continuación detalla cómo la placa publica mediante MQTT la información de su sensor DHT11, cómo el backend escucha y procesa el mensaje de estado del sensor, actualiza la base de datos del backend almacenando la nueva información, y cómo el frontend pide periódicamente información al backend sobre las habitaciones y las things conectadas, proporcionando al usuario una información en tiempo real de los dispositivos, y por ende, de la temperatura y humedad de la bodega.
+El diagrama explicativo de este caso de uso es la Figura \ref{fig:usecase3sub1}, y para la fase auxiliar, la Figura \ref{fig:usecase3sub2}.
+
+\begin{figure}[hbt!]
+\centering
+\includegraphics[height=4in]{figures/diagrams/use-cases/sensorInfo.png}
+\caption[usecase3sub1]{Diagrama de comunicación entre backend y sensor para comunicar su status\footnotemark}
+\label{fig:usecase3sub1}
+\end{figure}
 
 \subsection{Fase 1: Lado dispositivo}
 \label{ch:Capitulo5.4.1}
@@ -176,9 +200,19 @@ Precondiciones: el cliente \gls{mqtt} del servidor ha sido inicializado mediante
 
 \subsection{Fases paralelas: cálculo de datos generales de la habitación asociada y recuperación de datos en tiempo real}
 \label{ch:Capitulo5.4.3}
-La aplicación backend corre el proceso \verb|roomDaemon| del módulo \verb|room.controller.js| explicado en la sección \ref{makereference4.6.4}, mediante el cual evalua a intervalos regulares de 5 segundos la información general de una habitación en particular con los cálculos medios de las medidas de los sensores asociados a dicha habitación, y almacena dicha información de la habitación en la colección de Rooms, asociando la información a la habitación.
-\vspace{0.5cm}
-De la misma forma y al mismo tiempo, la aplicación frontend corre el proceso \verb|_synchronizeData| de la \verb|room.store.ts| y el proceso \verb|_synchronizeData| de la \verb|thing.store.ts|, mediante los cuales recupera del backend a intervalos regulares de 5 segundos la información actual de rooms y things. Los procesos están descritos en la sección \ref{makereference4.6.5}. En pro de la claridad, describiremos el proceso relativo al caso de uso actual hablando únicamente del flujo para las rooms, pero tenga en cuenta el lector que a la vez ocurre el proceso paralelo para las things, con sus métodos homónimos en sus respectivos módulos homónimos.
+
+\begin{figure}[hbt!]
+\centering
+\label{fig:usecase3sub2}
+\includegraphics[height=8in]{figures/diagrams/use-cases/sensorInfo2.png}
+\caption[usecase3sub2]{Diagrama de procesos en frontend y backend para actualizar información de sensores en una room y mostrarlo al usuario en tiempo real\footnotemark}
+\end{figure}
+
+La aplicación backend corre el proceso \verb|roomDaemon| del módulo \verb|room.controller.js| explicado en la sección \ref{ch:Capitulo4.6.4}, mediante el cual evalua a intervalos regulares de 5 segundos la información general de una habitación en particular con los cálculos medios de las medidas de los sensores asociados a dicha habitación, y almacena dicha información de la habitación en la colección de Rooms, asociando la información a la habitación.
+
+\vspace{1cm}
+
+De la misma forma y al mismo tiempo, la aplicación frontend corre el proceso \verb|_synchronizeData| de la \verb|room.store.ts| y el proceso \verb|_synchronizeData| de la \verb|thing.store.ts|, mediante los cuales recupera del backend a intervalos regulares de 5 segundos la información actual de rooms y things. Los procesos están descritos en la sección \ref{ch:Capitulo4.6.5}. En pro de la claridad, describiremos el proceso relativo al caso de uso actual hablando únicamente del flujo para las rooms, pero tenga en cuenta el lector que a la vez ocurre el proceso paralelo para las things, con sus métodos homónimos en sus respectivos módulos homónimos.
 
 \begin{enumerate}
 \item La lógica asociada a la vista que esté usando el usuario en ese momento es la que se suscribe al observable \verb|roomsChange| de la \verb|room.store.ts|, siguiendo el patrón Observer/Subscribe. Puede darse el caso tanto en la vista global \verb|home.ts|, en la que observamos los datos resumidos de todas las habitaciones registradas y será la descrita en esta subsección, como en la vista particular de la room \verb|room.ts|, para el caso actual la bodega, en la que observaremos los datos generales de la habitación así como los datos individuales de cada dispositivo asociado.

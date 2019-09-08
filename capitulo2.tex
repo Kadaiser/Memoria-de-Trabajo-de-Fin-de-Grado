@@ -89,7 +89,7 @@ Facilita el \gls{api} restful \verb|FIWARE NGSIv2| que permite ejecutar queries 
 \begin{figure}[hbt!]
 \label{fiwarechangecontext}
 \centering
-\includegraphics[height=3.5in]{figures/fiware_context_change.png}
+\includegraphics[height=2.6in]{figures/fiware_context_change.png}
 \caption[Acceso a la información en múltiple contextos con Fiware]{Acceso a la información en múltiple contextos con Fiware}
 \end{figure}
 
@@ -112,8 +112,8 @@ Orientando la selección de los servicios, estándares y protocolos necesarios p
 
 \vspace{1cm}
 
-\section{Stack de servicios}
-\label{ch:Capitulo2.3.2}
+\subsection{Stack de servicios}
+\label{ch:Capitulo2.3.1}
 
 Para nuestra estrategia de selección de servicios, se empieza determinando que BBDD que cimentará el resto del stack. Toda aplicación informática se sustenta en primera instancia sobre el almacenamiento de datos de manera persistente. Se segmentan en 2 categorías principales según como se relacionen entre sí dichos datos, esto es: BBDD relacionales, o no relacionales. Además de esta segmentación principal, existen otras características importantes en cuanto a la escalabilidad y diseño de cada modelo. Si consideramos cómo entendemos humanamente los datos necesarios para una suite domótica, una de las primeras impresiones, es que no sabemos con certeza cuántos dispositivos de sensorización o actuadores serán necesarios para cada caso de uso. De hecho, es muy probable que un mismo caso de uso disponga de diferentes combinaciones de dispositivos para alcanzar una solución. Es, sin embargo, bastante obvio que básicamente almacenaremos pocos conceptos atómicos, los principales son: Ubicaciones, dispositivos en las ubicaciones y medidas y/o acciones de los dispositivos.
 
@@ -134,9 +134,13 @@ Otra alternativa podría ser NodeJS. El creador de NodeJS tuvo la idea de coger 
 Para el fin que ocupa al proyecto, es útil añadir el \gls{framework} de ExpressJS, ligero y flexible orientado a la creación y exposición de una API REST con el objetivo de atender las peticiones de aplicaciones web y móviles. Esta adición sería casi imprescindible, pues la API básica de utilidades HTTP de NodeJS es muy poco amigable. Sin embargo, juntos, levantar un servidor web y una API REST completa y segura es una tarea asequible con poco más de un centenar de lineas de código. Otras librerías muy útiles y que nos conciernen podrían ser las que permiten integración con servicios como los arriba mencionados MQTT y MongoDB (para la cual está excepcionalmente bien orientado, dada la flexibilidad de JS y su natural compatibilidad con las estructuras de datos JSON).
 
 \vspace{1cm}
---
-Mosquitto es un mediador de mensajes que incluye el protocolo MQTT. Además es de código abierto lo que supone una ventaja para los Makers ya que lo podemos utilizar sin ningún tipo de problema.
---
+
+\subsection{Protocolos de comunicación}
+\label{ch:Capitulo2.3.2}
+
+
+Mosquitto es un mediador de mensajes que incluye el protocolo MQTT. Además es de código abierto su documentación es extensa y detalla lo que supone una ventaja para los desarrolladores.
+
 \vspace{1cm}
 
 Para discutir sobre las alternativas de comunicación del servidor con los dispositivos, hablaremos del arriba mencionado MQTT. Frente a la simple pero efectiva estrategia de HTTP/HTTPS, en proyectos de gls{iot}, hay un protocolo originalmente ideado por la compañía de IBM de licencia libre enfocado a una conectividad maquina a maquina (M2M), el código de dicho protocolo fue donado en 2011 al proyecto de Eclipse. Mientras que el protocolo HTTP/HTTPS puede manejar volúmenes grandes de información en su transferencia por la red de comunicaciones, el protocolo MQTT requiere menos ancho de banda, está orientado a proyectos con un bajo consumo y que dispongan de poco recursos de procesamiento; lo cual encaja con el enfoque necesario de una suite domótica, donde por ejemplo, si hay que obtener la temperatura de una habitación, todo se reduce a un único dato, un número (posiblemente decimal), o al menos, eso es lo que un usuario espera recibir. Esto implica que, un sensor de temperatura, en algún lugar de la casa, recibe una petición en la red en la que se encuentra de otro dispositivo, toma la medida y la envía a dicho dispositivo.
@@ -145,30 +149,26 @@ Para discutir sobre las alternativas de comunicación del servidor con los dispo
 
 Si usamos el planteamiento de un servicio web, el sensor dispondrá de la capacidad de recibir una solicitud en un puerto abierto, cuando reciba la petición adecuada, responderá incluyendo en el cuerpo de la respuesta dicha medida y será procesada en el dispositivo que creó la petición. Esto significa que cada sensor/actuador será por sí mismo un servidor web con un puerto abierto que atiende peticiones de clientes. Si todos los dispositivos están conectados en la misma red, salvo que se apliquen restricciones específicas en el firewall, serán visibles entre sí, pudiendo encadenar llamadas y respuestas entre ellos, o a través de un dispositivo central que se encargue de hacer las solicitudes y cuyas respuestas recibidas sean procesadas para mostrarse en la aplicación móvil.
 
- -- OJO
- un servicio web puede ser caro para un arduino. Hay papers sobre el consumo energético de servicios web vs mqtt
 
-Desde el planteamiento del protocolo \gls{mqtt}, la estrategia gira en torno al concepto de suscripción de $topics$ o temas, donde los dispositivos publican información de distintos temas y los suscriptores a dichos temas reciben la información cuando es publicada. A nivel físico, todos los clientes se conectan a un punto central, lo que define una topología de estrella (con sus ventajas e inconvenientes). Dicho nodo central es el servidor definido como $broker$, y es el único que sabe a qué topic está suscrito cada cliente. Esto significa que cada uno de los sensores/actuadores de la red ignora al resto de los dispositivos, ya que sólo atienden la comunicación con el broker a través de una conexión gls{tcp} permanente. Esta estrategia es diferente a la usada en el protocolo \gls{http}, ya que no es necesario hacer una petición para recibir información de un cliente. Simplemente el broker da o solicita información en los topics a los que los dispositivos están suscritos. Para proyectos de este tipo, el hecho de que los dispositivos no se relacionen entre sí, dan lugar a una gran ventaja, la escalabilidad. en el año 2014 se ha convertido en un estándar OASIS. \gls{mqtt} soporta cifrado mediante SSL. Es un protocolo fiable. Eso se debe a que tiene implementado un Servicio de Calidad o QoS (del inglés Quality of Service)
-
-\vspace{1.5cm}
-
-La escalabilidad de una suite domótica es un factor determinante al considerar su implementación. Que los dispositivos que conforman la red puedan cambiar con facilidad su organización, número o capacidades es un valor añadido.
-
-\vspace{1.5cm}
-
--- Hablar aquí de Ionic y Angular
-
--- encajar por aqui esto:
-
-La domótica se remonta a los años 70, uno de los primeros hitos fue el \href{https://es.wikipedia.org/wiki/X10}{protocolo de comunicaciones X-10}~\cite{x10protocolwikipedia} de automatización de dispositivos en la línea eléctrica de un hogar. Con él, se puede utilizar la propia red como canal de comunicaciones mediante ráfagas de pulsos. El ancho de banda de 256 dispositivos simultáneos es una cantidad más que suficiente para interactuar con los dispositivos de un hogar, si calculamos que cada elemento susceptible de ser automatizado como por ejemplo persianas, estufas, enchufes, e interruptores ocupase un espacio de este ancho de banda, seguirían sobrando espacios en un piso de 150 metros cuadrados.
-
-\vspace{1.5cm}
-
-En pleno 2019 pueden adquirirse los dispositivos necesarios para instalar una red X-10 que incluye interruptores, actuadores, sensores, transmisores, interfaces y unidades de control (todos ellos necesarios para obtener el control completo de la red) por precios con rangos entre 20 a 70 euros por cada elemento. Esto supone inversión elevada si se tiene en cuenta un hogar de varias habitaciones. Hay que considerar además ciertas limitaciones como que cada controlador es capaz de manejar un número limitado de dispositivos.En cuanto a las aplicaciones necesarias para gestionar el sistema, X-10 posee alternativas de código libre para su desarrollo como \href{http://www.minervahome.net/}{Minerva}. También existen interfaces hardware que traducen el protocolo X-10 a \gls{api}s de servicios web como el dispositivo \href{http://www.iobridge.com/}{ioBridge} que supuso una disrupción en el ámbito del \gls{iot} y la automatización del hogar. El problema del despliegue de soluciones basadas en X-10 no radica en su protocolo sino en los costes, que generalmente sobrepasan los cientos de euros para las configuraciones mas sencillas. Además, esta instalación requiere de un proceso de obra, ya que es necesario empalmar los componente a la red eléctrica del hogar. En realidad, la opción de usar dispositivos del protocolo X-10 esta condicionada a que la red eléctrica del hogar se instalara durante el proceso de edificación con vistas a utilizar este sistema. De otra forma, será necesario planificar obras y esto complica la facilidad de crear un prototipo asequible.
+Desde el planteamiento del protocolo \gls{mqtt}, la estrategia gira en torno al concepto de suscripción de $topics$ o temas, donde los dispositivos publican información de distintos temas y los suscriptores a dichos temas reciben la información cuando es publicada. A nivel físico, todos los clientes se conectan a un punto central, lo que define una topología de estrella (con sus ventajas e inconvenientes). Dicho nodo central es el servidor definido como $broker$, y es el único que sabe a qué topic está suscrito cada cliente. Esto significa que cada uno de los sensores/actuadores de la red ignora al resto de los dispositivos, ya que sólo atienden la comunicación con el broker a través de una conexión gls{tcp} permanente. Esta estrategia es diferente a la usada en el protocolo \gls{http}, ya que no es necesario hacer una petición para recibir información de un cliente. Simplemente el broker da o solicita información en los topics a los que los dispositivos están suscritos. Para proyectos de este tipo, el hecho de que los dispositivos no se relacionen entre sí, dan lugar a una gran ventaja, la escalabilidad. en el año 2014 se ha convertido en un estándar OASIS. \gls{mqtt} soporta cifrado mediante SSL. Es un protocolo fiable. Eso se debe a que tiene implementado \gls{qos}.
 
 \vspace{1cm}
 
-Una década después surgiría el SCE (Sistema de Cableado Estructurado) que permitía el trasporte de datos y voz, esto supuso la aparición del concepto Edificio Inteligente. Sin embargo, esto requiera de una instalación compleja difícilmente viable en edificios ya existentes, como es el caso que ocupa el alcance de este proyecto. Con la aparición de las redes inalámbricas, y sus posteriores estándares de comunicación como el WIFI, se popularizaron los sistemas de domótica aplicada directamente sobre los dispositivos, sin tener en cuenta la red eléctrica que los hace funcionar. 
+La escalabilidad de una suite domótica es un factor determinante al considerar su implementación. Que los dispositivos que conforman la red puedan cambiar con facilidad su organización, número o capacidades es un valor añadido.
+
+
+\subsection{Estándares en IoT}
+\label{ch:Capitulo2.3.3}
+
+La domótica se remonta a los años 70, uno de los primeros hitos fue el protocolo de comunicaciones X-10~\cite{x10protocolwikipedia} de automatización de dispositivos en la línea eléctrica de un hogar. Con él, se puede utilizar la propia red como canal de comunicaciones mediante ráfagas de pulsos. El ancho de banda de 256 dispositivos simultáneos es una cantidad más que suficiente para interactuar con los dispositivos de un hogar, si calculamos que cada elemento susceptible de ser automatizado como por ejemplo persianas, estufas, enchufes, e interruptores ocupase un espacio de este ancho de banda, seguirían sobrando espacios en un piso de 150 metros cuadrados.
+
+\vspace{1cm}
+
+En pleno 2019 pueden adquirirse los dispositivos necesarios para instalar una red X-10 que incluye interruptores, actuadores, sensores, transmisores, interfaces y unidades de control (todos ellos necesarios para obtener el control completo de la red) por precios con rangos entre 20 a 70 euros por cada elemento. Esto supone inversión elevada si se tiene en cuenta un hogar de varias habitaciones. Hay que considerar además ciertas limitaciones como que cada controlador es capaz de manejar un número limitado de dispositivos.En cuanto a las aplicaciones necesarias para gestionar el sistema, X-10 posee alternativas de código libre para su desarrollo como \verb|Minerva|. También existen interfaces hardware que traducen el protocolo X-10 a \gls{api}s de servicios web como el dispositivo \verb|ioBridge| que supuso una disrupción en el ámbito del \gls{iot} y la automatización del hogar. El problema del despliegue de soluciones basadas en X-10 no radica en su protocolo sino en los costes, que generalmente sobrepasan los cientos de euros para las configuraciones mas sencillas. Además, esta instalación requiere de un proceso de obra, ya que es necesario empalmar los componente a la red eléctrica del hogar. En realidad, la opción de usar dispositivos del protocolo X-10 esta condicionada a que la red eléctrica del hogar se instalara durante el proceso de edificación con vistas a utilizar este sistema. De otra forma, será necesario planificar obras y esto complica la facilidad de crear un prototipo asequible.
+
+\vspace{1cm}
+
+Una década después surgiría el Sistema de Cableado Estructurado (SCE) que permitía el trasporte de datos y voz, esto supuso la aparición del concepto Edificio Inteligente. Sin embargo, esto requiera de una instalación compleja difícilmente viable en edificios ya existentes, como es el caso que ocupa el alcance de este proyecto. Con la aparición de las redes inalámbricas, y sus posteriores estándares de comunicación como el \gls{wifi}, se popularizaron los sistemas de domótica aplicada directamente sobre los dispositivos, sin tener en cuenta la red eléctrica que los hace funcionar. 
 
 \vspace{1cm}
 
@@ -180,6 +180,20 @@ Una década después surgiría el SCE (Sistema de Cableado Estructurado) que per
 \caption[Modulo transductor de 2.4Gh Zigbee ETRX357]{Modulo transductor de Zigbee\footnotemark}
 \end{figure}
 
+\vspace{1cm}
+
+Un ejemplo mas de soluciones \gls{iot} es \verb|6LoWPan| ofrece un eficiente uso del protocolo IPv6 sobre el estándar IEEE 802.15.4 a través de redes locales inalámbricas ideadas para actuar como despliegues de red en malla~\cite{montenegro2007rfc}. Entre sus usos mas comunes se encuentra la industria \gls{iot}, la agricultura inteligente y las smart home. Este protocolo dispone además de una capa de seguridad adicional basada en autenticación y cifrado AES-128. Esto permite implementar mecanismos adicionales como \gls{tls} o firma digital en las comunicaciones. Su uso se planifica en transferencia de pequeñas tasas de datos, pero como resultado reduce el consumo de los nodos de la red. La siguiente figura~\ref{6Lowpandeploy} extraída del articulo 'The analysis of 6LoWPAN technology' refleja un ejemplo de despliegue de esta tecnología~\cite{ma2008analysis}.
+
+\begin{figure}[hbt!]
+\centering
+\label{6Lowpandeploy}
+\includegraphics[height=5in]{figures/6LowPanDeploy.png}
+\caption[Ejemplo de despliegue de una red 6LowPan con servicio en la nube]{Ejemplo de despliegue de una red 6LowPan con servicio en la nube}
+\end{figure}
+
+Otra de las tecnologías en {iot} es \verb|Lora|, definido en el RFC8376~\cite{rfc8376} es el nombre común de la tecnología 'Low Power Wide Area Network' (LPWAN). Los despliegues de estas redes inalámbricas son de tipo estrella, pero la comunicación entre nodos y \gls{gateway} se establecen en canales individuales donde la velocidad de transferencia de datos se alcanza según la distancia entre dispositivos, la duración y consumo energético del mensaje a enviar. El efecto de esta técnica es que los canales con distintas velocidades de transferencia no interfieren entre si, lo cual genera un amplio abanico de canales simultáneos que pueden establecerse con el \gls{gateway}.
+
+Otros protocolos interesantes son BLE, Wize o Sigfox.
 
 
 \section{Hardware disponible}

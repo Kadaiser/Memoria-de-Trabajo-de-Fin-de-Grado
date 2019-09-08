@@ -15,22 +15,25 @@ https://github.com/juliagoda/CH341SER
 nano328
 
 
-\section{Error en la instlación de mosquitto}
+\section{Error en la instalación de mosquitto}
 \label{AppendiB:Key3}
--- Error
+Durante el proceso de instalación de de la aplicación de \verb|mosquitto| para realizar pruebas de comunicación del protocolo \gls{mqtt} entre el \gls{gateway} y los nodos, es posible que se muestre el siguiente error:
 
 The following packages have unmet dependencies:
  mosquitto : Depends: libssl1.0.0 (>= 1.0.0) but it is not installable
              Depends: libwebsockets3 (>= 1.2) but it is not installable
 
---- solucion
+La solución para este problema puede encontrarse en el siguiente enlace:
 https://theembeddedlab.com/tutorials/install-mosquitto-on-a-raspberry-pi/
 
 % +--------------------------------------------------------------------+
 % | Enter text for your Appendix page in the space below this box.     |
 % |                                                                    |
 % +--------------------------------------------------------------------+
+\section{Baja calidad de la señal Wi-FI en los nodos}
+\label{AppendiB:key4}
+Debe tenerse en cuenta que las especificaciones del modulo esp8266 de wifi requiere de una alimentación de 3.3V que pueden ser suministrados por la placa microcontroladora como es el caso de las placas \verb|nodeMCU|, sin embargo, en las placas de \gls{soc} \gls{wifi} ESP8266 esto deja un problema de intensidad en la alimentación del modulo, ya que el pin de 3.3V disponible en la placa posees un amperaje de 50mA y se requieren de unos 200mA para garantizar una comunicación estable. Puede reforzarse la alimentación mediante el soldado de pines en la placa, pero este procedimiento debe seguirse bajo las indicaciones de un tutorial calro y que demuestre los reesultados del proceso.
 
 \section{Margenes de error del sensor DHT11}
-\label{AppendiB:key4}
+\label{AppendiB:key5}
 sensor DHT version 1.4. Se debe realizar una prueba de contacto con un script que nos muestre la información por pantalla para verificar que las conexiones del sensor a la rapsberry son correctos. Este primer script es un bucle infinito de mediciones de temperatura y humedad cada poco segundos. Hay una justificación para elegir un bucle sobre una única medida del sensor y está fundamentada en el margen de error inicial de las medidas. Si bien el sensor DTH11 es una opción muy común por su bajo coste y facilidad de implementación (este sensor se caracteriza por tener la señal digital calibrada por lo que asegura una alta calidad y una fiabilidad a lo largo del tiempo, ya que contiene un microcontrolador de 8 bits integrado. Está constituido por dos sensores resistivos (NTC y humedad) - revisar esta info y contrastarla contra ésta: \url{https://programarfacil.com/blog/arduino-blog/sensor-dht11-temperatura-humedad-arduino/} ), ademas de manejar señales digitales que no se ven afectadas por las fluctuaciones de voltaje, tiene algunas contrapartidas que deben tenerse en cuenta. Se necesita un tiempo mínimo de espera entre medidas (de al menos 1 segundo), hecho que no agrava particularmente su desempeño en entornos cerrados como una casa, ya que las variaciones de temperatura y humedad no son bruscas, aun así existen estrategias para reducir estos tiempos, por ejemplo, usar la función millis() de Arduino, el cual nos da el tiempo en milisegundos desde que empieza a ejecutarse el código, De esta forma evitamos la pausa de los 2 segundos, pero no el tiempo que demora en hacer la lectura, que es de aproximadamente  250 milisegundos, el cual lo pueden notar si realizan el ejemplo anterior, en donde se hace parpadear el led interno de la placa (Pin 13) con pausas de 100ms (tomado de \url{https://naylampmechatronics.com/blog/40_Tutorial-sensor-de-temperatura-y-humedad-DHT1.html}). Otro problema que abordar es que las primeras lecturas tienen un margen de error de unos +-2 grados Celsius y +-5\% de humedad relativa en las primeras 4 lecturas. Esto generará un problema a la hora de tomar lecturas instantáneas si el sensor no se encuentra ya operando cuando se solicita el dato.
