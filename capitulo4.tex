@@ -5,10 +5,10 @@
 
 Existen múltiples niveles de implementación del prototipo planteado en este documento. El nivel más básico e imprescindible implica un ordenador con SO Linux que actuará como controlador de la infraestructura de dispositivos que dan forma al sistema en su conjunto, esto será referido en adelante como \gls{gateway}.
 
+\vspace{1cm}
 
 \section{Despliegue IoT de la solución domótica}
 \label{ch:Capitulo4.1}
-\vspace{1cm}
 
 Para disponer de una base tecnológica sólida, pero fácil de adquirir, sobre la que experimentar y entender la complejidad de una suite domótica y sus planteamientos, en este proyecto se opta por usar hardware amigable como \verb|Raspberry Pi| para el \gls{gateway} y placas microcontroladoras \verb|nodeMCU| y las comúnmente llamados \verb|modulos ESP8266|, que disponen de una extensa comunidad de usuarios y documentación. En esa misma linea se buscará software libre. No sólo se puede aprovechar gran parte del trabajo ya creado en programación de \gls{script} para dispositivos como sensores y actuadores, aparte de ofrecer libertad para el usuario final de adaptar y modificar a su criterio tanto el software como el hardware. El \gls{gateway} actúa como concentrador de las conexiones de nodos, y dispone de los servicios necesarios para actuar como \verb|broker| de información para el servidor \verb|Node.js| que sera el núcleo del sistema, facilitando conexiones a clientes, los cuales mediante una \gls{app} móvil podrán conectarse para operar la solución domótica. En la siguiente figura~\ref{globalsystemdeployment} se observa como la aplicación móvil que se desarrollara, puede conectarse a través de la red de internet o de manera directa al router domestico, el conectara a su vez con el \gls{gateway} a través de una conexión de cable. El \gls{gateway} establece así el limite externo de la red de este despliegue de \gls{iot} y es a la vez el proveedor de servicios para la aplicación móvil, eliminado servicios de aplicación de terceros alojados en la red de internet para que pueda operar.
 
@@ -42,11 +42,11 @@ Una vez establecidos los canales de comunicación, se instalarán aplicaciones q
 \label{ch:Capitulo4.3}
  Utilizando los repositorios de distribuciones oficiales de \gls{so} de Raspberry Pi, se descarga e instala la versión \verb|lite| de \verb|Raspbian| en la tarjeta SD que se inserte en la \verb|Raspberry Pi|. Para establecer una conexión SSH por terminal es necesario crear un fichero con nombre \verb|ssh| en la raíz de la unidad de almacenamiento previamente al primer arranque del \gls{so}. La distribución originalmente estaba configurada por defecto con la conexión de \gls{ssh} abierta en el puerto 22, pudiendo acceder con el usuario \verb|pi| y la contraseña \verb|raspberry|. Este dato era ignorado por los usuarios menos experimentados y esto supuso una brecha de seguridad en todos las distribuciones que no fueron configuradas por los usuarios según las indicaciones de la propia \href{https://www.raspberrypi.org/documentation/configuration/security.md}{documentación de Raspberry}~\cite{securingyourraspberrypi}. En el primer arranque del SO de la Raspberry se establecerán las configuraciones básicas para las sucesivas conexiones \gls{ssh} basadas en autenticación con clave privada.
  
- \vspace{1cm}
+ \vspace{0.5cm}
 
  De las estrategias disponibles para esta configuración, se crearán las claves en el equipo remoto que se conectará al \gls{gateway}, entregando mediante la primera conexión \gls{ssh} con terminal la clave pública y almacenando la clave privada en el equipo remoto, reduciendo así el riesgo de ser expuesta fuera del dominio local del equipo. Para disponer de flexibilidad de conexión independientemente del \gls{so} del equipo remoto, la clave privada tendrá un formato \verb|OpenSSH|, fácil de incluir en \verb|Windows| o \verb|Linux| ya sea mediante conversión de la clave a formato \verb|PPK| o como fichero accesible para aplicaciones de desarrollo, transferencias de ficheros, y/o control de versiones que integran conexiones \gls{ssh} configurables (GitHub, Filezilla, Eclipse, etc). Los pasos necesarios para establecer conexiones cifradas robustas pueden encontrarse en el Anexo~\ref{AppendiA:Key2}.
 
-\vspace{1cm}
+\vspace{0.5cm}
 
 Se establece la capacidad del \gls{gateway} para su adaptador de red \gls{wifi} de 2.4ghz, para actuar como punto de acceso~\cite{raspberrypiasaccesspoint} mediante un acceso vía usuario y contraseña, con \verb|WPA2| y gestión de claves \verb|WPA-PSK|. De esta forma, se despliega un punto de acceso de red inalámbrica que permitirá a otros dispositivos incorporarse a la suite domótica. En la figura~\ref{deploydevicesGateway} se observa una representación de despliegue de dispositivos donde los nodos, en diferentes plataformas de hardware y con distintos roles de actuadores o sensores, conectándose a la misma red inalámbrica generada por el adaptador de red \gls{wifi} integrado en el hardware del \gls{gateway}.
 
@@ -57,11 +57,11 @@ Se establece la capacidad del \gls{gateway} para su adaptador de red \gls{wifi} 
 \caption[Diagrama de despliegue de back-end]{Diagrama de despliegue de dispositivos y gateway\footnotemark}
 \end{figure}
 
-\vspace{1cm}
+\vspace{0.5cm}
 
 Las placas seleccionadas para actuar como nodos del sistema están basadas en el \gls{soc} \gls{wifi} \verb|ESP8266| y su firmware esta escrito en lenguaje \verb|LUA|, sin embargo, su código es habitualmente escrito en \verb|C| con un alto nivel mediante herramientas de desarrollo como \verb|Arduino IDE|. El proceso de subida de código en un lenguaje especifico que es transformado a otro lenguaje y subido a una placa microcontrontrolador cuyo lenguaje es distinto para sobreescribir el firmware se conoce como \verb|compilación cruzada|. Y permite una manera fácil de programar en alto nivel el código que hace funcionar una placa con \gls{soc} como las placas nodeMCU o los chips ESP8266. El código programado por el desarrollador se conoce en Arduino como \verb|sketch|. El proceso de subida de un \gls{sketch} a una placa mediante el entorno de desarrollo de Arduino se realiza mediante \gls{usb}. El proceso de instalación y configuración del entrono de desarrollo de Ardunio por linea de comandos, así como una primera prueba de funcionamiento del procedimiento esta detallado en el apendiceA\ref{AppendiA:Key2}. Es importante haber verificado el correcto funcionamiento de estas instrucciones antes de proseguir con el desarrollo.
 
-\vspace{1cm}
+\vspace{0.5cm}
 
 
 Habiendo verificado el proceso de subida es necesario probar que la conexión inalámbrica y la comunicación mediante el protocolo \gls{mqtt} es correcta, con un código de prueba. El proceso es el mismo que en la etapa de pruebas: Instanciar un nuevo proyecto, incluir el código, subir el \gls{sketch} en la placa y probar la comunicación de la placa con el servidor. Es necesario además agregar las librerías necesarias, en el caso que ocupa este proyecto se utiliza la librería \verb|PubSubClient de Nick O'Leary|, un cliente ligero de \gls{mqtt} que posee buena estabilidad y fácil integración en desarrollo.
@@ -91,7 +91,6 @@ char msg[50];
 long lastMsg = 0;
 int value = 0;
 
- 
 void setup_wifi() {
   delay(10);
   // We start by connecting to a WiFi network
@@ -159,7 +158,7 @@ Una vez subido el sketch a la placa según los pasos anteriormente indicados, po
     mosquitto_pub -h localhost  -t test -m "0"
 \end{verbatim}
 
-\section{Scritps de generación de sckets para nodos}
+\section{Scripts de generación de sockets para nodos}
 \label{ch:Capitulo4.3.1}
 
 Crear un \gls{sketch} mediante un script puede variar en su complejidad en el grado de cuantos argumentos reciba y que tan flexible se desea que sea su comportamiento. Sea cual sea el tipo de \gls{sketch} que se busque crear, se debe mantener una estructura de carga de librerías y constantes, un constructor y un bucle de ejecución. Considerando las necesidades del proyecto, se requiere que el script reciba los siguientes argumentos de entrada:
@@ -176,7 +175,7 @@ Crear un \gls{sketch} mediante un script puede variar en su complejidad en el gr
 
 Con esta estrategia, el administrador de la suite domótica puede añadir nuevos sensores y actuadores al abanico de opciones disponibles en la aplicación del usuario.
 
-\subsection{Generador de sketch dinamicos para nodos}
+\subsection{Generador de sketchs dinámicos para nodos}
 l\label{ch:Capitulo4.3.2}
 
 El objetivo ultimo del \gls{script} es generar un \gls{sketch} de Arduino que pueda compilarse y subirse a la placa correctamente, sin embargo, hasta que se reciben los argumentos solo es posible disponer de una plantilla genérica con secciones que deben ser rellenadas en base a las opciones que se indicaran en argumentos mas adelante. El modelo de plantilla básico puede constituirse con código previamente escrito en diferentes ficheros para luego ser ordenadamente ensamblados en un único fichero de código. En el caso de este proyecto, se crea una estructura de carpetas constituida por un directorio principal, el script generador, un directorio con las secciones de código común a todos los \gls{sketch} y directorios separados para cada sensor/actuador disponible en la aplicación. Para la prueba inicial incluiremos el código del sensor DHT11 para un configurar una placa detectora de temperatura y humedad. En términos generales, un sensor/actuador requiere de 4 bloques de código que integrar en código común, las librerías y constantes, la configuración inicial del setup, la resolución de callback que atiende peticiones concretas del servidor y el código del bucle que sera requerido por el protocolo \gls{mqtt} para publicar de manera constante. En la figura~\ref{sketchgeneratordiagram} se muestra como las diferentes secciones comunes a todos los códigos son combinadas con las secciones especificas de código en función de los argumentos definidos para el script.
@@ -546,16 +545,16 @@ Una preocupación que agrava la perspectiva de usar una \gls{bbdd} relacional es
 
 
 \section{Arquitectura de la aplicación frontend}
-\label{ch:Capitulo4.6}
+\label{ch:Capitulo4.7}
 
 \subsection{Consideraciones previas en el desarrollo de una APP}
-\label{c:Capitulo4.6.1}
+\label{c:Capitulo4.7.1}
 
 El desarrollo de la app frontend se ha servido de dos frameworks para salvar ciertos escollos básicos no relacionados con la implementación de la suite domótica. Por un lado, se ha hecho uso del framework Open Source Ionic (en su versión 3), que es un framework Open Source para la construcción de aplicaciones híbridas multiplataforma, que nos permitirá portar la aplicación para cualquier dispositivo móvil Android a través de Cordova, y que además nos permitirá hacer uso de capacidades nativas de los dispositivos móviles (como el módulo de Wifi) gracias a los plugins existentes para ello. Además, Ionic proporciona grandes herramientas en cuanto a la maquetación responsive, lo cual ayuda en la creación de una aplicación móvil sin necesidad de invertir grandes esfuerzos en alcanzar un aspecto, usabilidad y elegancia mínimos y pudiendo redirigir ese esfuerzo a otros terrenos más fructíferos. Ionic está basado en Angular, el otro framework del que se ha hecho uso (en su versión 5) especialmente por su enfoque en una arquitectura basada en componentes que puedan ser reutilizados con mucha facilidad a lo largo de toda la aplicación. Las versiones modernas de Angular hacen uso de TypeScript para la programación de su lógica de negocio, lo que permite una mayor limpieza de código, mejores herramientas de tipado estricto y redunda en mayor escalabilidad. Angular se programa en TypeScript para la lógica de negocio, SASS para los estilos css y HTML para la maquetación.
 
 
 \subsection{Estructura básica}
-\label{ch:Capitulo4.6.2}
+\label{ch:Capitulo4.7.2}
 
 A grandes rasgos, la aplicación frontend está estructurada en:
 \begin{enumerate}
@@ -571,7 +570,7 @@ A grandes rasgos, la aplicación frontend está estructurada en:
 Con el fin de comprender el esquema utilizado, mencionaremos los tipos de estructura existentes, aun cuando detallaremos su flujo más adelante: tendremos los dispositivos, que serán conocidos como \textit{things} (siendo posiblemente lo más adecuado debido a su famosa acepción en el \gls{iot}); las habitaciones, que mencionaremos aquí y allá como \textit{rooms}; los usuarios, que conoceremos como \textit{users}; las placas, que mencionaremos como \textit{boards}; y los datos de aplicación generales, a los que nos referiremos como \textit{application data}. Se observará que, en todos los casos, nos conviene referirlos en su traducción al inglés por facilidad a la hora de seguir el hilo del flujo en el código.
 
 \subsection{Patrón del flujo de datos}
-\label{ch:Capitulo4.6.3}
+\label{ch:Capitulo4.7.3}
 
 En pro de aplicar una arquitectura que intenta aplicar los principios de separación de responsabilidades y capas de abstracción, a continuación explicamos los patrones que sigue la estructura del proyecto frontend.
 
@@ -620,7 +619,7 @@ Es necesario apuntar que todos los api service que hemos creado (en general un p
 \vspace{1cm}
 
 De la misma forma y con el mismo objetivo que para el api provider, se crea un módulo database service (específicamente orientado para el mismo tipo de datos que la store), que permite a la store interactuar con la \gls{bbdd} local para almacenar, recuperar o borrar cualquier entrada de ese tipo. En este proyecto, de entre las posibilidades existentes, hacemos uso de la base de datos IndexedDB, propia del motor web del dispositivo. Es una base de datos No-SQL que está orientada al almacenamiento de entradas de gran tamaño, y no bloquea la entrada-salida del hilo principal, de forma que es ideal para almacenar objetos JSON, que puedan tener estructuras y tamaños variables. En particular, cada database service se creará de forma que ataque específicamente a una única tabla, nombrada con el mismo tipo de datos, con el objetivo de reforzar la mantenibilidad del código y la separación de responsabilidades. Así, de nuevo, la store se permite desconocer si sus datos deben tener una estructura, codificación o formato en particular dependiendo de las características de la \gls{bbdd}: delega esa responsabilidad en el database service, el cual debe garantizar que los datos sean devueltos a la store en el mismo formato en que fueron entregados en primera instancia. 
-Los módulos database service, a diferencia de los api providers, no heredan de un mismo módulo, pero queda pendiente como una mejora posible puesto que cada uno puede ser creado con una configuración particular (como ya ocurre) y, con la excepción de algunos métodos, se puede refactorizar todos aquellos que sean comunes en una clase padre. En la Figura \ref{fig:database-service} se expone la clase que sigue RoomDatabaseService, muy similar a la que siguen el resto de database services con sus configuraciones propias. Hemos adjuntado un diagrama de cada uno de ellos en el apartado \ref{ch:Capitulo4.6.4}.
+Los módulos database service, a diferencia de los api providers, no heredan de un mismo módulo, pero queda pendiente como una mejora posible puesto que cada uno puede ser creado con una configuración particular (como ya ocurre) y, con la excepción de algunos métodos, se puede refactorizar todos aquellos que sean comunes en una clase padre. En la Figura \ref{fig:database-service} se expone la clase que sigue RoomDatabaseService, muy similar a la que siguen el resto de database services con sus configuraciones propias. Hemos adjuntado un diagrama de cada uno de ellos en el apartado \ref{ch:Capitulo4.7.4}.
 
 
 \begin{figure}[hbt!]
@@ -631,7 +630,7 @@ Los módulos database service, a diferencia de los api providers, no heredan de 
 \end{figure}
 
 \subsection{Inicialización de la aplicación frontend}
-\label{ch:Capitulo4.6.4}
+\label{ch:Capitulo4.7.4}
 
 Cuando la aplicación Android se inicia, tras las inicializaciones propias del framework de Ionic y Angular, se ejecuta la lógica correspondiente a \verb|app.module.ts|, el módulo base que se encarga de importar todo los módulos que se hemos implementado para nuestra aplicación antes de ejecutarlos por primera vez. El sistema de carga de módulos con \textit{lazy loading} de Angular permite ejecutar algunos de ellos antes que el resto si, por necesidades de la aplicación, es condición necesaria que se procese antes que los demás. En nuestro caso, hacemos uso de esta herramienta para lanzar el método \verb|initializeEndpoint| del módulo \verb|core.module.ts|, que redirige al \verb|initializeApiEndpoints| de \verb|application-data.store.ts| y permite extraer de la \gls{bbdd} local las IPs local y remota para poder disponer de ellas en la inicialización de los servicios de interacción con las APIs remotas.
 \vspace{0.5cm}
@@ -645,8 +644,8 @@ Describimos a continuación la inicialización de servicios y stores de la aplic
 \item Por último, se lanza el método \verb|initializeUser| para iniciar sesión en la aplicación con un usuario previamente almacenado, si existe y tiene un token que no haya expirado todavía.
 \end{enumerate}
 
-\subsection{Diagramas de clases de las Stores, Models y Services}
-\label{ch:Capitulo4.6.5}
+\subsection{Diagramas de clases de las Stores y Models}
+\label{ch:Capitulo4.7.5}
 
 \begin{figure}[hbt!]
 \centering
@@ -656,11 +655,7 @@ Describimos a continuación la inicialización de servicios y stores de la aplic
 
 La user store gestiona todo lo relacionado con el login del usuario, es por ello que tiene una fuerte cooperación con el AuthService. Durante la inicialización de la aplicación, se establece una suscripción a cambios de usuarios autenticados en el AuthService con el método público \verb|listenAuthenticationStatus|.
 
-\vspace{0.5cm}
-
 Nuestro proyecto implementa JWT de Auth0, para la autenticación de usuario mediante tokens, lo cual agiliza el login sin necesidad de que el usuario deba introducir de nuevo sus credenciales, y puede ser parametrizado desde el backend. Durante la inicialización de la aplicación, se lanza el método \verb|initializeUser|, el cual busca en la userDB (local del dispositivo) la existencia de un JWT válido. Si lo encuentra, entonces puede pasarle el token al AuthService, el cual lo descifrará y extraerá el usuario autenticado, y establecerá el estado de autenticado del AuthService a verdadero. De esta manera, se la suscripción del \verb|listenAuthenticationStatus| da lugar a pedirle a AuthService el usuario autenticado y se establece como el usuario actual. Si no, se lanza el método privado \verb|_cleanLastUserInfo| para borrar cualquier información remanente en la aplicación móvil relativa al último usuario logado, acudiendo a todas las demás stores para que se encarguen de borrar de sus \gls{bbdd} locales la información pertinente de la que son responsables.
-
-\vspace{1cm}
 
 Además de esto, la user store posee los métodos \verb|loginUser| y \verb|registerUser| que gestionan todo lo relacionado con los intentos de registrar y de iniciar sesión contra la API remota de user mediante el userProvider. Si logra logarse correctamente, el endpoint de login devuelve un token válido que la app almacena en la userDB y que utiliza para el propósito explicado anteriormente, además de pasar al AuthService este token válido para autenticar al usuario.
 
@@ -670,19 +665,13 @@ Además de esto, la user store posee los métodos \verb|loginUser| y \verb|regis
 \caption[room]{Room Data Class Diagram\footnotemark}
 \end{figure}
 
-\vspace{1cm}
+\vspace{0.5cm}
 
 La room store gestiona todo lo relacionado con la lista de rooms disponibles. Durante la inicialización de la aplicación, se establece una suscripción a cambios de usuarios autenticados en el AuthService con el método público \verb|listenAuthenticationStatus|; y alinea esta suscripción con otra al estado de la red con el NetworkService, de forma que, si hay conexión a la red y además el usuario está autenticado, se llama al método privado \verb|_startPollingData| (y de lo contrario, llama al \verb|_stopPollingData|).
 
-\vspace{1cm}
-
 \verb|_startPollingData| se encarga de llamar a intervalos de tiempo regulares de 5 segundos al método privado \verb|_synchronizeData|, el cual hace uso del roomProvider para obtener la lista de todas las rooms. Cada vez que interactuemos con la API remota (con cualquiera de sus métodos, y aplicable al resto de stores), ejecutaremos un flujo que consiste en recibir la información, guardarla en la roomDB y llamar al método \verb|refreshList|, que se encarga de extraer el valor actual de esa lista de la roomDB y actualizar tanto el array privado \verb|_currentRooms| como el observable \verb|_currentRoomsObservable| con el nuevo valor.
 
-\vspace{1cm}
-
 Este último paso es crucial para el flujo de datos en la aplicación y representa uno de los patrones reconocidos más útiles de los que hacemos uso en la aplicación frontend: el patrón Observer/Subscribe. La librería RXJs nos ofrece este elemento tan importante, mediante el cual cualquier flujo de la aplicación que desee hacer uso de la lista de rooms, se suscribe al observable \verb|_currentRoomsObservable| mediante el método \verb|roomsChange| de la room store. Cada vez que la room store actualice este observable, el cambio será automáticamente notificado a todos los suscriptores de dicho observable.
-
-\vspace{1cm}
 
 La room store también ofrece los métodos \verb|createNewRoom|, \verb|deleteRoom|, \verb|renameRoom|, \verb|updateRoomMainThing|, \verb|linkThingToRoom| y \verb|unlinkThingFromRoom|. Los tres primeros son autodescriptivos, interactuan con la API y siguen el mismo flujo de actualización descrito anteriormente aunque adaptado a cada caso. Los tres últimos son llamados desde la thing store como parte de unos procesos encadenados, en los cuales se requiere que se cambie información específica de alguna room en particular, pero esta vez sólo de forma local (en el dispositivo), ya que la petición al backend realizada desde la thing store ya desencadena otros flujos secundarios en el backend que actualizan la información de la room implicada. Se garantiza la alineación de datos ya que el flujo está diseñado como si de una transacción se tratara: el backend siempre tiene la información verídica, y si ocurriera algún fallo en el flujo (sea en backend o en frontend), se rechaza el flujo para evitar datos incorrectos, que en cualquier caso serán actualizados con la siguiente petición \verb|_synchronizeData|. 
 La room store también expone el método \verb|cleanUserRooms|, accedido y usado desde la user store para el borrado de datos de rooms.
@@ -693,9 +682,9 @@ La room store también expone el método \verb|cleanUserRooms|, accedido y usado
 \caption[thing]{Thing Data Class Diagram\footnotemark}
 \end{figure}
 
-La thing store gestiona todo lo relacionado con la lista de things disponibles. Tanto la suscripción al AuthService, y al NetworkService, como el sistema de petición periódica y recuperación de datos, así como la exposición del observable a posibles suscriptores, es idéntico al de room store pero evidentemente aplicado a la lista de things, por lo cual no entraremos en detalle de nuevo.
+\vspace{0.5cm}
 
-\vspace{1cm}
+La thing store gestiona todo lo relacionado con la lista de things disponibles. Tanto la suscripción al AuthService, y al NetworkService, como el sistema de petición periódica y recuperación de datos, así como la exposición del observable a posibles suscriptores, es idéntico al de room store pero evidentemente aplicado a la lista de things, por lo cual no entraremos en detalle de nuevo.
 
 La thing store también ofrece los métodos \verb|addNewThing|, \verb|deleteThing|, \verb|renameThing|, \verb|flagAsMainThing|, \verb|linkRoom| y \verb|unlinkRoom|, que interactuan con la API en sus métodos homónimos y siguen el mismo flujo de actualización descrito anteriormente aunque adaptado a cada caso. Los tres últimos 
 
@@ -708,6 +697,8 @@ La thing store también expone el método \verb|cleanUserThings|, accedido y usa
 \caption[thing]{Board Data Class Diagram\footnotemark}
 \end{figure}
 
+\vspace{0.5cm}
+
 La board store gestiona todo lo relacionado con las boards disponibles. La implementación actual, para el objetivo del proyecto, no requiere almacenar una lista de boards disponibles como ocurre con las stores de rooms o things; sin embargo, dispone de todo el flujo y todos sus métodos, al igual que con las otras stores, lo cual puede resultar útil para futuras ampliaciones del proyecto. El aspecto más importante de esta store es su flujo de detección de una placa conectada al puerto USB de la Raspberry Pi, preguntando periódicamente al backend, con el fin de comunicárselo a los módulos interesados en ejecutar alguna acción dependiendo de esto. Este flujo es explicado en contexto en el caso de uso \ref{ch:Capitulo5.2.4}.
 
 \begin{figure}[hbt!]
@@ -715,6 +706,8 @@ La board store gestiona todo lo relacionado con las boards disponibles. La imple
 \includegraphics[height=3in]{figures/diagrams/front/data-flow/app-data.png}
 \caption[app-data]{Application Data Class Diagram\footnotemark}
 \end{figure}
+
+\vspace{0.5cm}
 
 La application data store gestiona toda la información general que la aplicación requiere almacenar y utilizar y que puede varia con las acciones del usuario; principalmente se encargará de almacenar y modificar las URLs locales y remotas a las cuales la aplicación debe apuntar, según las circunstancias.
 Si el usuario se encuentra en la misma red local que la Raspberry Pi, mediante una acción del menú \textit{Settings} podrá detectar la red actual y recordarla (IP local y SSID), mediante el método de la store \verb|updateHomeLanInfo|, para así comunicarse por Wifi con el nodo principal, pudiendo prescindir de una conexión de Internet y la respectiva cobertura. Si por el contrario, se encuentra usando una red de datos (o una red Wifi desconocida, en la que no se encuentra la Raspberry Pi), utilizará la URL que apunta a la IP externa en la cual encontrar a la Raspberry Pi. Para setear las URLs a usar por los servicios de API remota, la store lanza el método \verb|_setNetworkUrls| que cambia la info utilizada en el \verb|network.service.ts|, el punto que utilizan dichas APIs. sus métodos \verb|getLocalEndpoint| y \verb|getRemoteEndpoint|.
@@ -725,6 +718,8 @@ De la misma forma, es la store encargada de ofrecerle al módulo JWT las rutas p
 \includegraphics[height=3in]{figures/diagrams/front/architecture/models.png}
 \caption[models]{Models Classes Diagram\footnotemark}
 \end{figure}
+
+\vspace{1cm}
 
 Los diagramas de clase responden a modelos para cada tipo de datos que sean claros y concisos, permitiendo toda la operatividad requerida para los casos de uso existentes.
 \begin{enumerate}
@@ -741,24 +736,81 @@ Los diagramas de clase responden a modelos para cada tipo de datos que sean clar
 
 \end{enumerate}
 
+\subsection{Diagramas de clases de los Services}
+\label{ch:Capitulo4.7.6}
+
 \begin{figure}[hbt!]
 \centering
 \includegraphics[height=8.2in]{figures/diagrams/front/architecture/services.png}
 \caption[services]{Services Class Diagram\footnotemark}
 \end{figure}
 
-[EXPLICAR AQUÍ LOS SERVICES]
+Tal y como se describió en la sección \ref{ch:Capitulo4.7.4}, el \verb|application.service.ts| tiene un rol importante de apoyar en la inicialización de la aplicación, encargándose él de inicializar tanto stores como services que lo requieran. No entraremos en mayor profundidad para explicarlo ya que el contexto de dicha sección contribuye a un mejor entendimiento.
+
+\vspace{1cm}
+
+El \verb|auth.service.ts| se encarga de guardar y modificar el estado de autenticación de usuario en la aplicación, apoyándose en la librería \verb|angular-jwt|. Expone métodos como \verb|isAuthenticated|, \verb|getAuthenticatedUser|, \verb|isTokenValid| y \verb|getTokenExpirationDate| para proporcionar información del estado actual de autenticación a otros módulos, así como el Observable \verb|authenticationObserver| al cual se suscriben todas las stores en la inicialización de la aplicación, y el \verb|navigation.service.ts| explicado más tarde, para recibir inmediatamente cualquier cambio de estado. También expone el método \verb|setAuthenticatedByToken| para establecer un token como identificación de autenticación del usuario y cambiar el estado de autenticación a verdadero. Finalmente, ofrece un método por cada caso en el que se desea pasar al estado de autenticación falso, como puede ser \verb|onRequestedLogout| para una situación de cierre de sesión, \verb|onUnauthorizedRequest| para una petición "ilegal" (es decir, una petición que recibe una respuesta de token inválido), y \verb|onUnauthorizedRouting| para un cambio de vista "ilegal" (es decir, enrutar a una vista privada cuando el estado de autenticación no debería permitirlo). 
+
+\vspace{1cm}
+
+El \verb|navigation.service.ts| es un módulo que cubre las funcionalidades para enrutar a diferentes páginas o vistas de la aplicación, utilizando el controlador de navegación de Ionic \verb|NavControllerBase|. En la inicialización de la aplicación, se suscribe a los cambios de autenticación de autenticación, con el \verb|authenticationObserver| del \verb|auth.service.ts|: si se recibe una autenticación válida, se enruta automáticamente a la vista Home; si se recibe una inválida, a la vista de Login.
+
+\vspace{0.5cm}
+
+Su método estrella expuesto es el \verb|goTo|, al cual se le pasa una ruta de página y parámetros de navegación y acudiendo al método interno homónimo \verb|_goTo| recorre el siguiente flujo: si la ruta es pública (es decir, no se requiere estar logado para visitar la ruta), introducirá una nueva entrada en el historial de navegación (o si se trata de la ruta de Login, reiniciará el historial, por tratarse de la casuística de un cierre de sesión de usuario); si la ruta no es pública, comprobará si el usuario está autenticado, en cuyo caso introducirá una nueva entrada en el historial de navegación, y en caso contrario, avisará al \verb|auth.service.ts| de un enrutado sin permiso y se dirigirá a la raíz (página de Login).
+
+\vspace{1cm}
+
+El \verb|network.service.ts| se encarga de controlar el estado de la red para proporcionar utilidades relacionadas a diferentes módulos de la aplicación, desde informar sencillamente de si estamos conectados a una red LAN o  una conexión a datos 4G o sencillamente sin conexión alguna, como proporcionar la URL adecuada a la que lanzar las peticiones del backend cada vez que pueda cambiar la red a la que estamos conectados.
+
+\vspace{0.5cm}
+
+En su constructor, se encarga de comprobar si estamos en un dispositivo móvil al cual tenga que solicitar permisos para obtener información de la red WIFI a la que está conectado, como es el caso de Android, así que a través del módulo \verb|AndroidPermissions| de Ionic, se podrá solicitar al usuario el permiso a conocer el estado de su red de WIFI y a su GPS. Contrariamente a lo que pueda parecer, es sólo un empaquetamiento de los permisos en Android lo que requiere conocer la información de GPS. Este módulo de la aplicación sólo utiliza el permiso para acceder a los datos de SSID y MAC de la red, y para ello utiliza la librería externa \verb|WifiWizard2| con sus métodos \verb|getConnectedSSID| y \verb|getConnectedBSSID| respectivamente.
+Al inicializarse lanza su método privado \verb|listenToNetworkChanges| para detectar los cambios de red gracias al plugin de \verb|Network| de Ionic, y reaccionar a los cambios ejecutando su método privado \verb|_setStatusByNetworkType| y los métodos \verb|_onOnline| y \verb|_onOffline| dependiendo de si logra conexión a una red o no. Una vez conecta a una red, si es una red LAN, capturará la información de la red WIFI con su método privado \verb|_updateWifiInfo| para almacenarla para futuras comparaciones con red preferida guardada en la application data store, y sólo entonces informar mediante el patrón Observer/subscribe a todos los módulos interesados en el cambio de red.
+
+\vspace{0.5cm}
+
+El módulo expone los siguientes métodos:
+\begin{enumerate}
+    \item El método \verb|setNetworkUrls| para establecer las URLs local y remota.
+    \item El método \verb|setHomeLanInfo| para establecer la información de la red en la que está el nodo principal.
+    \item El método \verb|getLocalNetworkUrl| para devolver la URL local.
+    \item El método \verb|getRemoteNetworkUrl| para devolver la URL remota.
+    \item El método \verb|getActiveNetworkUrl| para devolver la URL de la red activa actualmente.
+    \item El método \verb|getCurrentLanInfo| para devolver la información de la red LAN actual.
+    \item El método \verb|isOnline| para devolver si el estado actual es conectado a una red.
+    \item El método \verb|isOffline| para devolver si el estado actual es desconectado de cualquier red.
+    \item El método \verb|onlineObserver| para devolver un objeto observable al cual suscribirse que notifica los cambios de estado de la red.
+    \item El método \verb|isDataNetwork| para devolver si la red actual es una red de datos.
+    \item El método \verb|isLAN| para devolver si la red actual es una red LAN.
+\end{enumerate}
+
+\vspace{1cm}
+
+El \verb|toast.service.ts|, el \verb|modal.service.ts| y el \verb|alert.service.ts| son servicios que aprovechan las funcionalidades de Ionic de \textit{toasts}, \textit{popups} y \textit{alertas} respectivamente, aportando en sus constructores las configuraciones base necesarias para generarlos según nuestra preferencia; y exponen respectivamente sencillos métodos para su uso cómodo a lo largo de la aplicación, \verb|showToast|, el \verb|showModal| y el \verb|showAlert|.
+
+\vspace{0.5cm}
+
+Otro servicio de la misma categoría sería el \verb|loading.service.ts|, que sin entrar en detalles de implementación, ofrece el típico componente mostrado en pantalla de carga con o sin mensaje de espera, y que está implementado para ser el mismo por toda la aplicación; así, cuando un módulo decide mostrar un mensaje de espera (con el método expuesto \verb|show|), pero otro decide que existe una prioridad mayor para cerrarlo (con \verb|dismiss|) o sustituirlo (con \verb|setContent|), puede interactuar con el mismo sin problemas de apilación de componentes.
+
+\vspace{0.5cm}
+
+En la misma línea, el \verb|logger.service.ts| proporciona un servicio de log para el proceso de \textit{debug} de la aplicación durante su desarrollo, que permite personalizar altamente las características del log según el tipo de mensaje que se quiera apuntar, por ser un mensaje de error (logable usando el método \verb|error|), un aviso (con el método \verb|warn|), un sencillo log (con el \verb|log|) o una información (con \verb|info|).
+
+\vspace{1cm}
+
+El \verb|storage.service.ts| es el utilizado por todos los database services de la aplicación para crear un almacenamiento particular para cada uno de ellos con \verb|create|, y poder gestionarlo con los métodos \verb|get|, \verb|set|, \verb|getAll|, \verb|remove| y \verb|removeAll|. Como módulo interno, hace uso del servicio de \verb|Storage| de Ionic, que por detrás aprovecha todas las \gls{bbdd} disponibles en el motor del navegador en uso, dando preferencia y usando en la mayoría de casos, la \gls{IndexedDB}. Además, cabe destacar que, gracias a la librería \verb|crypto-js|, hemos añadido otro nivel de seguridad configurable que se encarga de encriptar o desencriptar cada entrada al almacenarla o recuperarla respectivamente.
 
 \section{Arquitectura del servidor de NodeJS}
-\label{ch:Capitulo4.7}
+\label{ch:Capitulo4.8}
 
 \subsection{Consideraciones previas}
-\label{ch:Capitulo4.7.1}
+\label{ch:Capitulo4.8.1}
 
 El desarrollo de la aplicación backend ha seguido la línea del stack MEAN, esto es, MongoDB, ExpressJS, Angular (éste sólo en el frontend) y NodeJS. Los beneficios de seguir dicho stack son sencillamente los de sus frameworks y herramientas: MongoDB aporta los beneficios de una \gls{bbdd} no relacional, enormemente alineado con las características del proyecto, según el cual podríamos almacenar grandes cantidades de datos con diferentes estructuras JSON bajo la misma lista de documentos sin perder velocidad de acceso o escritura; ExpressJS nos permite elaborar una API REST completa salvando los principales escollos que NodeJS podría presentarnos para tal fin, pues sus herramientas base para el tratamiento de peticiones http se presentan intrincadas y poco intuitivas; y NodeJS se beneficia de infinitas librerías de sencillo uso, constantemente probadas y actualizadas por su amplia comunidad, proveyéndonos en este caso de muchas utilidades que nos ayudan a evitar desarrollos difíciles e innecesarios no intrínsecos a una suite domótica (como es nuestro fin) y cuyos beneficios enumeraremos más adelante.
 
 \subsection{Estructura básica}
-\label{ch:Capitulo4.7.2}
+\label{ch:Capitulo4.8.2}
 
 A grandes rasgos, la aplicación backend está estructurada en:
 \begin{enumerate}
@@ -771,10 +823,12 @@ A grandes rasgos, la aplicación backend está estructurada en:
  \item Archivos de configuración y de constantes, que permitirán aislar adecuadamente el uso de constantes útiles a lo largo de toda la aplicación, de una forma centralizada, independiente y de fácil acceso y modificación.
 \end{enumerate}
 
+\vspace{0.5cm}
+
 Con el fin de comprender el esquema utilizado y establecer una alineación con el frontend, la nomenclatura utilizada para cada tipo de datos será la misma que en el proyecto cliente.
 
 \subsection{Flujo de enrutado de las peticiones HTTP}
-\label{ch:Capitulo4.7.3}
+\label{ch:Capitulo4.8.3}
 
 \begin{figure}[hbt!]
 \centering
@@ -784,9 +838,13 @@ Con el fin de comprender el esquema utilizado y establecer una alineación con e
 \end{figure}
 
 Como hemos explicado anteriormente, ExpressJS es utilizado para el enrutado de toda petición HTTP que alcance la aplicación backend. Durante la inicialización del servidor, mediante el método \verb|listen| en el \verb|server.js| se utiliza el objeto \verb|app| expuesto en el \verb|src/app.js| (un objeto generado por el framework ExpressJS) para generar un servidor que atenderá todas las peticiones HTTP en el puerto que se le configure, en este caso, se ha designado el puerto 3000.
+
 \vspace{0.5cm}
+
 Posteriormente, se lanza el setup del enrutador con el método \verb|setupRouting| del módulo \verb|router.js|, el cual se encarga de importar todos los routers existentes y vincularlos a cada uno de los endpoints que serán atendidos mediante el método \verb|use| del objeto \verb|app|. Así, suponiendo que se recibe una petición http con la ruta \verb|/api/thing|, ésta será redirigida al router \verb|thingRouter| mediante el método y sus parámetros \verb|use(ROUTER_CONFIG.EP_GLOBAL.THINGS, thingRouter)|. El primer nivel de encaminamiento de las peticiones es tal que el mostrado en la Figura \ref{fig:back-api-entry}.
+
 \vspace{0.5cm}
+
 Una vez la petición ha sido encaminada a un router en particular, entramos en el segundo nivel de encaminamiento. En este punto, el router se encarga de importar el controller específico para su tipo de datos y de encaminar cada endpoint a la función final de un controller que atenderá a dicha petición. ExpressJS nos permite registrar dicha función a ejecutar para unas características particulares de petición, de forma que con unos sencillos métodos, podremos asociar dicho método dependiendo del tipo CRUD de la petición atendida y de las características de su URL. Así, suponiendo que nuestro \verb|thing.router.js| atiende una petición PUT en la url \verb|/api/thing/rename/:id|, mediante el método \verb|put| podremos encaminar dicha petición a ser atendida por el método \verb|renameThing| del \verb|thing.controller.js|. Este segundo nivel de encaminamiento de las peticiones es tal que el mostrado en cada una de las figuras siguientes, brevemente descrito para cada endpoint.
 
 \begin{figure}[hbt!]
@@ -794,6 +852,8 @@ Una vez la petición ha sido encaminada a un router en particular, entramos en e
 \includegraphics[height=2.5in]{figures/diagrams/back/router-flow/link-endpoints.png}
 \caption[link-endpoints]{Link API Schema\footnotemark}
 \end{figure}
+
+\vspace{0.5cm}
 
 Para el endpoint \verb|/api/link|, se asocian 3 entradas atendidas por el \verb|link.router.js|:
 \begin{enumerate}
@@ -807,6 +867,8 @@ Para el endpoint \verb|/api/link|, se asocian 3 entradas atendidas por el \verb|
 \includegraphics[height=2.5in]{figures/diagrams/back/router-flow/room-endpoints.png}
 \caption[room-endpoints]{Room API Schema\footnotemark}
 \end{figure}
+
+\vspace{0.5cm}
 
 Para el endpoint \verb|/api/room|, se asocian 5 entradas atendidas por el \verb|room.router.js|:
 \begin{enumerate}
@@ -822,6 +884,8 @@ Para el endpoint \verb|/api/room|, se asocian 5 entradas atendidas por el \verb|
 \includegraphics[height=2.5in]{figures/diagrams/back/router-flow/thing-endpoints.png}
 \caption[thing-endpoints]{Thing API Schema\footnotemark}
 \end{figure}
+
+\vspace{0.5cm}
 
 Para el endpoint \verb|/api/thing|, se asocian 6 entradas atendidas por el \verb|thing.router.js|:
 \begin{enumerate}
@@ -839,6 +903,8 @@ Para el endpoint \verb|/api/thing|, se asocian 6 entradas atendidas por el \verb
 \caption[user-endpoints]{User API Schema\footnotemark}
 \end{figure}
 
+\vspace{0.5cm}
+
 Para el endpoint \verb|/api/user|, se asocian 2 entradas atendidas por el \verb|user.router.js|:
 \begin{enumerate}
 \item En la ruta \verb|/api/link/login|, las peticiones POST serán atendidas por el método \verb|loginUser|.
@@ -851,22 +917,24 @@ Para el endpoint \verb|/api/user|, se asocian 2 entradas atendidas por el \verb|
 \caption[board-endpoints]{Board API Schema\footnotemark}
 \end{figure}
 
+\vspace{0.5cm}
+
 Para el endpoint \verb|/api/board|, se asocian 2 entradas atendidas por el \verb|board.router.js|:
 \begin{enumerate}
 \item En la ruta \verb|/api/board/|, las peticiones GET serán atendidas por el método \verb|getAllBoards|.
 \item En la ruta \verb|/api/board/detect|, las peticiones GET serán atendidas por el método \verb|getUSBConnectedBoard|.
 \end{enumerate}
 
-[HABLAR AQUÍ DE MIDDLEWARES]
-[passport.middleware.js]
+\vspace{1cm}
 
+Hay que hacer mención especial al \verb|passport.middleware.js|. Lo consideramos como un \gls{middleware}, puesto que asiste al proceso de validación de las peticiones. En este caso se apoya en la librería de npm \verb|passport|, que ayuda a comprobar que la petición en cuestión dispone de un token JWT válido, buscando si existe en la colección Users de la MongoDB un usuario con el mismo id que el contenido en el token. Este middleware aplica en todas las peticiones de la API REST expuesta, salvo en las peticiones de loginUser y registerUser del endpoint /api/user, que no pueden disponer de token por no tener un usuario iniciado. Si la petición no dispone de token, es automáticamente rechazada. Juega un importante papel en el reforzado de seguridad de la aplicación.
+
+\vspace{1cm}
 
 Toda petición http que no sea encaminada a un método mediante esta metodología será automáticamente rechazada. Esto permite controlar severamente los caminos por los cuales se ejecutará una lógica en base a una petición http, y por ende constituye una medida de seguridad adicional por el principio básico de conocer y controlar todas las posibles entradas al servidor con un flujo único y específico para cada una de ellas, para minimizar brechas de seguridad.
 
 \subsection{Diagramas de clases de los Controllers, Helpers y Models}
-\label{makereference4.7.4}
-
-[HABLAR AQUÍ DE CONTROLLERS]
+\label{makereference4.8.4}
 
 El \verb|core.controller.js| se encarga de lanzar aquellos procesos que deben estar listos tras la inicialización base del servidor NodeJS. Una vez el servidor ha conectado su cliente de Mongo a la instancia de MongoDB, está listo para interactuar con toda la información almacenada anteriormente en la \gls{bbdd}, y el proceso de \verb|app.js| se encarga de lanzar el método \verb|setupCoreMonitors| del coreController. Este método lanza dos de sus métodos internos, por un lado \verb|_launchStoredSubscriptions| y posteriormente \verb|_releaseDaemons|, finalizando así la preparación inicial del servidor.
 
@@ -938,25 +1006,32 @@ El método \verb|registerUser| comprueba en la colección Users de la MongoDB si
 El método \verb|loginUser| comprueba en la colección Users de la MongoDB si existe un usuario con el email proporcionado en la petición http. Mediante el método del esquema User \verb|comparePassword|, procede a devolver si el login ocurre con éxito o no, resolviendo la petición http con un código 200 y un objeto JSON con el email y un token válido (creado por el método privado \verb|_createToken|) o bien devolviendo un código 400 y un mensaje de error.
 El método privado \verb|_createToken| hace uso del plugin JWT para crear un token único con el id de usuario y su email, siguiendo la configuración existente en los campos \verb|JWT_SECRET| y \verb|TOKEN_EXPIRE_TIME| del \verb|server.config.js|.
 
-[HABLAR AQUÍ DE LIGHT CONTROLLER]
-[HABLAR AQUÍ DE SENSOR CONTROLLER]
+\vspace{1cm}
 
-[HABLAR AQUÍ DE HELPERS]
-[thing.helper.js
-  translateCommand,
-  getThingControllerInstance,
-  generateSubscriptionData,
-  getModelStructure,
-  getDHT11AvgInfo,
-  getMQ135AvgInfo
-]
+El \verb|light.controller.js|, como controlador directo de acciones de una thing, gestiona las operaciones específicas de una thing de tipo luz por lo que, entre otras, encontramos expuestos los métodos procesar la comunicación MQTT con una luz, además de otros métodos privados auxiliares. Con el fin de evitar repeticiones, no lo explicaremos con más profundidad puesto que lo encontraremos detallado en un contexto real en los pasos del lado servidor del caso de uso de la sección \ref{ch:Capitulo5.3}.
 
 \vspace{1cm}
+
+El \verb|sensor.controller.js|, como controlador directo de acciones de una thing, gestiona las operaciones específicas de una thing de tipo sensor por lo que, entre otras, encontramos expuestos los métodos procesar la comunicación MQTT con una sensor, además de otros métodos privados auxiliares. Con el fin de evitar repeticiones, no lo explicaremos con más profundidad puesto que lo encontraremos detallado en un contexto real en los pasos del lado servidor del caso de uso de la sección \ref{ch:Capitulo5.4}.
+
+\vspace{1cm}
+
+El \verb|thing.helper.js| tiene lugar con el fin de descargar al módulo \verb|thing.controller.js| de código que no está estrictamente vinculado a operaciones contra la base de datos o tratamiento de peticiones o comunicaciones, es decir, de acoger todo aquellos métodos que responden a simples cálculos o utilidades generales relacionadas con los things que son procesos o algoritmos necesarios pero no constituyen el núcleo lógico. Son los siguientes:
+\begin{enumerate}
+\item El método \verb|getThingControllerInstance|, que responde a una necesidad de arquitectura del código, pues se encarga de devolver, a partir de un tipo de thing (luz, sensor, etc.), una instancia de código de controlador directo de acciones asociado estrictamente a dicho tipo. En la implementación actual de código, este puede ser o bien el \verb|light.controller.js|, o bien el \verb|sensor.controller.js|. 
+\item El método \verb|generateSubscriptionData|, que a partir de una thing obtiene su instancia controladora correspondiente (con el método descrito anteriormente) y devuelve un objeto con dos campos, \verb|answer| y \verb|status|, donde almacena un objeto en cada uno con la información necesaria para registrar una suscripción MQTT en el servicio MQTT sobre los dos topics necesarios a ser escuchados para la comunicación, el topic \verb|answer| y el \verb|status|, el campo \verb|id| de la thing, y la función de procesamiento asociada a cada topic, bien sea \verb|processAnswer| o \verb|processStatus| de la instancia controladora obtenida.
+\item El método \verb|getModelStructure|, que dependiendo del tipo y modelo de una thing, nos devuelve un objeto con la estructura por defecto (y unos valores por defecto) que debe tener el campo typeProperties para almacenar, recuperar y operar los valores acordes a dicho modelo y tipo de thing.
+\item El método \verb|getDHT11AvgInfo| sirve para calcular la media de temperatura y humedad de una lista de sensores DHT11 y devolver dichos valores medios.
+\item El método \verb|getMQ135AvgInfo|, en la misma línea que el método anterior, a partir de una lista de sensores MQ135, averigua si todos informan de una calidad del aire correcta o si al menos uno de ellos presenta una advertencia de peligro en la calidad del aire, y devuelve este dato junto a la lista de sensores que presentan dicha advertencia. El estado actual de implementación del proyecto no contempla completamente el uso de este sensor, pues aunque toda la estructura de frontend y backend lo soporta, es requerido un voltaje superior al valor con el cual garantizamos que la Raspberry Pi opera correctamente todos sus servicios y comunicaciones.
+\end{enumerate}
+
+\vspace{1cm}
+
 Los modelos utilizados en el backend se diseñan como modelo para su \gls{bbdd} de MongoDB, y por ello la creación del modelo es mediante los métodos \verb|Schema| y \verb|model| de la librería de npm \verb|mongoose|. Estos modelos, a excepción del User, siguen el mismo esquema que los utilizados en el frontend, lo que refuerza la mantenibilidad de código y permite una comunicación con menos trabas entre cliente y servidor. El modelo Board, va asociado a la colección de MongoDB 'Boards'; el modelo Room, va asociado a la colección de MongoDB 'Rooms'; el modelo Thing, va asociado a la colección de MongoDB 'Things'; y el modelo User, va asociado a la colección de MongoDB 'Users'.
 Particularmente, para el modelo User, posee 2 campos, \verb|email| (identificador único, alineado con el frontend), y \verb|password| para almacenar el password del usuario. Además, se definen unos métodos en relación con su cometido de identificación de usuario para inicios de sesión. Se establece un método que es ejecutado justo antes de almacenar objetos de tipo User en la MongoDB (cuando se registra un nuevo usuario), que gracias a la librería de npm \verb|bcryptjs|, permite aplicar \gls{salt} y \gls{hash} sobre el password como medidas adicionales de seguridad. Además, se establece otro método para la comparación de password, en el flujo ejecutado cuando un usuario intenta hacer login. Este método también utiliza la librería de \verb|bcryptjs| para comparar bajo las mismas condiciones de \gls{salt} y \gls{hash}.
 
 \subsection{Diagramas de clases de los Services}
-\label{makereference4.7.5}
+\label{makereference4.8.5}
 
 El servicio \verb|mqtt.service.js| ofrece la capacidad de interactuar de forma sencilla con otros dispositivos mediante el protocolo MQTT, apoyándose en la librería de npm \verb|mqtt|, mediante los métodos que expone, que explicamos a continuación.
 \begin{enumerate}
@@ -968,28 +1043,13 @@ El servicio \verb|mqtt.service.js| ofrece la capacidad de interactuar de forma s
 \end{enumerate}
 Igualmente importante es el flujo de escucha y procesado de mensajes MQTT, mediante los métodos privados \verb|_initMessageListener| y método privado \verb|_processMessage|, que se encargan de procesar cualquier mensaje recibido por MQTT, extraer del topic el identificador de thing y el endpoint y lanzar la función asociada a dicha combinación de suscripción.
 
-[mqtt.service.js
-  initializeClient,
-  stopClient,
-  addSubscription,
-  removeSubscription,
-  publish
-  
-  _loadSubscriptions
-  _subscribeTopic
-  _unsubscribeTopic
-  _publishTopic
-  _initMessageListener
-  _formTopic
-  _findSubscriptionIndex
-  _processMessage
-  ]
+\vspace{1cm}
   
 El servicio \verb|mongo.db.js| tiene la capacidad de iniciar la conexión entre el proyecto y la \gls{bbdd} de MongoDB. El trabajo en bruto de la conexión ocurre gracias a la librería de npm \verb|mongoose|.El servicio en cuestión expone el método \verb|_connect| que hace uso de esta librería para, mediante eventos de conexión, establecer la conexión con unos parámetros dados de dónde se encuentra la MongoDB (URL y las opciones necesarias para la conexión, valores que se extraen de los campos \verb|MONGODB_URL| y \verb|MONGODB_OPTIONS| del archivo de configuración \verb|server.config.js|), así como escuchar posibles errores de la conexión y avisar de cuándo la conexión ha tenido éxito, para poder asegurar que a partir de entonces las operaciones contra la MongoDB ocurran con ciertas garantías.
 
 \vspace{1cm}
  
-El servicio \verb|shell.service.js| tiene la capacidad de ejecutar scripts de shell. Este servicio expone el método \verb|compileAndUploadToBoard| para generar, compilar y cargar a una placa todos los scripts que necesite dicha placa para operar una thing conectada a ella en comunicación con el nodo principal. \verb|compileAndUploadToBoard|, para su fin, hace uso del método privado \verb|_execAsync| y detecta cuando el script devuelve por stdout el string "Ended" como señal de finalización. En ese caso, 
+El servicio \verb|shell.service.js| tiene la capacidad de ejecutar scripts de shell. Este servicio expone el método \verb|compileAndUploadToBoard| para generar, compilar y cargar a una placa todos los scripts que necesite dicha placa para operar una thing conectada a ella en comunicación con el nodo principal. \verb|compileAndUploadToBoard|, para su fin, hace uso del método privado \verb|_execAsync| y detecta cuando el script devuelve por stdout el string \textit{Ended} como señal de finalización. En ese caso, 
 Su método privado \verb|_execAsync| hace el trabajo en bruto gracias al uso de la librería de npm \verb|shelljs|, ejecutando el script de shell que recibe por parámetro. Controla las salidas stdout y stderr para ejecutar una función en caso de resultados devueltos por la salida stdout, o ejecutar otra en caso de errores devueltos por la salida stderr.
 
 \vspace{1cm}
