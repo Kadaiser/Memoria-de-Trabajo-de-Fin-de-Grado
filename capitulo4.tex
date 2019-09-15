@@ -10,7 +10,7 @@ Existen múltiples niveles de implementación del prototipo planteado en este do
 \section{Despliegue IoT de la solución domótica}
 \label{ch:Capitulo4.1}
 
-Para disponer de una base tecnológica sólida, pero fácil de adquirir, sobre la que experimentar y entender la complejidad de una suite domótica y sus planteamientos, en este proyecto se opta por usar hardware amigable como \verb|Raspberry Pi| para el \gls{gateway} y placas microcontroladoras \verb|nodeMCU| y las comúnmente llamados \verb|modulos ESP8266|, que disponen de una extensa comunidad de usuarios y documentación. En esa misma linea se buscará software libre. No sólo se puede aprovechar gran parte del trabajo ya creado en programación de \gls{script} para dispositivos como sensores y actuadores, aparte de ofrecer libertad para el usuario final de adaptar y modificar a su criterio tanto el software como el hardware. El \gls{gateway} actúa como concentrador de las conexiones de nodos, y dispone de los servicios necesarios para actuar como \verb|broker| de información para el servidor \verb|Node.js| que sera el núcleo del sistema, facilitando conexiones a clientes, los cuales mediante una \gls{app} móvil podrán conectarse para operar la solución domótica. En la siguiente figura~\ref{globalsystemdeployment} se observa como la aplicación móvil que se desarrollara, puede conectarse a través de la red de internet o de manera directa al router domestico, el conectara a su vez con el \gls{gateway} a través de una conexión de cable. El \gls{gateway} establece así el limite externo de la red de este despliegue de \gls{iot} y es a la vez el proveedor de servicios para la aplicación móvil, eliminado servicios de aplicación de terceros alojados en la red de internet para que pueda operar.
+Para disponer de una base tecnológica sólida, pero fácil de adquirir, sobre la que experimentar y entender la complejidad de una suite domótica y sus planteamientos, en este proyecto se opta por usar hardware amigable como \verb|Raspberry Pi| para el \gls{gateway} y placas microcontroladoras \verb|nodeMCU| y los comúnmente llamados \verb|modulos ESP8266|, que disponen de una extensa comunidad de usuarios y documentación. En esa misma linea se buscará software libre. No sólo se puede aprovechar gran parte del trabajo ya creado en programación de \gls{script} para dispositivos como sensores y actuadores, aparte de ofrecer libertad para el usuario final de adaptar y modificar a su criterio tanto el software como el hardware. El \gls{gateway} actúa como concentrador de las conexiones de nodos, y dispone de los servicios necesarios para actuar como \verb|broker| de información para el servidor \verb|Node.js| que será el núcleo del sistema, facilitando conexiones a clientes, los cuales mediante una \gls{app} móvil podrán conectarse para operar la suite domótica. En la siguiente figura~\ref{globalsystemdeployment} se observa cómo la aplicación móvil que se desarrollará puede conectarse a través de la red de internet o de manera directa al router domestico, que conectará a su vez con el \gls{gateway} a través de una conexión de cable. El \gls{gateway} establece así el limite externo de la red de este despliegue de \gls{iot} y es a la vez el proveedor de servicios para la aplicación móvil, eliminando servicios de aplicación de terceros alojados en la red de internet como requisito innecesario para que pueda operar.
 
 \begin{figure}[hbt!]
 \label{globalsystemdeployment}
@@ -23,7 +23,7 @@ Para disponer de una base tecnológica sólida, pero fácil de adquirir, sobre l
 \section{Definición del gateway}
 \label{ch:Capitulo4.2}
 
-El \gls{gateway} representa el núcleo de nuestra suite domótica. Al no existir una dependencia de procesos externos y computación en la red de internet, este elemento representa el dispositivo en la posición mas elevada de la jerarquía de la suite domótica. Los nodos dispuestos en un hogar lo usan como concentrador de comunicaciones para que el sistema opere, y la aplicación móvil lo usa como servidor para obtener la información registrada por esos dispositivos e interactuar con ellos. Si bien los nodos son capaces de registrar datos por su cuenta, estos deben ser entregados en el \gls{gateway} para ser procesados de forma útil para la aplicación.
+El \gls{gateway} representa el núcleo de nuestra suite domótica. Al no existir una dependencia de procesos externos y computación en la red de internet, este elemento representa el dispositivo en la posición más elevada de la jerarquía de la suite domótica. Los nodos dispuestos en un hogar lo usan como concentrador de comunicaciones para que el sistema opere, y la aplicación móvil lo usa como servidor para obtener la información registrada por esos dispositivos e interactuar con ellos. Si bien los nodos son capaces de registrar datos por su cuenta, estos deben ser entregados en el \gls{gateway} para ser procesados de forma útil para la aplicación.
 
 \vspace{1cm}
 
@@ -31,12 +31,11 @@ La selección de \verb|Raspberry Pi| como plataforma de hardware se basa en dos 
 
 \vspace{1cm}
 
-El \gls{gateway} ejecuta \verb|Raspbian|. Un \gls{so} \verb|GNU/Linux| diseñado específicamente para la arquitectura ARMv7 de los distintos modelos de ordenadores Raspberry. Concretamente, en este proyecto se utiliza la serie de distribuciones \verb|Lite|, orientadas a la ejecución del sistema operativa mediante interfaz de linea de comandos en terminal. Esta decisión está fundamentada en desprenderse de la necesidad de periféricos externos e interfaces de \verb|I/O| analógicas para controlar el \gls{so}. Toda configuración del sistema será realizada mediante conexiones por \gls{ssh}. El proceso de instalación y configuración de conexiones esta ampliado en el apéndice~\ref{AppendiA:Key2} del documento. La selección de esta distribución en lugar de un \gls{so} estrictamente orientado a \gls{iot}, o para sistemas empotrados, se debe a la flexibilidad de aplicaciones y servicios que pueden instalarse durante los periodos de prueba y diseño.
+El \gls{gateway} ejecuta \verb|Raspbian|. Un \gls{so} \verb|GNU/Linux| diseñado específicamente para la arquitectura ARMv7 de los distintos modelos de ordenadores Raspberry. Concretamente, en este proyecto se utiliza la serie de distribuciones \verb|Lite|, orientadas a la ejecución del sistema operativa mediante interfaz de linea de comandos en terminal. Esta decisión está fundamentada en desprenderse de la necesidad de periféricos externos e interfaces de \verb|I/O| analógicas para controlar el \gls{so}. Toda configuración del sistema será realizada mediante conexiones por \gls{ssh}. El proceso de instalación y configuración de conexiones está ampliado en el apéndice~\ref{AppendiA:Key2} del documento. La selección de esta distribución en lugar de un \gls{so} estrictamente orientado a \gls{iot}, o para sistemas empotrados, se debe a la flexibilidad de aplicaciones y servicios que pueden instalarse durante los periodos de prueba y diseño.
 
 \vspace{1cm}
 
-Una vez establecidos los canales de comunicación, se instalarán aplicaciones que permitirán ejecutar los servicios necesarios para actuar como \gls{gateway}. La estrategia de comunicación entre los distintos dispositivos que conforman la suite domótica se basa en un servidor \verb|NodeJs| que establece conexiones vía \gls{wifi} de 2.4Gh con los nodos mediante el protocolo \gls{mqtt}. El servidor a su vez establece conexión con la aplicación móvil vía \gls{wifi} o internet, mediante el protocolo \gls{https}. Se realizara una descripción mas concisa del software necesario en el nodo principal en el apartado \ref{ch:Capitulo4.4}.
-
+Una vez establecidos los canales de comunicación, se instalarán aplicaciones que permitirán ejecutar los servicios necesarios para actuar como \gls{gateway}. La estrategia de comunicación entre los distintos dispositivos que conforman la suite domótica se basa en un servidor \verb|NodeJs| que establece conexiones vía \gls{wifi} de 2.4Gh con los nodos mediante el protocolo \gls{mqtt}. El servidor a su vez establece conexión con la aplicación móvil vía \gls{wifi} o internet, mediante el protocolo \gls{https}.
 
 \section{Instalación y configuración del gateway}
 \label{ch:Capitulo4.3}
@@ -59,7 +58,7 @@ Se establece la capacidad del \gls{gateway} para su adaptador de red \gls{wifi} 
 
 \vspace{0.5cm}
 
-Las placas seleccionadas para actuar como nodos del sistema están basadas en el \gls{soc} \gls{wifi} \verb|ESP8266| y su firmware esta escrito en lenguaje \verb|LUA|, sin embargo, su código es habitualmente escrito en \verb|C| con un alto nivel mediante herramientas de desarrollo como \verb|Arduino IDE|. El proceso de subida de código en un lenguaje especifico que es transformado a otro lenguaje y subido a una placa microcontrontrolador cuyo lenguaje es distinto para sobreescribir el firmware se conoce como \verb|compilación cruzada|. Y permite una manera fácil de programar en alto nivel el código que hace funcionar una placa con \gls{soc} como las placas nodeMCU o los chips ESP8266. El código programado por el desarrollador se conoce en Arduino como \verb|sketch|. El proceso de subida de un \gls{sketch} a una placa mediante el entorno de desarrollo de Arduino se realiza mediante \gls{usb}. El proceso de instalación y configuración del entrono de desarrollo de Ardunio por linea de comandos, así como una primera prueba de funcionamiento del procedimiento esta detallado en el apendiceA\ref{AppendiA:Key2}. Es importante haber verificado el correcto funcionamiento de estas instrucciones antes de proseguir con el desarrollo.
+Las placas seleccionadas para actuar como nodos del sistema están basadas en el \gls{soc} \gls{wifi} \verb|ESP8266| y su firmware está escrito en lenguaje \verb|LUA|, sin embargo, su código es habitualmente escrito en \verb|C| con un alto nivel mediante herramientas de desarrollo como \verb|Arduino IDE|. El proceso de subida de código en un lenguaje especifico que es transformado a otro lenguaje y subido a una placa microcontrontroladora cuyo lenguaje es distinto para sobreescribir el firmware se conoce como \verb|compilación cruzada| y permite una manera fácil de programar en alto nivel el código que hace funcionar una placa con \gls{soc} como las placas nodeMCU o los chips ESP8266. El código programado por el desarrollador se conoce en Arduino como \verb|sketch|. El proceso de subida de un \gls{sketch} a una placa mediante el entorno de desarrollo de Arduino se realiza mediante \gls{usb}. El proceso de instalación y configuración del entorno de desarrollo de Arduino por linea de comandos, así como una primera prueba de funcionamiento del procedimiento está detallado en el Apéndice \ref{AppendiA:Key2}. Es importante haber verificado el correcto funcionamiento de estas instrucciones antes de proseguir con el desarrollo.
 
 \vspace{0.5cm}
 
@@ -74,7 +73,7 @@ Habiendo verificado el proceso de subida es necesario probar que la conexión in
     nano test/testmqtt.ino
 \end{verbatim}
 
-El código de prueba de \gls{mqtt} incluye la librería de ESP8266WiFi.h que no es necesario añadir mediante el instalador de librerías, ya que este viene incluido en el core de tarjetas de terceros que se incluyo anteriormente para el chip esp8266. De esta forma, el código incluye los parámetros de conexión \gls{wifi} para el adaptador de red inalámbrico del nodo principal y la conexión al servicio de \gls{mqtt} así como la publicación de topics. El siguiente, es un ejemplo básico para hacer pruebas es una ligera modificación del ejemplo contenido en la ruta \path{~/Arduino/libraries/PubSubClient/examples/mqtt_basic/mqtt_basic.ino}.
+El código de prueba de \gls{mqtt} incluye la librería de ESP8266WiFi.h que no es necesario añadir mediante el instalador de librerías, ya que este viene incluido en el core de tarjetas de terceros que se incluyó anteriormente para el chip ESP8266. De esta forma, el código incluye los parámetros de conexión \gls{wifi} para el adaptador de red inalámbrico del nodo principal y la conexión al servicio de \gls{mqtt} así como la publicación de topics. El siguiente, es un ejemplo básico para hacer pruebas es una ligera modificación del ejemplo contenido en la ruta \path{~/Arduino/libraries/PubSubClient/examples/mqtt_basic/mqtt_basic.ino}.
 
 
 \begin{verbatim}
@@ -150,7 +149,7 @@ void loop() {
 }
 \end{verbatim}
 
-Una vez subido el sketch a la placa según los pasos anteriormente indicados, podemos realizar una llamada a la placa mediante el cliente de \gls{mqtt} instalado en el nodo principal. El cual generara una salida de texto sin fin. También se puede operar el led embebido en la placa con el argumento 0 o 1. Con esto, queda probado que el proceso de subida y la placa están en condiciones óptimas de funcionamiento.
+Una vez subido el sketch a la placa según los pasos anteriormente indicados, podemos realizar una llamada a la placa mediante el cliente de \gls{mqtt} instalado en el nodo principal. El cual generará una salida de texto sin fin. También se puede operar el led embebido en la placa con el argumento 0 o 1. Con esto, queda probado que el proceso de subida y la placa están en condiciones óptimas de funcionamiento.
 
 \begin{verbatim}
     mosquitto_sub -h localhost -t test/msg
@@ -161,14 +160,14 @@ Una vez subido el sketch a la placa según los pasos anteriormente indicados, po
 \section{Scripts de generación de sockets para nodos}
 \label{ch:Capitulo4.3.1}
 
-Crear un \gls{sketch} mediante un script puede variar en su complejidad en el grado de cuantos argumentos reciba y que tan flexible se desea que sea su comportamiento. Sea cual sea el tipo de \gls{sketch} que se busque crear, se debe mantener una estructura de carga de librerías y constantes, un constructor y un bucle de ejecución. Considerando las necesidades del proyecto, se requiere que el script reciba los siguientes argumentos de entrada:
+Crear un \gls{sketch} mediante un script puede variar en su complejidad en el grado de cuantos argumentos reciba y qué tan flexible se desea que sea su comportamiento. Sea cual sea el tipo de \gls{sketch} que se busque crear, se debe mantener una estructura de carga de librerías y constantes, un constructor y un bucle de ejecución. Considerando las necesidades del proyecto, se requiere que el script reciba los siguientes argumentos de entrada:
 
 \begin{itemize}
   \item Modelo de la placa microcontroladora en la que se sube el \gls{sketch}.
 
   \item Modelo del sensor/actuador que va a conectarse en el GPIO de la placa microcontroladora.
 
-  \item Valor numérico del pin de conexión de I/O en el que se conectara el sensor/actuador.
+  \item Valor numérico del pin de conexión de I/O en el que se conectará el sensor/actuador.
   
   \item Nombre de la estancia en la que se planea ubicar la placa microcontroladora.
 \end{itemize}
@@ -178,7 +177,7 @@ Con esta estrategia, el administrador de la suite domótica puede añadir nuevos
 \subsection{Generador de sketchs dinámicos para nodos}
 l\label{ch:Capitulo4.3.2}
 
-El objetivo ultimo del \gls{script} es generar un \gls{sketch} de Arduino que pueda compilarse y subirse a la placa correctamente, sin embargo, hasta que se reciben los argumentos solo es posible disponer de una plantilla genérica con secciones que deben ser rellenadas en base a las opciones que se indicaran en argumentos mas adelante. El modelo de plantilla básico puede constituirse con código previamente escrito en diferentes ficheros para luego ser ordenadamente ensamblados en un único fichero de código. En el caso de este proyecto, se crea una estructura de carpetas constituida por un directorio principal, el script generador, un directorio con las secciones de código común a todos los \gls{sketch} y directorios separados para cada sensor/actuador disponible en la aplicación. Para la prueba inicial incluiremos el código del sensor DHT11 para un configurar una placa detectora de temperatura y humedad. En términos generales, un sensor/actuador requiere de 4 bloques de código que integrar en código común, las librerías y constantes, la configuración inicial del setup, la resolución de callback que atiende peticiones concretas del servidor y el código del bucle que sera requerido por el protocolo \gls{mqtt} para publicar de manera constante. En la figura~\ref{sketchgeneratordiagram} se muestra como las diferentes secciones comunes a todos los códigos son combinadas con las secciones especificas de código en función de los argumentos definidos para el script.
+El objetivo ultimo del \gls{script} es generar un \gls{sketch} de Arduino que pueda compilarse y subirse a la placa correctamente; sin embargo, hasta que se reciben los argumentos sólo es posible disponer de una plantilla genérica con secciones que deben ser rellenadas en base a las opciones que se indicarán en argumentos más adelante. El modelo de plantilla básico puede constituirse con código previamente escrito en diferentes ficheros para luego ser ordenadamente ensamblados en un único fichero de código. En el caso de este proyecto, se crea una estructura de carpetas constituida por un directorio principal, el script generador, un directorio con las secciones de código común a todos los \gls{sketch} y directorios separados para cada sensor/actuador disponible en la aplicación. Para la prueba inicial incluiremos el código del sensor DHT11 para un configurar una placa detectora de temperatura y humedad. En términos generales, un sensor/actuador requiere de 4 bloques de código que integrar en código común, las librerías y constantes, la configuración inicial del setup, la resolución de callback que atiende peticiones concretas del servidor y el código del bucle que será requerido por el protocolo \gls{mqtt} para publicar de manera constante. En la figura~\ref{sketchgeneratordiagram} se muestra como las diferentes secciones comunes a todos los códigos son combinadas con las secciones especificas de código en función de los argumentos definidos para el script.
 
 \vspace{0.5cm}
 \begin{figure}[hbt!]
@@ -188,7 +187,7 @@ El objetivo ultimo del \gls{script} es generar un \gls{sketch} de Arduino que pu
 \caption[Esquema de generación de sketch por partes]{Esquema de generación de sketch por partes\footnotemark}
 \end{figure}
 
-El proceso que debe preparase para que este esquema se cumpla requiere de la creación de directorios con los contenedores de codigos por partes que serannecesarios apra generar un \gls{sketch} valido que pueda compilarse y subirse a un nodo.
+El proceso que debe preparase para que este esquema se cumpla requiere de la creación de directorios con los contenedores de códigos por partes que serán necesarios para generar un \gls{sketch} válido que pueda compilarse y subirse a un nodo.
 
 \begin{verbatim}
     cd ~
@@ -211,7 +210,7 @@ Con esta estructura, el \gls{script} tendrá que construir un fichero de extensi
     nano sketchgenerator/general/setup
 \end{verbatim}
 
-Considerando que el sensor DHT11 posee cierto código que se incluye en la función setup, se usara una cadena de caracteres a modo de centinela, el cual sera sustituido por el código definido en un fichero concreto (dht11Setup, en este caso) situado en el directorio del sensor definido por los argumentos del script generador. Dicho centinela en este código aparece como \verb|SETUP_THING|. Adicionalmente, en este segmento, y demás casos, se incluirá el centinela \verb|ID_DEVICE| que sera entregado en los argumentos del script para identificar una placa de manera inequívoca por parte del servidor.
+Considerando que el sensor DHT11 posee cierto código que se incluye en la función setup, se usará una cadena de caracteres a modo de centinela, el cual será sustituido por el código definido en un fichero concreto (dht11Setup, en este caso) situado en el directorio del sensor definido por los argumentos del script generador. Dicho centinela en este código aparece como \verb|SETUP_THING|. Adicionalmente, en este segmento, y demás casos, se incluirá el centinela \verb|ID_DEVICE| que sera entregado en los argumentos del script para identificar una placa de manera inequívoca por parte del servidor.
 
 \begin{verbatim}
 long lastMsg = 0;
@@ -247,7 +246,7 @@ void reconnect() {
 }
 \end{verbatim}
 
-Para que el servidor pueda realizar peticiones concretas a una placa, está, debe resolver mediante la función callback los argumentos de entrada por \gls{mqtt} cuando se invoque un topic al que este suscrita dicha placa. En esta sección del código se incluye un centinela \verb|CALLBACK_THING| que sera sustituido por la lógica correspondiente a cada sensor/actuador. En general, esta sección de código esta planificada para ser usado por actuadores que pueden tener distintos estados, como un relé (encendido o apagado).
+Para que el servidor pueda realizar peticiones concretas a una placa, ésta debe resolver mediante la función callback los argumentos de entrada por \gls{mqtt} cuando se invoque un topic al que esté suscrita dicha placa. En esta sección del código se incluye un centinela \verb|CALLBACK_THING| que será sustituido por la lógica correspondiente a cada sensor/actuador. En general, esta sección de código está planificada para ser usado por actuadores que pueden tener distintos estados, como un relé (encendido o apagado).
 
 \begin{verbatim}
     nano sketchgenerator/general/callback
@@ -320,7 +319,7 @@ else
 }
 \end{verbatim}
 
-Y por ultimo el segmento de código que sera invocado en la función loop que incluye la respuesta del cliente \gls{mqtt}. Este segmento de código también incluye centinelas que deben ser sustituidos en base a los argumentos del generador de \gls{sketch}, ya que de otra forma no seria posible definir los topics a los que responderá la placa cuando el nodo solicite información.
+Y por último el segmento de código que será invocado en la función loop que incluye la respuesta del cliente \gls{mqtt}. Este segmento de código también incluye centinelas que deben ser sustituidos en base a los argumentos del generador de \gls{sketch}, ya que de otra forma no sería posible definir los topics a los que responderá la placa cuando el nodo solicite información.
 \begin{verbatim}
     nano sketchgenerator/dht/dht11Loop
 \end{verbatim}
@@ -342,7 +341,7 @@ else
 }
 \end{verbatim}
 
-Con todo este código por segmentado puede constituirse un \gls{sketch} valido siempre que se encadene en el orden correcto con las sustituciones adecuadas. El script se ejecutara en el entorno de \verb|Bash|, y realizara la recepción de los argumentos, validación de los mismos y verificación de las rutas de los ficheros de donde se obtendrán los segmentos de código de cada parte. Serán unidos y escritos en un fichero situado en la ruta de un proyecto de Arduino que actuara como contenedor para las compilaciones. El script además dispone de los credenciales necesarios para la conexión \gls{wifi} al nodo y el servicio de \gls{mqtt}.
+Con todo este código por segmentado puede constituirse un \gls{sketch} válido siempre que se encadene en el orden correcto con las sustituciones adecuadas. El script se ejecutará en el entorno de \verb|Bash|, y realizará la recepción de los argumentos, validación de los mismos y verificación de las rutas de los ficheros de donde se obtendrán los segmentos de código de cada parte. Serán unidos y escritos en un fichero situado en la ruta de un proyecto de Arduino que actuará como contenedor para las compilaciones. El script además dispone de los credenciales necesarios para la conexión \gls{wifi} al nodo y el servicio de \gls{mqtt}.
 
 \begin{verbatim}
     nano sketchgenerator/sketchgenerator
@@ -481,23 +480,12 @@ El comando del \gls{script} para la configuración de prueba es:
 ./sketchgenerator dht/dht11 4 nodemcu823234 esp8266:esp8266:nodemcuv2
 \end{verbatim}
 
-Si todo el proceso se ha ejecutado correctamente desde la generación del sketch, su compilación y subida a la placa, la correcta conexión de la placa a la red inalambrica del \gls{gateway} y su correcta publicación en \gls{mqtt}, el servidor debería responder a la petición por parte del \gls{gateway} con un \gls{json} con la respuesta esperada.
-
-\section{Criterio de selección de dispositivos y Software}
-\label{ch:Capitulo4.4}
-
-\begin{figure}[hbt!]
-\centering
-\includegraphics[height=2.5in]{figures/diagrams/physical-devices/front-back.png}
-\caption[Despligue de front]{Diagrama de despliegue de smartphone, router y gateway\footnotemark}
-\end{figure}
-
-
+Si todo el proceso se ha ejecutado correctamente desde la generación del sketch, su compilación y subida a la placa, la correcta conexión de la placa a la red inalámbrica del \gls{gateway} y su correcta publicación en \gls{mqtt}, el servidor debería responder a la petición por parte del \gls{gateway} con un \gls{json} con la respuesta esperada.
 
 \section{Criterio de selección servicios}
-\label{ch:Capitulo4.5}
+\label{ch:Capitulo4.4}
 
-Al almacenar los datos generados por los nodos en el servidor, en los cuales una medida esta relacionada con un nodo que a su vez esta relacionado con una estancia, plantearse un modelo de \gls{bbdd} relacional es una buena opción. Pero si consideramos que, cada entrada almacenada tendrá una estructura distinta, hace que no sea la opción mas ideal. Por ejemplo, utilizando una \gls{bbdd} SQL se planifica un conjunto de tablas relacionadas entre sí. Es necesaria una tabla que contenga las ubicaciones y se relacione con otra tabla que defina a los nodos. Esto establece una relación 1:N donde múltiples nodos pueden existir para una estancia, pero nunca, un nodo podra estar en varias instancias a la vez simultáneamente. De cada nodo existirá una nueva relación 1:N de medidas. Lo cual deja un esquema semejante al de la figura siguiente:
+Al almacenar los datos generados por los nodos en el servidor, en los cuales una medida esta relacionada con un nodo que a su vez esta relacionado con una estancia, plantearse un modelo de \gls{bbdd} relacional es una buena opción. Pero si consideramos que, cada entrada almacenada tendrá una estructura distinta, hace que no sea la opción más ideal. Por ejemplo, utilizando una \gls{bbdd} SQL se planifica un conjunto de tablas relacionadas entre sí. Es necesaria una tabla que contenga las ubicaciones y se relacione con otra tabla que defina a los nodos. Esto establece una relación 1:N donde múltiples nodos pueden existir para una estancia, pero nunca, un nodo podrá estar en varias instancias a la vez simultáneamente. De cada nodo existirá una nueva relación 1:N de medidas. Lo cual deja un esquema semejante al de la figura siguiente:
 
 \begin{figure}[hbt!]
 \centering
@@ -520,7 +508,7 @@ Existen algunos problemas graves de diseño de esta idea. En primer lugar, los d
 
 \vspace{1cm}
 
-Con esto, aún hay que enfrentar un problema adicional. El número de columnas que definen las propiedades de una tabla. El ejemplo más claro, es la tabla de medidas. Una medida, efectuada por un nodo será definida por su identificador y la fecha en la que se realizó, ahora bien, según la naturaleza del dispositivo, se obtendrán disantos tiempos de medida. Un sensor combinado de temperatura y humedad nos dará dos magnitudes de medición, un sensor de ruido almacenará un valor de decibelios, una luz define su medida por su estado de actividad (encendido o apagado), aunque por otra parte podría indicar el consumo eléctrico, o propiedades adicionales como intensidad de luz, o incluso color (con conjunto de valores RGB). Es cierto que, para un actuador, como lo es un emisor de luz, no realiza medidas como tal, y sus correspondientes estados de actividad podrían ser más adecuados definirlos como propiedades del dispositivo y no como medidas. Podríamos separar las medidas de los estados en tablas distintas, pero igualmente llegaríamos al problema del número de campos necesarios en una tabla. Valor que por otra parte es muy difícil de prever en base a la extensa gama de dispositivos existentes. Esto puede solucionarse de manera sencilla con 2 estrategias.
+Con esto, aún hay que enfrentar un problema adicional. El número de columnas que definen las propiedades de una tabla. El ejemplo más claro, es la tabla de medidas. Una medida, efectuada por un nodo será definida por su identificador y la fecha en la que se realizó; ahora bien, según la naturaleza del dispositivo, se obtendrán distintos tiempos de medida. Un sensor combinado de temperatura y humedad nos dará dos magnitudes de medición, un sensor de ruido almacenará un valor de decibelios, una luz define su medida por su estado de actividad (encendido o apagado), aunque por otra parte podría indicar el consumo eléctrico, o propiedades adicionales como intensidad de luz, o incluso color (con conjunto de valores RGB). Es cierto que, para un actuador, como lo es un emisor de luz, no realiza medidas como tal, y sus correspondientes estados de actividad podrían ser más adecuados definirlos como propiedades del dispositivo y no como medidas. Podríamos separar las medidas de los estados en tablas distintas, pero igualmente llegaríamos al problema del número de campos necesarios en una tabla. Valor que por otra parte es muy difícil de prever en base a la extensa gama de dispositivos existentes. Esto puede solucionarse de manera sencilla con 2 estrategias.
 
 \begin{enumerate}
   \item Incluir una gran cantidad de columnas en previsión de los distritos tipos de medidas existentes, dejando que las medidas posean un valor nulo para los campos no utilizados en función de la relación de su sensor.
@@ -541,20 +529,20 @@ Lo que dejaría un esquema como el reflejado en la siguiente figura\ref{sqlschem
 
 \vspace{1cm}
 
-Una preocupación que agrava la perspectiva de usar una \gls{bbdd} relacional es, en este punto del proyecto, su escalabilidad horizontal. Si bien las tablas pueden crecer a un gran número de registros, no se prevé almacenar datos con vistas a largo plazo, la mayoría de los valores almacenados serán efímeros en tiempo de utilidad, almacenarlos responde solo a la necesidad de obtener comparativas en plazos de tiempo relativamente cortos, como horas, días, y posiblemente semanas. Mas allá de este rango estos datos no tienen una utilidad real y pueden ser condensados en medias para utilizarse en resúmenes. Por otro lado, disponer de flexibilidad a la hora de configurar la extensión de propiedades de un objeto de la \gls{bbdd} es uno de los puntos fuertes de una \gls{bbdd} no relacional.
+Una preocupación que agrava la perspectiva de usar una \gls{bbdd} relacional es, en este punto del proyecto, su escalabilidad horizontal. Si bien las tablas pueden crecer a un gran número de registros, no se prevé almacenar datos con vistas a largo plazo, la mayoría de los valores almacenados serán efímeros en tiempo de utilidad, almacenarlos responde solo a la necesidad de obtener comparativas en plazos de tiempo relativamente cortos, como horas, días, y posiblemente semanas. Más allá de este rango estos datos no tienen una utilidad real y pueden ser condensados en medias para utilizarse en resúmenes. Por otro lado, disponer de flexibilidad a la hora de configurar la extensión de propiedades de un objeto de la \gls{bbdd} es uno de los puntos fuertes de una \gls{bbdd} no relacional.
 
 
 \section{Arquitectura de la aplicación frontend}
-\label{ch:Capitulo4.7}
+\label{ch:Capitulo4.5}
 
 \subsection{Consideraciones previas en el desarrollo de una APP}
-\label{c:Capitulo4.7.1}
+\label{c:Capitulo4.5.1}
 
 El desarrollo de la app frontend se ha servido de dos frameworks para salvar ciertos escollos básicos no relacionados con la implementación de la suite domótica. Por un lado, se ha hecho uso del framework Open Source Ionic (en su versión 3), que es un framework Open Source para la construcción de aplicaciones híbridas multiplataforma, que nos permitirá portar la aplicación para cualquier dispositivo móvil Android a través de Cordova, y que además nos permitirá hacer uso de capacidades nativas de los dispositivos móviles (como el módulo de Wifi) gracias a los plugins existentes para ello. Además, Ionic proporciona grandes herramientas en cuanto a la maquetación responsive, lo cual ayuda en la creación de una aplicación móvil sin necesidad de invertir grandes esfuerzos en alcanzar un aspecto, usabilidad y elegancia mínimos y pudiendo redirigir ese esfuerzo a otros terrenos más fructíferos. Ionic está basado en Angular, el otro framework del que se ha hecho uso (en su versión 5) especialmente por su enfoque en una arquitectura basada en componentes que puedan ser reutilizados con mucha facilidad a lo largo de toda la aplicación. Las versiones modernas de Angular hacen uso de TypeScript para la programación de su lógica de negocio, lo que permite una mayor limpieza de código, mejores herramientas de tipado estricto y redunda en mayor escalabilidad. Angular se programa en TypeScript para la lógica de negocio, SASS para los estilos css y HTML para la maquetación.
 
 
 \subsection{Estructura básica}
-\label{ch:Capitulo4.7.2}
+\label{ch:Capitulo4.5.2}
 
 A grandes rasgos, la aplicación frontend está estructurada en:
 \begin{enumerate}
@@ -570,7 +558,7 @@ A grandes rasgos, la aplicación frontend está estructurada en:
 Con el fin de comprender el esquema utilizado, mencionaremos los tipos de estructura existentes, aun cuando detallaremos su flujo más adelante: tendremos los dispositivos, que serán conocidos como \textit{things} (siendo posiblemente lo más adecuado debido a su famosa acepción en el \gls{iot}); las habitaciones, que mencionaremos aquí y allá como \textit{rooms}; los usuarios, que conoceremos como \textit{users}; las placas, que mencionaremos como \textit{boards}; y los datos de aplicación generales, a los que nos referiremos como \textit{application data}. Se observará que, en todos los casos, nos conviene referirlos en su traducción al inglés por facilidad a la hora de seguir el hilo del flujo en el código.
 
 \subsection{Patrón del flujo de datos}
-\label{ch:Capitulo4.7.3}
+\label{ch:Capitulo4.5.3}
 
 En pro de aplicar una arquitectura que intenta aplicar los principios de separación de responsabilidades y capas de abstracción, a continuación explicamos los patrones que sigue la estructura del proyecto frontend.
 
@@ -619,7 +607,7 @@ Es necesario apuntar que todos los api service que hemos creado (en general un p
 \vspace{1cm}
 
 De la misma forma y con el mismo objetivo que para el api provider, se crea un módulo database service (específicamente orientado para el mismo tipo de datos que la store), que permite a la store interactuar con la \gls{bbdd} local para almacenar, recuperar o borrar cualquier entrada de ese tipo. En este proyecto, de entre las posibilidades existentes, hacemos uso de la base de datos IndexedDB, propia del motor web del dispositivo. Es una base de datos No-SQL que está orientada al almacenamiento de entradas de gran tamaño, y no bloquea la entrada-salida del hilo principal, de forma que es ideal para almacenar objetos JSON, que puedan tener estructuras y tamaños variables. En particular, cada database service se creará de forma que ataque específicamente a una única tabla, nombrada con el mismo tipo de datos, con el objetivo de reforzar la mantenibilidad del código y la separación de responsabilidades. Así, de nuevo, la store se permite desconocer si sus datos deben tener una estructura, codificación o formato en particular dependiendo de las características de la \gls{bbdd}: delega esa responsabilidad en el database service, el cual debe garantizar que los datos sean devueltos a la store en el mismo formato en que fueron entregados en primera instancia. 
-Los módulos database service, a diferencia de los api providers, no heredan de un mismo módulo, pero queda pendiente como una mejora posible puesto que cada uno puede ser creado con una configuración particular (como ya ocurre) y, con la excepción de algunos métodos, se puede refactorizar todos aquellos que sean comunes en una clase padre. En la Figura \ref{fig:database-service} se expone la clase que sigue RoomDatabaseService, muy similar a la que siguen el resto de database services con sus configuraciones propias. Hemos adjuntado un diagrama de cada uno de ellos en el apartado \ref{ch:Capitulo4.7.4}.
+Los módulos database service, a diferencia de los api providers, no heredan de un mismo módulo, pero queda pendiente como una mejora posible puesto que cada uno puede ser creado con una configuración particular (como ya ocurre) y, con la excepción de algunos métodos, se puede refactorizar todos aquellos que sean comunes en una clase padre. En la Figura \ref{fig:database-service} se expone la clase que sigue RoomDatabaseService, muy similar a la que siguen el resto de database services con sus configuraciones propias. Hemos adjuntado un diagrama de cada uno de ellos en el apartado \ref{ch:Capitulo4.5.4}.
 
 
 \begin{figure}[hbt!]
@@ -630,7 +618,7 @@ Los módulos database service, a diferencia de los api providers, no heredan de 
 \end{figure}
 
 \subsection{Inicialización de la aplicación frontend}
-\label{ch:Capitulo4.7.4}
+\label{ch:Capitulo4.5.4}
 
 Cuando la aplicación Android se inicia, tras las inicializaciones propias del framework de Ionic y Angular, se ejecuta la lógica correspondiente a \verb|app.module.ts|, el módulo base que se encarga de importar todo los módulos que se hemos implementado para nuestra aplicación antes de ejecutarlos por primera vez. El sistema de carga de módulos con \textit{lazy loading} de Angular permite ejecutar algunos de ellos antes que el resto si, por necesidades de la aplicación, es condición necesaria que se procese antes que los demás. En nuestro caso, hacemos uso de esta herramienta para lanzar el método \verb|initializeEndpoint| del módulo \verb|core.module.ts|, que redirige al \verb|initializeApiEndpoints| de \verb|application-data.store.ts| y permite extraer de la \gls{bbdd} local las IPs local y remota para poder disponer de ellas en la inicialización de los servicios de interacción con las APIs remotas.
 \vspace{0.5cm}
@@ -645,7 +633,7 @@ Describimos a continuación la inicialización de servicios y stores de la aplic
 \end{enumerate}
 
 \subsection{Diagramas de clases de las Stores y Models}
-\label{ch:Capitulo4.7.5}
+\label{ch:Capitulo4.5.5}
 
 \begin{figure}[hbt!]
 \centering
@@ -737,7 +725,7 @@ Los diagramas de clase responden a modelos para cada tipo de datos que sean clar
 \end{enumerate}
 
 \subsection{Diagramas de clases de los Services}
-\label{ch:Capitulo4.7.6}
+\label{ch:Capitulo4.5.6}
 
 \begin{figure}[hbt!]
 \centering
@@ -745,7 +733,7 @@ Los diagramas de clase responden a modelos para cada tipo de datos que sean clar
 \caption[services]{Services Class Diagram\footnotemark}
 \end{figure}
 
-Tal y como se describió en la sección \ref{ch:Capitulo4.7.4}, el \verb|application.service.ts| tiene un rol importante de apoyar en la inicialización de la aplicación, encargándose él de inicializar tanto stores como services que lo requieran. No entraremos en mayor profundidad para explicarlo ya que el contexto de dicha sección contribuye a un mejor entendimiento.
+Tal y como se describió en la sección \ref{ch:Capitulo4.5.4}, el \verb|application.service.ts| tiene un rol importante de apoyar en la inicialización de la aplicación, encargándose él de inicializar tanto stores como services que lo requieran. No entraremos en mayor profundidad para explicarlo ya que el contexto de dicha sección contribuye a un mejor entendimiento.
 
 \vspace{1cm}
 
@@ -802,15 +790,15 @@ En la misma línea, el \verb|logger.service.ts| proporciona un servicio de log p
 El \verb|storage.service.ts| es el utilizado por todos los database services de la aplicación para crear un almacenamiento particular para cada uno de ellos con \verb|create|, y poder gestionarlo con los métodos \verb|get|, \verb|set|, \verb|getAll|, \verb|remove| y \verb|removeAll|. Como módulo interno, hace uso del servicio de \verb|Storage| de Ionic, que por detrás aprovecha todas las \gls{bbdd} disponibles en el motor del navegador en uso, dando preferencia y usando en la mayoría de casos, la \gls{IndexedDB}. Además, cabe destacar que, gracias a la librería \verb|crypto-js|, hemos añadido otro nivel de seguridad configurable que se encarga de encriptar o desencriptar cada entrada al almacenarla o recuperarla respectivamente.
 
 \section{Arquitectura del servidor de NodeJS}
-\label{ch:Capitulo4.8}
+\label{ch:Capitulo4.6}
 
 \subsection{Consideraciones previas}
-\label{ch:Capitulo4.8.1}
+\label{ch:Capitulo4.6.1}
 
 El desarrollo de la aplicación backend ha seguido la línea del stack MEAN, esto es, MongoDB, ExpressJS, Angular (éste sólo en el frontend) y NodeJS. Los beneficios de seguir dicho stack son sencillamente los de sus frameworks y herramientas: MongoDB aporta los beneficios de una \gls{bbdd} no relacional, enormemente alineado con las características del proyecto, según el cual podríamos almacenar grandes cantidades de datos con diferentes estructuras JSON bajo la misma lista de documentos sin perder velocidad de acceso o escritura; ExpressJS nos permite elaborar una API REST completa salvando los principales escollos que NodeJS podría presentarnos para tal fin, pues sus herramientas base para el tratamiento de peticiones http se presentan intrincadas y poco intuitivas; y NodeJS se beneficia de infinitas librerías de sencillo uso, constantemente probadas y actualizadas por su amplia comunidad, proveyéndonos en este caso de muchas utilidades que nos ayudan a evitar desarrollos difíciles e innecesarios no intrínsecos a una suite domótica (como es nuestro fin) y cuyos beneficios enumeraremos más adelante.
 
 \subsection{Estructura básica}
-\label{ch:Capitulo4.8.2}
+\label{ch:Capitulo4.6.2}
 
 A grandes rasgos, la aplicación backend está estructurada en:
 \begin{enumerate}
@@ -828,7 +816,7 @@ A grandes rasgos, la aplicación backend está estructurada en:
 Con el fin de comprender el esquema utilizado y establecer una alineación con el frontend, la nomenclatura utilizada para cada tipo de datos será la misma que en el proyecto cliente.
 
 \subsection{Flujo de enrutado de las peticiones HTTP}
-\label{ch:Capitulo4.8.3}
+\label{ch:Capitulo4.6.3}
 
 \begin{figure}[hbt!]
 \centering
@@ -934,7 +922,7 @@ Hay que hacer mención especial al \verb|passport.middleware.js|. Lo consideramo
 Toda petición http que no sea encaminada a un método mediante esta metodología será automáticamente rechazada. Esto permite controlar severamente los caminos por los cuales se ejecutará una lógica en base a una petición http, y por ende constituye una medida de seguridad adicional por el principio básico de conocer y controlar todas las posibles entradas al servidor con un flujo único y específico para cada una de ellas, para minimizar brechas de seguridad.
 
 \subsection{Diagramas de clases de los Controllers, Helpers y Models}
-\label{makereference4.8.4}
+\label{makereference4.6.4}
 
 El \verb|core.controller.js| se encarga de lanzar aquellos procesos que deben estar listos tras la inicialización base del servidor NodeJS. Una vez el servidor ha conectado su cliente de Mongo a la instancia de MongoDB, está listo para interactuar con toda la información almacenada anteriormente en la \gls{bbdd}, y el proceso de \verb|app.js| se encarga de lanzar el método \verb|setupCoreMonitors| del coreController. Este método lanza dos de sus métodos internos, por un lado \verb|_launchStoredSubscriptions| y posteriormente \verb|_releaseDaemons|, finalizando así la preparación inicial del servidor.
 
@@ -1031,7 +1019,7 @@ Los modelos utilizados en el backend se diseñan como modelo para su \gls{bbdd} 
 Particularmente, para el modelo User, posee 2 campos, \verb|email| (identificador único, alineado con el frontend), y \verb|password| para almacenar el password del usuario. Además, se definen unos métodos en relación con su cometido de identificación de usuario para inicios de sesión. Se establece un método que es ejecutado justo antes de almacenar objetos de tipo User en la MongoDB (cuando se registra un nuevo usuario), que gracias a la librería de npm \verb|bcryptjs|, permite aplicar \gls{salt} y \gls{hash} sobre el password como medidas adicionales de seguridad. Además, se establece otro método para la comparación de password, en el flujo ejecutado cuando un usuario intenta hacer login. Este método también utiliza la librería de \verb|bcryptjs| para comparar bajo las mismas condiciones de \gls{salt} y \gls{hash}.
 
 \subsection{Diagramas de clases de los Services}
-\label{makereference4.8.5}
+\label{makereference4.6.5}
 
 El servicio \verb|mqtt.service.js| ofrece la capacidad de interactuar de forma sencilla con otros dispositivos mediante el protocolo MQTT, apoyándose en la librería de npm \verb|mqtt|, mediante los métodos que expone, que explicamos a continuación.
 \begin{enumerate}
